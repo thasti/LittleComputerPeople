@@ -13,7 +13,6 @@ import android.view.View;
 import java.util.Iterator;
 import java.util.List;
 
-
 public class GraphicalOutput extends View {
 
     private Subject subject;
