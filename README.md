@@ -1,3 +1,3 @@
-Demo_Subj
+Little Computer People Repository
 =========
-Just a Trial of an Engine for a game called Little Computer People
+Developers: Please fork this repository and create pull requests. 
