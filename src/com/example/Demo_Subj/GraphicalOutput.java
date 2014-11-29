@@ -5,27 +5,26 @@ package com.example.Demo_Subj;
  */
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.view.View;
+
+import java.util.Iterator;
+import java.util.List;
 
 
 public class GraphicalOutput extends View {
 
     private Subject subject;
-    private Room room1;
-    private Room room2;
+    private List<Room> roomList;
     private Object object;
 
-    public GraphicalOutput (Context c, Subject subject1, Room num1, Room num2, Object object1) {
+    public GraphicalOutput (Context c, Subject subject1, List<Room> m_roomList) {
         super(c);
         //setzt den Hintergrund
-
+        this.roomList = m_roomList;
         subject = subject1;
-        room1 = num1;
-        room2 = num2;
-        object = object1;
-
     }
 
     @Override
@@ -34,15 +33,32 @@ public class GraphicalOutput extends View {
         Paint iconPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(subject.getSubjBitmap(), 140, 350, false);
 
-        if (subject.getAktRoomID() == 1) {
-            canvas.drawBitmap(Bitmap.createScaledBitmap(room1.getBitmapRoom(), canvas.getWidth(), canvas.getHeight(), false),0,0,iconPaint);
+        Room drawRoom = null;
+        for (Iterator<Room> iter = roomList.iterator(); iter.hasNext(); ) {
+            Room room = iter.next();
+            if (room.getRoomID() == subject.getAktRoomID()) {
+                drawRoom = room;
+            }
+        }
+        if (drawRoom == null) {
+            // room not found
+            drawRoom = roomList.get(0);
         }
 
-        if (subject.getAktRoomID() == 2) {
-            canvas.drawBitmap(Bitmap.createScaledBitmap(room2.getBitmapRoom(), canvas.getWidth(), canvas.getHeight(), false),0,0,iconPaint);
+        Bitmap background = Bitmap.createScaledBitmap(drawRoom.getBitmapRoom(),
+                canvas.getWidth(),
+                canvas.getHeight(),
+                false);
+        canvas.drawBitmap(background, 0, 0, iconPaint);
+
+        List<Object> drawObjects = drawRoom.getObjectList();
+
+        for (Iterator<Object> iter = drawObjects.iterator(); iter.hasNext(); ) {
+            Object obj = iter.next();
+            canvas.drawBitmap(obj.getBitmapO(), obj.getxPos(), obj.getyPos(), iconPaint);
         }
 
-        if(subject.getInitialized() == 0){
+        if(subject.getInitialized() == 0) {
             float canvasx = (float) canvas.getWidth();
             float canvasy = (float) canvas.getHeight();
             float bitmapx = (float) resizedBitmap.getWidth();

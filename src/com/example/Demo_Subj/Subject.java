@@ -23,6 +23,7 @@ public class Subject {
     private int destRoomID;
 
     //Bildverweise
+    // TODO: List/Array of bitmaps for animations
     private Bitmap subjStandBitmap;
     private Bitmap subjStandBitmapInv;
     private Bitmap subjWalk1Bitmap;
@@ -38,6 +39,8 @@ public class Subject {
     private Context context;
     private SoundManager soundmanager;
 
+    private KI intel;
+
     //Konstruktor: zu übergeben - 3 Bilder
     public Subject(Bitmap sStand, int screenW, Context c){
         subjStandBitmap = sStand;
@@ -51,12 +54,17 @@ public class Subject {
         soundmanager = new SoundManager(c);
         soundmanager.setBalance(1);
         soundmanager.setVolume(1);
+
+        intel = new KI();
     }
 
     public void setDefaultKoords(float xDef, float yDef, int room){
         xPos = xDef;
         yPos = yDef;
         aktRoomID = room;
+
+        xDest = xDef;
+        destRoomID = room;
     }
 
     public void setInitialized(){
@@ -101,25 +109,32 @@ public class Subject {
         return aktBitmap;
     }
 
-    public Bitmap getNextBitmap(){
+    public void tick() {
+        intel.tick();
+
+        // TODO hier sollte das Animations-Zeugs eigentlich nicht gemacht werden, nur die Bewegung
+        // die Animation sollte das GraphicalOutput dann aus dem Zustand und der Richtung erzeugen (oder?)
         if((xPos == xDest) && (aktRoomID == destRoomID)){
             aktBitmap = subjStandBitmap;
+            // we finished the last action, so get the next from the KI
+            SubjectAction nextAction = intel.getNextAction();
+            if (nextAction.getActionID() == 0) {
+                SubjectMoveAction move = (SubjectMoveAction)nextAction;
+                setDest(move.getDestX(), move.getDestRoom());
+            }
         }
         else if (aktRoomID == destRoomID) {
             if (xPos > xDest) {
-                //swapBitmap(false)
                 aktBitmap = subjStandBitmap;
                 xPos --;
             }
             else{
-                //swapBitmap(true);
                 aktBitmap = subjStandBitmapInv;
-                xPos ++;
+                xPos++;
             }
         }
         else if (aktRoomID > destRoomID){
             if (xPos > 0){
-                //swapBitmap(false)
                 aktBitmap = subjStandBitmap;
                 xPos--;
             }
@@ -132,7 +147,6 @@ public class Subject {
         }
         else if (aktRoomID < destRoomID){
             if (xPos < (screenWidth)){
-                //swapBitmap(true);
                 aktBitmap = subjStandBitmapInv;
                 xPos++;
             }
@@ -143,7 +157,6 @@ public class Subject {
                 xPos = 0;
             }
         }
-        return aktBitmap;
     }
 
     private void swapBitmap(boolean mirror){

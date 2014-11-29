@@ -4,16 +4,14 @@ import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Point;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MyActivity extends Activity {
@@ -23,9 +21,8 @@ public class MyActivity extends Activity {
 
     private GraphicalOutput grafik;
     private Subject subject;
-    private Room wohnzimmer;
-    private Room schlafzimmer;
-    private Object pflanze;
+    private List<Room> roomList;
+    private int currentRoom;
     private int screenWidth;
     private int screenHeight;
 
@@ -44,66 +41,47 @@ public class MyActivity extends Activity {
 
         //gets the size of the Display
         Display display = getWindowManager().getDefaultDisplay();
+        /*
         Point size = new Point();
         display.getSize(size);
         screenWidth = size.x;
         screenHeight = size.y;
+        */
+        // workaround for my older API 10 smartphone
+        screenHeight = display.getHeight();
+        screenWidth = display.getWidth();
 
         Bitmap subjectB = BitmapFactory.decodeResource(resources, R.drawable.subjekt);
         subject = new Subject (subjectB, screenWidth, MyActivity.this);
 
-        Bitmap wohnzimmerB = BitmapFactory.decodeResource(resources, R.drawable.wohnzimmer);
-        wohnzimmer = new Room (wohnzimmerB, 1);
+        roomList = new ArrayList<Room>();
+        // TODO: populate this list via the XML
+        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.wohnzimmer), 1, this));
+        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.schlafzimmer), 2, this));
 
-        Bitmap schlafzimmerB = BitmapFactory.decodeResource(resources, R.drawable.schlafzimmer);
-        schlafzimmer= new Room (schlafzimmerB, 2);
+        currentRoom = subject.getAktRoomID();
 
-        Bitmap pflanzeB = BitmapFactory.decodeResource(resources, R.drawable.pflanze);
-        pflanze= new Object (pflanzeB, 10, 20);
-
-        grafik = new GraphicalOutput(this, subject, wohnzimmer, schlafzimmer, pflanze);
+        grafik = new GraphicalOutput(this, subject, roomList);
 
         FrameLayout fl = (FrameLayout) findViewById(R.id.framelayout0);
         fl.addView(grafik);
 
-        //grafik.invalidate();
         grafik.invalidate();
 
         Thread move = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
-                    subject.setDest(680, 2);
-                    while (subject.reachedDest() == 0) {
-                        subject.getNextBitmap();
-                        try {
-                            Thread.sleep(10);
-                            // Do some stuff
-                        } catch (Exception e) {
-                            e.getLocalizedMessage();
-                        }
-                        grafik.postInvalidate();
-                    }
+                    // tick everything
+                    subject.tick();
+                    // TODO: find a good way to encapsule current room (world object would be good..)
+                    // i dislike the way it is in Subject only, hmh
+                    // it should be possible to display rooms where the subject is not at the moment
+                    currentRoom = subject.getAktRoomID();
+                    grafik.postInvalidate();
+                    // TODO: instead of sleeping, pause the main and wait for signal from Tick-Object (this thread)
                     try {
-                        Thread.sleep(5000);
-                        // Do some stuff
-                    } catch (Exception e) {
-                        e.getLocalizedMessage();
-                    }
-                    subject.setDest(40, 1);
-                    while (subject.reachedDest() == 0) {
-                        subject.getNextBitmap();
-                        try {
-                            Thread.sleep(10);
-                            // Do some stuff
-                        } catch (Exception e) {
-                            e.getLocalizedMessage();
-                        }
-                        grafik.postInvalidate();
-                    }
-                    try {
-                        Thread.sleep(5000);
-                        // Do some stuff
+                        Thread.sleep(10);
                     } catch (Exception e) {
                         e.getLocalizedMessage();
                     }
