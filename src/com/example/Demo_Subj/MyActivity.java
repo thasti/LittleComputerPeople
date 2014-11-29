@@ -44,10 +44,15 @@ public class MyActivity extends Activity {
 
         //gets the size of the Display
         Display display = getWindowManager().getDefaultDisplay();
+        /*
         Point size = new Point();
         display.getSize(size);
         screenWidth = size.x;
         screenHeight = size.y;
+        */
+        // workaround for my older API 10 smartphone
+        screenHeight = display.getHeight();
+        screenWidth = display.getWidth();
 
         Bitmap subjectB = BitmapFactory.decodeResource(resources, R.drawable.subjekt);
         subject = new Subject (subjectB, screenWidth, MyActivity.this);
@@ -66,44 +71,18 @@ public class MyActivity extends Activity {
         FrameLayout fl = (FrameLayout) findViewById(R.id.framelayout0);
         fl.addView(grafik);
 
-        //grafik.invalidate();
         grafik.invalidate();
 
         Thread move = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
-                    subject.setDest(680, 2);
-                    while (subject.reachedDest() == 0) {
-                        subject.getNextBitmap();
-                        try {
-                            Thread.sleep(10);
-                            // Do some stuff
-                        } catch (Exception e) {
-                            e.getLocalizedMessage();
-                        }
-                        grafik.postInvalidate();
-                    }
+                    // tick everything
+                    subject.tick();
+                    grafik.postInvalidate();
+                    // TODO: instead of sleeping, pause the main and wait for signal from Tick-Object (this thread)
                     try {
-                        Thread.sleep(5000);
-                        // Do some stuff
-                    } catch (Exception e) {
-                        e.getLocalizedMessage();
-                    }
-                    subject.setDest(40, 1);
-                    while (subject.reachedDest() == 0) {
-                        subject.getNextBitmap();
-                        try {
-                            Thread.sleep(10);
-                            // Do some stuff
-                        } catch (Exception e) {
-                            e.getLocalizedMessage();
-                        }
-                        grafik.postInvalidate();
-                    }
-                    try {
-                        Thread.sleep(5000);
-                        // Do some stuff
+                        Thread.sleep(10);
                     } catch (Exception e) {
                         e.getLocalizedMessage();
                     }
