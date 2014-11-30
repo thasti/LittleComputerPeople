@@ -67,13 +67,11 @@ public class Subject {
 
         for (int i = 0; i <= (bitmaps.size() - 1); i++){
             Bitmap bm = bitmaps.get(i);
-            bm = Bitmap.createScaledBitmap(bm, 140, 350, false);
             subjectWalk.add(i, bm);
         }
 
         for (int i = 0; i <= (subjectWalk.size() - 1); i++){
             Bitmap bm = subjectWalk.get(i);
-            bm = Bitmap.createScaledBitmap(bm, 140, 350, false);
             bm = this.mirrorBitmap(bm);
             subjectWalkInv.add(i, bm);
         }

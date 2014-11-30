@@ -36,7 +36,6 @@ public class GraphicalOutput extends View {
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         Paint iconPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(subject.getSubjBitmap(), 140, 350, false);
 
 
         for (Iterator<Room> iter = roomList.iterator(); iter.hasNext(); ) {
@@ -63,6 +62,8 @@ public class GraphicalOutput extends View {
             canvas.drawBitmap(obj.getBitmapO(), obj.getxPos(), obj.getyPos(), iconPaint);
         }
 
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(subject.getSubjBitmap(), 170, 330, false);
+
         // TODO subject init should probably NOT be here
         if(subject.getInitialized() == 0) {
             float canvasx = (float) canvas.getWidth();
@@ -70,7 +71,7 @@ public class GraphicalOutput extends View {
             float bitmapx = (float) resizedBitmap.getWidth();
             float bitmapy = (float) resizedBitmap.getHeight();
             float posX = ((canvasx/2) - (bitmapx / 2));
-            float posY = (((canvasy/2) - (bitmapy / 2)) + (canvasy/20));
+            float posY = (((canvasy/2) - (bitmapy / 2)) + (canvasy/15));
 
             subject.setDefaultKoords(posX,posY,1);
             subject.setInitialized();
