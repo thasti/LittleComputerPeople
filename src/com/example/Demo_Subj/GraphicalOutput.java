@@ -8,16 +8,22 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.Iterator;
 import java.util.List;
 
 public class GraphicalOutput extends View {
 
+    public static final int TOUCH_BOX_SIZE = 50;
+
     private Subject subject;
     private List<Room> roomList;
     private Object object;
+    Room drawRoom;
 
     public GraphicalOutput (Context c, Subject subject1, List<Room> m_roomList) {
         super(c);
@@ -32,7 +38,7 @@ public class GraphicalOutput extends View {
         Paint iconPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(subject.getSubjBitmap(), 140, 350, false);
 
-        Room drawRoom = null;
+
         for (Iterator<Room> iter = roomList.iterator(); iter.hasNext(); ) {
             Room room = iter.next();
             if (room.getRoomID() == subject.getAktRoomID()) {
@@ -76,5 +82,31 @@ public class GraphicalOutput extends View {
                     subject.getyPos(),
                     iconPaint);
         }
+    }
+
+    public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
+
+        int eventAction = event.getAction();
+
+        switch (eventAction) {
+            case MotionEvent.ACTION_DOWN:
+                // Traverse all Objects in the current room
+                List<Object> allObjs = drawRoom.getObjectList();
+                
+                for (Iterator<Object> iter = allObjs.iterator(); iter.hasNext(); ) {
+                    Object obj = iter.next();
+                    Rect boundingBox = new Rect((int)obj.getxPos(),
+                            (int)obj.getyPos(),
+                            (int)obj.getxPos() + obj.getBitmapO().getWidth(),
+                            (int)obj.getyPos() + obj.getBitmapO().getHeight());
+                    if (boundingBox.contains((int)event.getX(), (int)event.getY())) {
+                        // TODO call the use() function of the object
+                        Toast.makeText(getContext(), "Click on " + obj.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+        }
+        return true;
     }
 }
