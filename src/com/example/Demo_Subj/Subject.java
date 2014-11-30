@@ -4,7 +4,13 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.media.MediaPlayer;
+
+import java.lang.*;
+import java.lang.Object;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 
 /**
@@ -16,7 +22,7 @@ public class Subject {
     //aktuelle Position
     private float xPos;
     private float yPos;
-    private int aktRoomID;
+    private int aktRoomID = 1;
 
     //Ziel
     private float xDest;
@@ -26,15 +32,17 @@ public class Subject {
     // TODO: List/Array of bitmaps for animations
     private Bitmap subjStandBitmap;
     private Bitmap subjStandBitmapInv;
-    private Bitmap subjWalk1Bitmap;
-    private Bitmap subjWalk1BitmapInv;
-    private Bitmap subjWalk2Bitmap;
-    private Bitmap subjWalk2BitmapInv;
 
+    private List<Bitmap> subjectWalk;
+    private List<Bitmap> subjectWalkInv;
 
     private Bitmap aktBitmap;
-    private int initialized;
+    private int initialized = 0;
     private int screenWidth;
+
+    private int listPointerWalk = 0;
+    private int holdAnimation = 0;
+    private static int holdAnimationCycles = 20;
 
     private Context context;
     private SoundManager soundmanager;
@@ -42,18 +50,33 @@ public class Subject {
     private KI intel;
 
     //Konstruktor: zu übergeben - 3 Bilder
-    public Subject(Bitmap sStand, int screenW, Context c){
+    public Subject(Bitmap sStand, List<Bitmap> bitmaps, int screenW, Context c){
         subjStandBitmap = sStand;
         subjStandBitmapInv = mirrorBitmap(subjStandBitmap);
 
         aktBitmap = sStand;
-        aktRoomID = 1;
-        initialized = 0;
         screenWidth = screenW;
         context = c;
         soundmanager = new SoundManager(c);
         soundmanager.setBalance(1);
         soundmanager.setVolume(1);
+
+        //Copy List of Bitmaps for Walking animations
+        subjectWalk = new ArrayList<Bitmap>();
+        subjectWalkInv = new ArrayList<Bitmap>();
+
+        for (int i = 0; i <= (bitmaps.size() - 1); i++){
+            Bitmap bm = bitmaps.get(i);
+            bm = Bitmap.createScaledBitmap(bm, 140, 350, false);
+            subjectWalk.add(i, bm);
+        }
+
+        for (int i = 0; i <= (subjectWalk.size() - 1); i++){
+            Bitmap bm = subjectWalk.get(i);
+            bm = Bitmap.createScaledBitmap(bm, 140, 350, false);
+            bm = this.mirrorBitmap(bm);
+            subjectWalkInv.add(i, bm);
+        }
 
         intel = new KI();
     }
@@ -116,6 +139,7 @@ public class Subject {
         // die Animation sollte das GraphicalOutput dann aus dem Zustand und der Richtung erzeugen (oder?)
         if((xPos == xDest) && (aktRoomID == destRoomID)){
             aktBitmap = subjStandBitmap;
+            listPointerWalk = 0;
             // we finished the last action, so get the next from the KI
             SubjectAction nextAction = intel.getNextAction();
             if (nextAction instanceof SubjectMoveAction) {
@@ -126,17 +150,17 @@ public class Subject {
         }
         else if (aktRoomID == destRoomID) {
             if (xPos > xDest) {
-                aktBitmap = subjStandBitmap;
+                swapBitmap(false);
                 xPos --;
             }
             else{
-                aktBitmap = subjStandBitmapInv;
+                swapBitmap(true);
                 xPos++;
             }
         }
         else if (aktRoomID > destRoomID){
             if (xPos > 0){
-                aktBitmap = subjStandBitmap;
+                swapBitmap(false);
                 xPos--;
             }
             else{
@@ -144,11 +168,13 @@ public class Subject {
                 aktRoomID--;
                 soundmanager.play(soundmanager.load(R.raw.sound_door));
                 xPos = screenWidth;
+                //reset walking animation
+                listPointerWalk = 0;
             }
         }
         else if (aktRoomID < destRoomID){
             if (xPos < (screenWidth)){
-                aktBitmap = subjStandBitmapInv;
+                swapBitmap(true);
                 xPos++;
             }
             else{
@@ -156,25 +182,38 @@ public class Subject {
                 aktRoomID++;
                 soundmanager.play(soundmanager.load(R.raw.sound_door));
                 xPos = 0;
+                //reset walking animation
+                listPointerWalk = 0;
             }
         }
     }
 
     private void swapBitmap(boolean mirror){
-        if ((aktBitmap == subjWalk1Bitmap)||(aktBitmap == subjWalk1BitmapInv)){
-            if (mirror == true){
-                aktBitmap = subjWalk2BitmapInv;
+        if (mirror == true){
+            if (holdAnimation < holdAnimationCycles){
+                holdAnimation++;
             }
-            else
-                aktBitmap = subjWalk2Bitmap;
-        }
-        else{
-            if (mirror == true){
-                aktBitmap = subjWalk1BitmapInv;
+            else{
+                holdAnimation = 0;
+                aktBitmap = subjectWalkInv.get(listPointerWalk);
+                listPointerWalk++;
+                if (listPointerWalk > (subjectWalkInv.size() - 1)){
+                    listPointerWalk = 0;
+                }
             }
-            else
-                aktBitmap = subjWalk1Bitmap;
         }
+        else
+            if (holdAnimation < holdAnimationCycles){
+                holdAnimation++;
+            }
+            else {
+                holdAnimation = 0;
+                aktBitmap = subjectWalk.get(listPointerWalk);
+                listPointerWalk++;
+                if (listPointerWalk > (subjectWalk.size() - 1)) {
+                    listPointerWalk = 0;
+                }
+            }
     }
 
     private Bitmap mirrorBitmap(Bitmap b){

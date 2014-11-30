@@ -22,6 +22,7 @@ public class MyActivity extends Activity {
     private GraphicalOutput grafik;
     private Subject subject;
     private List<Room> roomList;
+    private List<Bitmap> bitmapWalkingList;
     private int currentRoom;
     private int screenWidth;
     private int screenHeight;
@@ -51,8 +52,13 @@ public class MyActivity extends Activity {
         screenHeight = display.getHeight();
         screenWidth = display.getWidth();
 
-        Bitmap subjectB = BitmapFactory.decodeResource(resources, R.drawable.subjekt);
-        subject = new Subject (subjectB, screenWidth, MyActivity.this);
+        Bitmap subjectBStand = BitmapFactory.decodeResource(resources, R.drawable.subjekt);
+        bitmapWalkingList = new ArrayList<Bitmap>();
+        bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_1));
+        bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_2));
+        bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_3));
+        bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_4));
+        subject = new Subject (subjectBStand, bitmapWalkingList,screenWidth, MyActivity.this);
 
         roomList = new ArrayList<Room>();
         // TODO: populate this list via the XML

@@ -58,7 +58,7 @@ public class GraphicalOutput extends View {
 
         List<Object> drawObjects = drawRoom.getObjectList();
 
-        for (Iterator<Object> iter = drawObjects.iterator(); iter.hasNext(); ) {
+        for (Iterator<Object> iter = drawObjects.iterator(); iter.hasNext(); ){
             Object obj = iter.next();
             canvas.drawBitmap(obj.getBitmapO(), obj.getxPos(), obj.getyPos(), iconPaint);
         }
