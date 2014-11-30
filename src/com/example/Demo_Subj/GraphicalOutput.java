@@ -21,7 +21,7 @@ public class GraphicalOutput extends View {
 
     public GraphicalOutput (Context c, Subject subject1, List<Room> m_roomList) {
         super(c);
-        //setzt den Hintergrund
+        //setzt den Hintergrund und so
         this.roomList = m_roomList;
         subject = subject1;
     }
@@ -57,6 +57,7 @@ public class GraphicalOutput extends View {
             canvas.drawBitmap(obj.getBitmapO(), obj.getxPos(), obj.getyPos(), iconPaint);
         }
 
+        // TODO subject init should probably NOT be here
         if(subject.getInitialized() == 0) {
             float canvasx = (float) canvas.getWidth();
             float canvasy = (float) canvas.getHeight();

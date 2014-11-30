@@ -8,7 +8,6 @@ public class SubjectMoveAction extends SubjectAction {
     int destX;
 
     public SubjectMoveAction(int m_destX, int m_destRoom) {
-        super(0);
         destRoom = m_destRoom;
         destX = m_destX;
     }
