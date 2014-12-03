@@ -5,14 +5,13 @@ import android.graphics.Bitmap;
 /**
  * Created by johannes on 24.11.2014.
  */
-public class Object {
+public class Item {
 
     private Bitmap bitmapO;
     private float xPos;
     private float yPos;
 
-
-    public Object (Bitmap bitmap, float x, float y){
+    public Item(Bitmap bitmap, float x, float y){
         bitmapO = bitmap;
         xPos = x;
         yPos = y;

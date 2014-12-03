@@ -22,7 +22,7 @@ public class GraphicalOutput extends View {
 
     private Subject subject;
     private List<Room> roomList;
-    private Object object;
+    private Item item;
     Room drawRoom;
 
     public GraphicalOutput (Context c, Subject subject1, List<Room> m_roomList) {
@@ -55,10 +55,11 @@ public class GraphicalOutput extends View {
                 false);
         canvas.drawBitmap(background, 0, 0, iconPaint);
 
-        List<Object> drawObjects = drawRoom.getObjectList();
 
-        for (Iterator<Object> iter = drawObjects.iterator(); iter.hasNext(); ){
-            Object obj = iter.next();
+        List<Item> drawItems = drawRoom.getItemList();
+
+        for (Iterator<Item> iter = drawItems.iterator(); iter.hasNext(); ){
+            Item obj = iter.next();
             canvas.drawBitmap(obj.getBitmapO(), obj.getxPos(), obj.getyPos(), iconPaint);
         }
         //TODO alle resize Vorgänge in den Konstruktor auslagern? - JS
@@ -93,16 +94,16 @@ public class GraphicalOutput extends View {
         switch (eventAction) {
             case MotionEvent.ACTION_DOWN:
                 // Traverse all Objects in the current room
-                List<Object> allObjs = drawRoom.getObjectList();
+                List<Item> allObjs = drawRoom.getItemList();
                 
-                for (Iterator<Object> iter = allObjs.iterator(); iter.hasNext(); ) {
-                    Object obj = iter.next();
+                for (Iterator<Item> iter = allObjs.iterator(); iter.hasNext(); ) {
+                    Item obj = iter.next();
                     Rect boundingBox = new Rect((int)obj.getxPos(),
                             (int)obj.getyPos(),
                             (int)obj.getxPos() + obj.getBitmapO().getWidth(),
                             (int)obj.getyPos() + obj.getBitmapO().getHeight());
                     if (boundingBox.contains((int)event.getX(), (int)event.getY())) {
-                        // TODO call the use() function of the object
+                        // TODO call the use() function of the item
                         Toast.makeText(getContext(), "Click on " + obj.toString(), Toast.LENGTH_SHORT).show();
                     }
                 }

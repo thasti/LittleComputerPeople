@@ -16,18 +16,18 @@ public class Room {
     private Bitmap bitmapRoom;
     private int roomID;
 
-    private List<Object> objectList;
+    private List<Item> itemList;
 
     public Room (Bitmap bitmapRoomR, int ID, Context ctx) {
         bitmapRoom = bitmapRoomR;
         roomID = ID;
-        objectList = new ArrayList<Object>();
+        itemList = new ArrayList<Item>();
 
         Resources resources = ctx.getResources();
 
         // populate this object list from XML information instead
         if (ID == 2) {
-            objectList.add(new Object(BitmapFactory.decodeResource(resources, R.drawable.pflanze), 180, 40));
+            itemList.add(new Item(BitmapFactory.decodeResource(resources, R.drawable.pflanze), 180, 40));
         }
     }
 
@@ -39,7 +39,7 @@ public class Room {
         return bitmapRoom;
     }
 
-    public List<Object> getObjectList() {
-        return objectList;
+    public List<Item> getItemList() {
+        return itemList;
     }
 }

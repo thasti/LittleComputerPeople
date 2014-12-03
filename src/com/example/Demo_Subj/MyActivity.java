@@ -85,7 +85,7 @@ public class MyActivity extends Activity {
                     // it should be possible to display rooms where the subject is not at the moment
                     currentRoom = subject.getAktRoomID();
                     grafik.postInvalidate();
-                    // TODO: instead of sleeping, pause the main and wait for signal from Tick-Object (this thread)
+                    // TODO: instead of sleeping, pause the main and wait for signal from Tick-Item (this thread)
                     try {
                         Thread.sleep(10);
                     } catch (Exception e) {
