@@ -15,8 +15,7 @@ public class Item {
         bitmapO = bitmap;
         xPos = x;
         yPos = y;
-    }
-
+     }
 
     public float getxPos(){
         return xPos;
@@ -27,5 +26,6 @@ public class Item {
     public Bitmap getBitmapO(){
         return bitmapO;
     }
+
 
 }

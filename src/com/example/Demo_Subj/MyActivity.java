@@ -69,6 +69,8 @@ public class MyActivity extends Activity {
 
         grafik = new GraphicalOutput(this, subject, roomList);
 
+
+
         FrameLayout fl = (FrameLayout) findViewById(R.id.framelayout0);
         fl.addView(grafik);
 
@@ -95,5 +97,14 @@ public class MyActivity extends Activity {
             }
         });
         move.start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        //Kills the app immediately
+        //TODO figure out a way to do this more safely and elegant
+        super.onBackPressed();
+        this.finish();
+        System.exit(0);
     }
 }
