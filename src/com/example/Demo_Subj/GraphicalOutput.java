@@ -1,7 +1,8 @@
 package com.example.Demo_Subj;
 
 /**
- * Created by johannes on 22.11.2014.
+ * 22.11.2014 - File created - JS
+ * 29.11.2014 - taken over (refactored) - SB
  */
 
 import android.content.Context;
@@ -18,26 +19,23 @@ import java.util.List;
 
 public class GraphicalOutput extends View {
 
-    public static final int TOUCH_BOX_SIZE = 50;
-
+    private Paint p;
     private Subject subject;
     private List<Room> roomList;
-    private Item item;
-    Room drawRoom;
+    private Room drawRoom;
 
-    public GraphicalOutput (Context c, Subject subject1, List<Room> m_roomList) {
+    public GraphicalOutput (Context c, Subject m_subject, List<Room> m_roomList) {
         super(c);
-        //setzt den Hintergrund und so
         this.roomList = m_roomList;
-        subject = subject1;
+        this.subject = m_subject;
+        this.p = new Paint(Paint.ANTI_ALIAS_FLAG);;
     }
 
     @Override
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
-        Paint iconPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-
+        // find out which room to draw
         for (Iterator<Room> iter = roomList.iterator(); iter.hasNext(); ) {
             Room room = iter.next();
             if (room.getRoomID() == subject.getAktRoomID()) {
@@ -48,20 +46,25 @@ public class GraphicalOutput extends View {
             // room not found
             drawRoom = roomList.get(0);
         }
+
+        //TODO for all upcoming TODOs, we need a better framework to give canvas size to objects
         //TODO kann man auslagern in den Konstruktor? - JS
+        // draw the background image
         Bitmap background = Bitmap.createScaledBitmap(drawRoom.getBitmapRoom(),
                 canvas.getWidth(),
                 canvas.getHeight(),
                 false);
-        canvas.drawBitmap(background, 0, 0, iconPaint);
+        canvas.drawBitmap(background, 0, 0, p);
 
-
+        // draw all items (TODO: add layering)
         List<Item> drawItems = drawRoom.getItemList();
-
+        
         for (Iterator<Item> iter = drawItems.iterator(); iter.hasNext(); ){
             Item obj = iter.next();
-            canvas.drawBitmap(obj.getBitmapO(), obj.getxPos(), obj.getyPos(), iconPaint);
+            canvas.drawBitmap(obj.getBitmapO(), obj.getxPos(), obj.getyPos(), p);
         }
+
+        // draw the subject
         //TODO alle resize Vorgänge in den Konstruktor auslagern? - JS
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(subject.getSubjBitmap(), 170, 330, false);
 
@@ -82,7 +85,7 @@ public class GraphicalOutput extends View {
             canvas.drawBitmap(resizedBitmap,
                     subject.getxPos(),
                     subject.getyPos(),
-                    iconPaint);
+                    p);
         }
     }
 
