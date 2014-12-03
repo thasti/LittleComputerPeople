@@ -29,7 +29,7 @@ public class Subject {
     private int destRoomID;
 
     //Bildverweise
-    // TODO: List/Array of bitmaps for animations
+    //TODO: List/Array of bitmaps for animations
     private Bitmap subjStandBitmap;
     private Bitmap subjStandBitmapInv;
 
@@ -145,6 +145,7 @@ public class Subject {
                 setDest(move.getDestX(), move.getDestRoom());
             }
             // TODO: else -> implement SubjectDoAction
+            // move.getDestItem().use();
         }
         else if (aktRoomID == destRoomID) {
             if (xPos > xDest) {

@@ -48,7 +48,7 @@ public class GraphicalOutput extends View {
             // room not found
             drawRoom = roomList.get(0);
         }
-
+        //TODO kann man auslagern in den Konstruktor? - JS
         Bitmap background = Bitmap.createScaledBitmap(drawRoom.getBitmapRoom(),
                 canvas.getWidth(),
                 canvas.getHeight(),
@@ -61,7 +61,7 @@ public class GraphicalOutput extends View {
             Object obj = iter.next();
             canvas.drawBitmap(obj.getBitmapO(), obj.getxPos(), obj.getyPos(), iconPaint);
         }
-
+        //TODO alle resize Vorgänge in den Konstruktor auslagern? - JS
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(subject.getSubjBitmap(), 170, 330, false);
 
         // TODO subject init should probably NOT be here
