@@ -11,11 +11,13 @@ public class Object {
     private float xPos;
     private float yPos;
 
+
     public Object (Bitmap bitmap, float x, float y){
         bitmapO = bitmap;
         xPos = x;
         yPos = y;
     }
+
 
     public float getxPos(){
         return xPos;
