@@ -69,6 +69,8 @@ public class MyActivity extends Activity {
 
         grafik = new GraphicalOutput(this, subject, roomList);
 
+
+
         FrameLayout fl = (FrameLayout) findViewById(R.id.framelayout0);
         fl.addView(grafik);
 

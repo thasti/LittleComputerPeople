@@ -1,16 +1,15 @@
 package com.example.Demo_Subj;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.media.MediaPlayer;
+import android.net.Uri;
 
-import java.lang.*;
-import java.lang.Object;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
+
 
 
 /**
@@ -46,6 +45,7 @@ public class Subject {
 
     private Context context;
     private SoundManager soundmanager;
+    private MediaPlayer mediaplayer;
 
     private KI intel;
 
@@ -77,6 +77,49 @@ public class Subject {
         }
 
         intel = new KI();
+
+        mediaplayer = new MediaPlayer();
+    }
+
+    private void startSound(int soundRes){
+        //mediaplayer.create(context, R.raw.sound_door);
+
+        Uri path = Uri.parse("android.resource://com.example.Demo_Subj/" + R.raw.sound_door);
+        mediaplayer = new MediaPlayer();
+        mediaplayer.reset();
+        try{
+            mediaplayer.setDataSource(context, path);
+        }catch (IOException e){
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }catch (IllegalArgumentException e){
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+
+        try{
+            mediaplayer.prepare();
+        }catch (IOException e){
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
+
+        Thread sound = new Thread(new Runnable() {
+            @Override
+            public void run() {
+            mediaplayer.start();
+            mediaplayer.setVolume(1,1);
+            while (mediaplayer.getCurrentPosition() != mediaplayer.getDuration()) {
+
+            }
+            mediaplayer.start();
+            mediaplayer.setVolume(1,1);
+            }
+        });
+        sound.start();
     }
 
     public void setDefaultKoords(float xDef, float yDef, int room){
@@ -165,10 +208,10 @@ public class Subject {
             else{
                 aktBitmap = subjStandBitmap;
                 aktRoomID--;
-                soundmanager.play(soundmanager.load(R.raw.sound_door));
                 xPos = screenWidth;
                 //reset walking animation
                 listPointerWalk = 0;
+                startSound(R.raw.sound_door);
             }
         }
         else if (aktRoomID < destRoomID){
@@ -179,10 +222,10 @@ public class Subject {
             else{
                 aktBitmap = subjStandBitmapInv;
                 aktRoomID++;
-                soundmanager.play(soundmanager.load(R.raw.sound_door));
                 xPos = 0;
                 //reset walking animation
                 listPointerWalk = 0;
+                startSound(R.raw.sound_door);
             }
         }
     }
