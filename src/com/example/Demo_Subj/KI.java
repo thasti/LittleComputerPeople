@@ -37,7 +37,7 @@ public class KI {
         init_attributes(1, 10, 100); //Erzeugung von Zufallszahlen zwischen 1 und 10; Tick alle 100ms
     }
 
-    //überladener Konstrktor - für die Tests, um die KI verschieden zu konfigurieren
+    //überladener Konstruktor - für die Tests, um die KI verschieden zu konfigurieren
     public KI(int random_start, int random_end, int Tick_milsec){
         //Initialisierung des Vectors
         init_vector();
@@ -46,7 +46,7 @@ public class KI {
         init_attributes(random_start, random_end, Tick_milsec);
     }
 
-     //Liest die .xml und füllt den Vektor mit Bedürfnissen
+    //Liest die .xml und füllt den Vektor mit Bedürfnissen
     private void init_vector(){
         int     top_level; 	    //Schwellenwert
         byte    priority; 	    //Priorität
@@ -56,6 +56,7 @@ public class KI {
 
         /*ToDo:
             - .xml parsen
+            - unmögliche/ unsinnige Wert, die falsch in der xml stehen abfangen
             - lokale Varibalen mit den Werten aus der xml belegen und für den Konstruktor der Bedürfnisse nutzen
             - Bedürfnisse beim Instanziieren in Vektor schieben
 
@@ -69,12 +70,37 @@ public class KI {
 
     //Belegt die privaten Attribute mit Anfangswerten
     private void init_attributes(int lokal_random_start, int lokal_random_end, int lokal_Tick_milsec){
+        int temp;       //zum Vertauschen von lokal_random_end und lokal_random_start
+
         motivation_max_index = 0;
         day_night_counter = 0;
-        day_night = true;
+        day_night = true;               //beginnend mit Tag
+
+
+        if(lokal_random_start < 0)                        //lokal_random_start ist negativ -> * -1
+            lokal_random_start = lokal_random_start * -1;
+
+        if(lokal_random_end < 0)                          //lokal_random_end ist negativ -> * -1
+           lokal_random_end = lokal_random_end * -1;
+
+        if(lokal_random_start > lokal_random_end){        //lokal_random_start ist größer als lokal_random_end -> vertauschen
+            temp = lokal_random_start;
+            lokal_random_start = lokal_random_end;
+            lokal_random_end = temp;
+        }
+
+        if(lokal_random_end == lokal_random_start)        //lokal_random_start ist identisch lokal_random_end -> lokal_random_end + 1
+            lokal_random_end++;
 
         random_start = lokal_random_start;
-        random_end   = lokal_random_end;
+        random_end = lokal_random_end;
+
+        if(lokal_Tick_milsec < 0)                         //lokal_Tick_milsec ist negativ -> * -1
+            lokal_Tick_milsec = lokal_Tick_milsec * -1;
+
+        if(lokal_Tick_milsec == 0)                        //wurde kein Tick übergeben, wird dieser als 100 angenommen
+            lokal_Tick_milsec += 100;
+
         day_limit    = day_time * 1000 / lokal_Tick_milsec;
         night_limit  = night_time * 1000 / lokal_Tick_milsec;
 
@@ -82,7 +108,7 @@ public class KI {
 
     //Aufruf von Subjekt; Gibt Objekt_ID zurück, zu der das Subjekt als nächstes laufen soll
     public int getNextObject(){
-        //ToDo: XMl parsen und XMPParser.getObjectbyID() aufrufen
+        //ToDo: XMl parsen und XMLParser.getObjectbyID() aufrufen
 
         //Bedürfnis mit der höchsten Motivation resetten
         needs_list.elementAt(motivation_max_index).set_current_value(0);
@@ -90,7 +116,7 @@ public class KI {
         return needs_list.elementAt(motivation_max_index).get_object_id();
     }
 
-    //um mit dem unfertigen Projekt kompilieren zu können, wird die Method enoch beibehalten
+    //um mit dem unfertigen Projekt kompilieren zu können, wird die Method noch beibehalten
     //fliegt aber raus, sobald die Schnittstelle und der Übergabewert geklärt sind
     public SubjectMoveAction getNextAction() {
         switch (state) {
@@ -104,7 +130,7 @@ public class KI {
         return new SubjectMoveAction(0, 1);
     }
 
-    //Algorithmus, in dem die KI den Vektor verwaltet und alle die Bedürfnisse neu berechnet
+    //Algorithmus, in dem die KI den Vektor verwaltet und alle Bedürfnisse neu berechnet
     public void tick() {
         int motivation_highest = 0;
         Need beduerfnis;
@@ -140,7 +166,7 @@ public class KI {
         //Zählvariable für Tick inkrementieren
         day_night_counter++;
 
-        //Zahlvariable zurücksetzen (day_night umschalten), wenn...
+        //Zahlvariable zurücksetzen (= day_night umschalten), wenn...
         if(day_night && day_night_counter >= day_limit){  //... Tag ist und die Zählvaribale das Tageslimit erreicht hat
             day_night_counter = 0;
             day_night = false;
