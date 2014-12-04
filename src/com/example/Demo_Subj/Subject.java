@@ -44,7 +44,6 @@ public class Subject {
     private static int holdAnimationCycles = 20;
 
     private Context context;
-    private SoundManager soundmanager;
     private MediaPlayer mediaplayer;
 
     private KI intel;
@@ -57,9 +56,6 @@ public class Subject {
         aktBitmap = sStand;
         screenWidth = screenW;
         context = c;
-        soundmanager = new SoundManager(c);
-        soundmanager.setBalance(1);
-        soundmanager.setVolume(1);
 
         //Copy List of Bitmaps for Walking animations
         subjectWalk = new ArrayList<Bitmap>();
