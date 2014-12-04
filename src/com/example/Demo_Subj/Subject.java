@@ -179,12 +179,8 @@ public class Subject {
             aktBitmap = subjStandBitmap;
             listPointerWalk = 0;
             // we finished the last action, so get the next from the KI
-            SubjectAction nextAction = intel.getNextAction();
-            if (nextAction instanceof SubjectMoveAction) {
-                SubjectMoveAction move = (SubjectMoveAction)nextAction;
-                setDest(move.getDestX(), move.getDestRoom());
-            }
-            // TODO: else -> implement SubjectDoAction
+            SubjectMoveAction nextAction = intel.getNextAction();
+            setDest(nextAction.getDestX(), nextAction.getDestRoom());
             // move.getDestItem().use();
         }
         else if (aktRoomID == destRoomID) {
