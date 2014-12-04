@@ -13,6 +13,10 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by JS - note on 29.11.2014.
+ * edited by SB
+ */
 
 public class RoomActivity extends Activity {
     /**
