@@ -102,7 +102,7 @@ public class Subject {
             mediaplayer.prepare();
         }catch (IOException e){
             e.printStackTrace();
-        } catch (IllegalStateException e) {
+        }catch (IllegalStateException e) {
             e.printStackTrace();
         }
 
@@ -142,6 +142,7 @@ public class Subject {
             return 0;
         }
     }
+
 
 
     //kann das Ziel des Subjektes verändern
