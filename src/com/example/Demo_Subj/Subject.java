@@ -36,8 +36,6 @@ public class Subject {
     private List<Bitmap> subjectWalkInv;
 
     private Bitmap aktBitmap;
-    //TODO can go away now
-    private int initialized = 0;
 
     private int listPointerWalk = 0;
     private int holdAnimation = 0;
@@ -47,8 +45,7 @@ public class Subject {
     private MediaPlayer mediaplayer;
 
     private KI intel;
-
-    //Konstruktor: zu übergeben - 3 Bilder
+    
     public Subject(Bitmap sStand, List<Bitmap> bitmaps, Context c){
         subjStandBitmap = Bitmap.createScaledBitmap(sStand, 170, 330, false);;
         subjStandBitmapInv = mirrorBitmap(subjStandBitmap);
@@ -77,9 +74,7 @@ public class Subject {
         float bitmapy = (float) subjStandBitmap.getHeight();
         float posX = ((canvasx/2) - (bitmapx / 2));
         float posY = (((canvasy/2) - (bitmapy / 2)) + (canvasy/15));
-
-        setDefaultKoords(posX,posY,1);
-        setInitialized();
+        setDefaultKoords(posX, posY, 1);
 
         intel = new KI();
 
@@ -127,20 +122,13 @@ public class Subject {
         sound.start();
     }
 
-    public void setDefaultKoords(float xDef, float yDef, int room){
+    public void setDefaultKoords(float xDef, float yDef, int room) {
         xPos = xDef;
         yPos = yDef;
         aktRoomID = room;
 
         xDest = xDef;
         destRoomID = room;
-    }
-
-    public void setInitialized(){
-        initialized = 1;
-    }
-    public int getInitialized(){
-        return initialized;
     }
 
     public int reachedDest(){
