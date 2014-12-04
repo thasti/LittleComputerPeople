@@ -12,7 +12,7 @@ public class KI {
         state = 0;
     }
 
-    public SubjectAction getNextAction() {
+    public SubjectMoveAction getNextAction() {
         switch (state) {
             case 0:
                 state = 1;
