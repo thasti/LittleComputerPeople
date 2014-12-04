@@ -23,9 +23,6 @@ public class MyActivity extends Activity {
     private Subject subject;
     private List<Room> roomList;
     private List<Bitmap> bitmapWalkingList;
-    private int currentRoom;
-    private int screenWidth;
-    private int screenHeight;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,27 +46,26 @@ public class MyActivity extends Activity {
         screenHeight = size.y;
         */
         // workaround for my older API 10 smartphone
-        screenHeight = display.getHeight();
-        screenWidth = display.getWidth();
+        GlobalInformation.setScreenHeight(display.getHeight());
+        GlobalInformation.setScreenWidth(display.getWidth());
 
+        // this has to be here (for now) because there is no XML-parser yet
         Bitmap subjectBStand = BitmapFactory.decodeResource(resources, R.drawable.subjekt);
         bitmapWalkingList = new ArrayList<Bitmap>();
         bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_1));
         bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_2));
         bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_3));
         bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_4));
-        subject = new Subject (subjectBStand, bitmapWalkingList,screenWidth, MyActivity.this);
+        subject = new Subject (subjectBStand, bitmapWalkingList, MyActivity.this);
 
         roomList = new ArrayList<Room>();
         // TODO: populate this list via the XML
         roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.wohnzimmer), 1, this));
         roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.schlafzimmer), 2, this));
 
-        currentRoom = subject.getAktRoomID();
+        GlobalInformation.setCurrentRoom(subject.getAktRoomID());
 
         grafik = new GraphicalOutput(this, subject, roomList);
-
-
 
         FrameLayout fl = (FrameLayout) findViewById(R.id.framelayout0);
         fl.addView(grafik);
@@ -85,7 +81,7 @@ public class MyActivity extends Activity {
                     // TODO: find a good way to encapsule current room (world object would be good..)
                     // i dislike the way it is in Subject only, hmh
                     // it should be possible to display rooms where the subject is not at the moment
-                    currentRoom = subject.getAktRoomID();
+                    GlobalInformation.setCurrentRoom(subject.getAktRoomID());
                     grafik.postInvalidate();
                     // TODO: instead of sleeping, pause the main and wait for signal from Tick-Item (this thread)
                     try {

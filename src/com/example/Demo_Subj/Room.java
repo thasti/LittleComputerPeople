@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * Created by johannes on 24.11.2014.
+ * Graphical adapations - 04.12.2014
  */
 public class Room {
 
@@ -19,13 +20,17 @@ public class Room {
     private List<Item> itemList;
 
     public Room (Bitmap bitmapRoomR, int ID, Context ctx) {
-        bitmapRoom = bitmapRoomR;
+        bitmapRoom = Bitmap.createScaledBitmap(bitmapRoomR,
+                GlobalInformation.getScreenWidth(),
+                GlobalInformation.getScreenHeight(),
+                false);
+
         roomID = ID;
         itemList = new ArrayList<Item>();
 
         Resources resources = ctx.getResources();
 
-        // populate this object list from XML information instead
+        //TODO populate this object list from XML information instead
         if (ID == 2) {
             itemList.add(new Item(BitmapFactory.decodeResource(resources, R.drawable.pflanze), 180, 40));
         }

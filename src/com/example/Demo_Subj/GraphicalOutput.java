@@ -36,9 +36,10 @@ public class GraphicalOutput extends View {
         super.onDraw(canvas);
 
         // find out which room to draw
+        //TODO should be replaced by a proper find() in the list
         for (Iterator<Room> iter = roomList.iterator(); iter.hasNext(); ) {
             Room room = iter.next();
-            if (room.getRoomID() == subject.getAktRoomID()) {
+            if (room.getRoomID() == GlobalInformation.getCurrentRoom()) {
                 drawRoom = room;
             }
         }
@@ -47,13 +48,8 @@ public class GraphicalOutput extends View {
             drawRoom = roomList.get(0);
         }
 
-        //TODO for all upcoming TODOs, we need a better framework to give canvas size to objects
-        //TODO kann man auslagern in den Konstruktor? - JS
         // draw the background image
-        Bitmap background = Bitmap.createScaledBitmap(drawRoom.getBitmapRoom(),
-                canvas.getWidth(),
-                canvas.getHeight(),
-                false);
+        Bitmap background = drawRoom.getBitmapRoom();
         canvas.drawBitmap(background, 0, 0, p);
 
         // draw all items (TODO: add layering)
@@ -65,24 +61,10 @@ public class GraphicalOutput extends View {
         }
 
         // draw the subject
-        //TODO alle resize Vorgänge in den Konstruktor auslagern? - JS
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(subject.getSubjBitmap(), 170, 330, false);
-
-        // TODO subject init should probably NOT be here
-        if(subject.getInitialized() == 0) {
-            float canvasx = (float) canvas.getWidth();
-            float canvasy = (float) canvas.getHeight();
-            float bitmapx = (float) resizedBitmap.getWidth();
-            float bitmapy = (float) resizedBitmap.getHeight();
-            float posX = ((canvasx/2) - (bitmapx / 2));
-            float posY = (((canvasy/2) - (bitmapy / 2)) + (canvasy/15));
-
-            subject.setDefaultKoords(posX,posY,1);
-            subject.setInitialized();
-        }
+        Bitmap subjectBitmap = subject.getSubjBitmap();
 
         if(subject.getSubjBitmap() != null){
-            canvas.drawBitmap(resizedBitmap,
+            canvas.drawBitmap(subjectBitmap,
                     subject.getxPos(),
                     subject.getyPos(),
                     p);

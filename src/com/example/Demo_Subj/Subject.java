@@ -36,8 +36,8 @@ public class Subject {
     private List<Bitmap> subjectWalkInv;
 
     private Bitmap aktBitmap;
+    //TODO can go away now
     private int initialized = 0;
-    private int screenWidth;
 
     private int listPointerWalk = 0;
     private int holdAnimation = 0;
@@ -49,12 +49,11 @@ public class Subject {
     private KI intel;
 
     //Konstruktor: zu übergeben - 3 Bilder
-    public Subject(Bitmap sStand, List<Bitmap> bitmaps, int screenW, Context c){
-        subjStandBitmap = sStand;
+    public Subject(Bitmap sStand, List<Bitmap> bitmaps, Context c){
+        subjStandBitmap = Bitmap.createScaledBitmap(sStand, 170, 330, false);;
         subjStandBitmapInv = mirrorBitmap(subjStandBitmap);
 
         aktBitmap = sStand;
-        screenWidth = screenW;
         context = c;
 
         //Copy List of Bitmaps for Walking animations
@@ -63,7 +62,7 @@ public class Subject {
 
         for (int i = 0; i <= (bitmaps.size() - 1); i++){
             Bitmap bm = bitmaps.get(i);
-            subjectWalk.add(i, bm);
+            subjectWalk.add(i,  Bitmap.createScaledBitmap(bm, 170, 330, false));
         }
 
         for (int i = 0; i <= (subjectWalk.size() - 1); i++){
@@ -71,6 +70,16 @@ public class Subject {
             bm = this.mirrorBitmap(bm);
             subjectWalkInv.add(i, bm);
         }
+
+        float canvasx = (float) GlobalInformation.getScreenWidth();
+        float canvasy = (float) GlobalInformation.getScreenHeight();
+        float bitmapx = (float) subjStandBitmap.getWidth();
+        float bitmapy = (float) subjStandBitmap.getHeight();
+        float posX = ((canvasx/2) - (bitmapx / 2));
+        float posY = (((canvasy/2) - (bitmapy / 2)) + (canvasy/15));
+
+        setDefaultKoords(posX,posY,1);
+        setInitialized();
 
         intel = new KI();
 
@@ -204,14 +213,14 @@ public class Subject {
             else{
                 aktBitmap = subjStandBitmap;
                 aktRoomID--;
-                xPos = screenWidth;
+                xPos = GlobalInformation.getScreenWidth();
                 //reset walking animation
                 listPointerWalk = 0;
                 startSound(R.raw.sound_door);
             }
         }
         else if (aktRoomID < destRoomID){
-            if (xPos < (screenWidth)){
+            if (xPos < (GlobalInformation.getScreenWidth())){
                 swapBitmap(true);
                 xPos++;
             }
