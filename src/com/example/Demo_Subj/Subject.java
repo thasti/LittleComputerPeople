@@ -3,6 +3,7 @@ package com.example.Demo_Subj;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 
@@ -82,9 +83,7 @@ public class Subject {
     }
 
     private void startSound(int soundRes){
-        //mediaplayer.create(context, R.raw.sound_door);
-
-        Uri path = Uri.parse("android.resource://com.example.Demo_Subj/" + R.raw.sound_door);
+        Uri path = Uri.parse("android.resource://com.example.Demo_Subj/" + soundRes);
         mediaplayer = new MediaPlayer();
         mediaplayer.reset();
         try{
@@ -111,7 +110,11 @@ public class Subject {
             @Override
             public void run() {
             mediaplayer.start();
-            mediaplayer.setVolume(1,1);
+            mediaplayer.setVolume(1.0f, 1.0f);
+
+            AudioManager mAudioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mAudioManager.getStreamMaxVolume (AudioManager.STREAM_MUSIC), 0);
+
             while (mediaplayer.getCurrentPosition() != mediaplayer.getDuration()) {
 
             }
