@@ -24,11 +24,11 @@ public class GraphicalOutput extends View {
     private List<Room> roomList;
     private Room drawRoom;
 
-    public GraphicalOutput (Context c, Subject m_subject, List<Room> m_roomList) {
+    public GraphicalOutput (Context c) {
         super(c);
-        this.roomList = m_roomList;
-        this.subject = m_subject;
-        this.p = new Paint(Paint.ANTI_ALIAS_FLAG);;
+        this.roomList = GlobalInformation.getRoomList();
+        this.subject = GlobalInformation.getSubject();
+        this.p = null;
     }
 
     @Override
@@ -49,8 +49,7 @@ public class GraphicalOutput extends View {
         }
 
         // draw the background image
-        Bitmap background = drawRoom.getBitmapRoom();
-        canvas.drawBitmap(background, 0, 0, p);
+        canvas.drawBitmap(drawRoom.getBitmapRoom(), 0, 0, p);
 
         // draw all items (TODO: add layering)
         List<Item> drawItems = drawRoom.getItemList();
@@ -61,14 +60,9 @@ public class GraphicalOutput extends View {
         }
 
         // draw the subject
-        Bitmap subjectBitmap = subject.getSubjBitmap();
-
-        if(subject.getSubjBitmap() != null){
-            canvas.drawBitmap(subjectBitmap,
-                    subject.getxPos(),
-                    subject.getyPos(),
-                    p);
-        }
+        canvas.drawBitmap(subject.getSubjBitmap(),
+                subject.getxPos(),
+                subject.getyPos(), p);
     }
 
     public boolean onTouchEvent(MotionEvent event) {

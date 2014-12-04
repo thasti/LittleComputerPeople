@@ -1,5 +1,7 @@
 package com.example.Demo_Subj;
 
+import java.util.List;
+
 /**
  * Created by thasti-note on 04.12.2014.
  * A static class to determine system information from everywhere
@@ -8,6 +10,8 @@ public class GlobalInformation {
     private static int screenWidth;
     private static int screenHeight;
     private static int currentRoom;
+    private static List<Room> roomList;
+    private static Subject subject;
 
     private GlobalInformation(){};
 
@@ -33,5 +37,21 @@ public class GlobalInformation {
 
     public static void setCurrentRoom(int currentRoom) {
         GlobalInformation.currentRoom = currentRoom;
+    }
+
+    public static List<Room> getRoomList() {
+        return roomList;
+    }
+
+    public static void setRoomList(List<Room> roomList) {
+        GlobalInformation.roomList = roomList;
+    }
+
+    public static Subject getSubject() {
+        return subject;
+    }
+
+    public static void setSubject(Subject subject) {
+        GlobalInformation.subject = subject;
     }
 }
