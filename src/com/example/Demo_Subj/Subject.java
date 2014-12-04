@@ -179,6 +179,7 @@ public class Subject {
             aktBitmap = subjStandBitmap;
             listPointerWalk = 0;
             // we finished the last action, so get the next from the KI
+                //ToDO: Schnittstelle muss auf getNextObject() umgestellt werdne; ist aber noch nicht genau spezifiziert
             SubjectMoveAction nextAction = intel.getNextAction();
             setDest(nextAction.getDestX(), nextAction.getDestRoom());
             // move.getDestItem().use();
