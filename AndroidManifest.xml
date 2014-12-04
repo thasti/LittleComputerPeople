@@ -14,7 +14,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".HouseActivity"/>
+        <activity android:name=".HouseActivity"
+                  android:configChanges="orientation"
+                  android:screenOrientation="landscape"/>
     </application>
 </manifest>
 

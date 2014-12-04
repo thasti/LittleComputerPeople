@@ -33,8 +33,6 @@ public class HouseActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        // change back to RoomActivity
-        Intent i = new Intent(getApplicationContext(), RoomActivity.class);
-        startActivity(i);
+        finish();
     }
 }

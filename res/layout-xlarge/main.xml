@@ -10,7 +10,7 @@
             android:layout_height="wrap_content"
             android:text="Hello World"
             />
-    <com.example.Demo_Subj.GraphicalOutput
+    <com.example.Demo_Subj.RoomView
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:background="#ffffff"/>
