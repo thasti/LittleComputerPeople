@@ -1,10 +1,12 @@
 package com.example.Demo_Subj;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,7 +25,12 @@ public class RoomActivity extends Activity {
      * Called when the activity is first created.
      */
 
-    private GraphicalOutput grafik;
+    private RoomView grafik;
+
+    private Object mPauseLock;
+    private boolean mPaused;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,13 +79,14 @@ public class RoomActivity extends Activity {
         GlobalInformation.setCurrentRoom(subject.getAktRoomID());
         GlobalInformation.setRoomList(roomList);
 
-        grafik = new GraphicalOutput(this);
+        grafik = new RoomView(this);
 
         FrameLayout fl = (FrameLayout) findViewById(R.id.framelayout0);
         fl.addView(grafik);
 
         grafik.invalidate();
 
+        mPauseLock = new Object();
         Thread move = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -96,10 +104,35 @@ public class RoomActivity extends Activity {
                     } catch (Exception e) {
                         e.getLocalizedMessage();
                     }
+                    synchronized (mPauseLock) {
+                        while (mPaused) {
+                            try {
+                                mPauseLock.wait();
+                            } catch (InterruptedException e) {
+                            }
+                        }
+                    }
                 }
             }
         });
         move.start();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        synchronized (mPauseLock) {
+            mPaused = true;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        synchronized (mPauseLock) {
+            mPaused = false;
+            mPauseLock.notifyAll();
+        }
     }
 
     @Override

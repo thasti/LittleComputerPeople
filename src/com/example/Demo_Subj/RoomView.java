@@ -6,6 +6,7 @@ package com.example.Demo_Subj;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -17,15 +18,18 @@ import android.widget.Toast;
 import java.util.Iterator;
 import java.util.List;
 
-public class GraphicalOutput extends View {
+public class RoomView extends View {
 
+    private Context ctx;
     private Paint p;
     private Subject subject;
     private List<Room> roomList;
     private Room drawRoom;
 
-    public GraphicalOutput (Context c) {
+    public RoomView(Context c) {
         super(c);
+
+        this.ctx = c;
         this.roomList = GlobalInformation.getRoomList();
         this.subject = GlobalInformation.getSubject();
         this.p = null;
@@ -85,6 +89,11 @@ public class GraphicalOutput extends View {
                         // TODO call the use() function of the item
                         Toast.makeText(getContext(), "Click on " + obj.toString(), Toast.LENGTH_SHORT).show();
                     }
+                }
+                Rect changeViewBox = new Rect(0,0, 50, 50);
+                if (changeViewBox.contains((int)event.getX(), (int)event.getY())) {
+                    Intent i = new Intent(ctx, HouseActivity.class);
+                    ctx.startActivity(i);
                 }
                 break;
         }
