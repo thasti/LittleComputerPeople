@@ -106,19 +106,6 @@ public class RoomActivity extends Activity {
                 else{
                     //Do nothing
                 }
-                synchronized (mPauseLock) {
-                    while (!running) {
-                        try {
-                            mPauseLock.wait();              //Wenn ich das richtig verstehe, wird hier versucht, mPauseLock
-                                                            //solange zu pausieren(xyz.wait() legt eine Thread schlafen bis
-                                                            //er durch xyz.notify() geweckt wird), wie running false ist.
-                                                            //Theoretisch sollte es ausreichen, den Thread einmal schlafen zu legen
-                                                        
-                        } catch (InterruptedException e) {
-
-                        }
-                    }
-                }
             }
         }, 0, tick);
 
@@ -158,18 +145,20 @@ public class RoomActivity extends Activity {
     @Override
     public void onPause() {
         super.onPause();
-        synchronized (mPauseLock) {
-            running = false;
-        }
+        running = false;
+        /*synchronized (mPauseLock) {
+            mPaused = true;
+        }*/
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        synchronized (mPauseLock) {
-            running = true;
+        running = true;
+        /*synchronized (mPauseLock) {
+            mPaused = false;
             mPauseLock.notifyAll();
-        }
+        }*/
     }
 
     @Override
