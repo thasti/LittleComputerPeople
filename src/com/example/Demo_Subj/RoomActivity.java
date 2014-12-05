@@ -33,6 +33,7 @@ public class RoomActivity extends Activity {
     private boolean mPaused;
     private int tick = 10;
     private Timer timer;
+    private boolean running = true;
 
 
     @Override
@@ -97,9 +98,27 @@ public class RoomActivity extends Activity {
         timer.schedule(new TimerTask(){
             @Override
             public void run(){
-                subject.tick();
-                GlobalInformation.setCurrentRoom(subject.getAktRoomID());
-                grafik.postInvalidate();
+                if(running){
+                    subject.tick();
+                    GlobalInformation.setCurrentRoom(subject.getAktRoomID());
+                    grafik.postInvalidate();
+                }
+                else{
+                    //Do nothing
+                }
+                synchronized (mPauseLock) {
+                    while (!running) {
+                        try {
+                            mPauseLock.wait();              //Wenn ich das richtig verstehe, wird hier versucht, mPauseLock
+                                                            //solange zu pausieren(xyz.wait() legt eine Thread schlafen bis
+                                                            //er durch xyz.notify() geweckt wird), wie running false ist.
+                                                            //Theoretisch sollte es ausreichen, den Thread einmal schlafen zu legen
+                                                        
+                        } catch (InterruptedException e) {
+
+                        }
+                    }
+                }
             }
         }, 0, tick);
 
@@ -135,12 +154,12 @@ public class RoomActivity extends Activity {
         });
         move.start();*/
     }
-/*
+
     @Override
     public void onPause() {
         super.onPause();
         synchronized (mPauseLock) {
-            mPaused = true;
+            running = false;
         }
     }
 
@@ -148,17 +167,17 @@ public class RoomActivity extends Activity {
     public void onResume() {
         super.onResume();
         synchronized (mPauseLock) {
-            mPaused = false;
+            running = true;
             mPauseLock.notifyAll();
         }
     }
-*/
+
     @Override
     public void onBackPressed() {
         //Kills the app immediately
         //TODO figure out a way to do this more safely and elegant
         super.onBackPressed();
-        timer.cancel();
+        timer.cancel();             //Timer sauber beenden
         this.finish();
         System.exit(0);
     }
