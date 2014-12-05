@@ -17,12 +17,12 @@ public class Need {
         current_value = 0;
     }
 
-    public Need(int top_level_xml, byte priority_xml, String description_xml, int object_ID_xml, boolean day_night_xml) {
-        top_level = top_level_xml;
-        priority = priority_xml;
-        description = description_xml;
-        object_ID = object_ID_xml;
-        day_night = day_night_xml;
+    public Need(int top_level, byte priority, String description, int object_ID, boolean day_night) {
+        this.top_level = top_level;
+        this.priority = priority;
+        this.description = description;
+        this.object_ID = object_ID;
+        this.day_night = day_night;
 
         motivation = 0;
         current_value = 0;
