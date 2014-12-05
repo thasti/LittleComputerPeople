@@ -14,6 +14,8 @@ import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by JS - note on 29.11.2014.
@@ -29,7 +31,8 @@ public class RoomActivity extends Activity {
 
     private Object mPauseLock;
     private boolean mPaused;
-
+    private int tick = 10;
+    private Timer timer;
 
 
     @Override
@@ -86,6 +89,21 @@ public class RoomActivity extends Activity {
 
         grafik.invalidate();
 
+        if(tick > 100)  tick = 100;
+        if(tick < 1)    tick = 1;           //Zu große und zu kleine/negative Werte sollen abgefangen werden
+
+        timer = new Timer();
+
+        timer.schedule(new TimerTask(){
+            @Override
+            public void run(){
+                subject.tick();
+                GlobalInformation.setCurrentRoom(subject.getAktRoomID());
+                grafik.postInvalidate();
+            }
+        }, 0, tick);
+
+        /*
         mPauseLock = new Object();
         Thread move = new Thread(new Runnable() {
             @Override
@@ -115,9 +133,9 @@ public class RoomActivity extends Activity {
                 }
             }
         });
-        move.start();
+        move.start();*/
     }
-
+/*
     @Override
     public void onPause() {
         super.onPause();
@@ -134,12 +152,13 @@ public class RoomActivity extends Activity {
             mPauseLock.notifyAll();
         }
     }
-
+*/
     @Override
     public void onBackPressed() {
         //Kills the app immediately
         //TODO figure out a way to do this more safely and elegant
         super.onBackPressed();
+        timer.cancel();
         this.finish();
         System.exit(0);
     }
