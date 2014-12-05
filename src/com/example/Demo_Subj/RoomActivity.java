@@ -33,6 +33,7 @@ public class RoomActivity extends Activity {
     private boolean mPaused;
     private int tick = 10;
     private Timer timer;
+    private boolean running = true;
 
 
     @Override
@@ -97,9 +98,14 @@ public class RoomActivity extends Activity {
         timer.schedule(new TimerTask(){
             @Override
             public void run(){
-                subject.tick();
-                GlobalInformation.setCurrentRoom(subject.getAktRoomID());
-                grafik.postInvalidate();
+                if(running){
+                    subject.tick();
+                    GlobalInformation.setCurrentRoom(subject.getAktRoomID());
+                    grafik.postInvalidate();
+                }
+                else{
+                    //Do nothing
+                }
             }
         }, 0, tick);
 
@@ -135,30 +141,32 @@ public class RoomActivity extends Activity {
         });
         move.start();*/
     }
-/*
+
     @Override
     public void onPause() {
         super.onPause();
-        synchronized (mPauseLock) {
+        running = false;
+        /*synchronized (mPauseLock) {
             mPaused = true;
-        }
+        }*/
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        synchronized (mPauseLock) {
+        running = true;
+        /*synchronized (mPauseLock) {
             mPaused = false;
             mPauseLock.notifyAll();
-        }
+        }*/
     }
-*/
+
     @Override
     public void onBackPressed() {
         //Kills the app immediately
         //TODO figure out a way to do this more safely and elegant
         super.onBackPressed();
-        timer.cancel();
+        timer.cancel();             //Timer sauber beenden
         this.finish();
         System.exit(0);
     }
