@@ -92,5 +92,10 @@ public class Need {
             new_current_value = 0;
         current_value = new_current_value;
     }
+<<<<<<< HEAD
 }
 
+=======
+
+}
+>>>>>>> 5ad301a5eae026829a9ae4e386e41738038c36b2
