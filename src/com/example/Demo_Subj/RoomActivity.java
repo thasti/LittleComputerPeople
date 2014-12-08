@@ -29,11 +29,21 @@ public class RoomActivity extends Activity {
 
     private RoomView grafik;
 
+    //Variablen für Timer
     private Object mPauseLock;
-    private boolean mPaused;
-    private int tick = 10;
     private Timer timer;
     private boolean running = true;
+    private boolean mPaused;
+    private int tick;
+
+    //Variablen für interne Uhrzeit
+    private int internalTime = 0;           //Interne Uhrzeit
+    private int realTimeDay;                //Dauer eines Internen Tages in realen Minuten
+    private int realTimeNight;              //Dauer einer Internen Nacht in realen Minuten
+    private int tickAmountDay;              //Benötigte Ticks für 1 internen Tag
+    private int tickAmountNight;            //Benötigte Ticks für 1 interne Nacht
+    private int tickCount = 0;
+    private boolean day = true;
 
 
     @Override
@@ -48,6 +58,14 @@ public class RoomActivity extends Activity {
         this.setContentView(R.layout.main);
 
         Resources resources = getResources();
+
+        tick = GlobalInformation.getTick();
+
+        realTimeDay = GlobalInformation.getRealTimeDay();
+        tickAmountDay = (1000*60*realTimeDay)/ tick;
+
+        realTimeNight = GlobalInformation.getRealTimeNight();
+        tickAmountNight = (1000*60*realTimeNight)/ tick;
 
         //gets the size of the Display
         Display display = getWindowManager().getDefaultDisplay();
@@ -102,9 +120,32 @@ public class RoomActivity extends Activity {
                     subject.tick();
                     GlobalInformation.setCurrentRoom(subject.getAktRoomID());
                     grafik.postInvalidate();
+
+                    tickCount++;
+
+                    if((day) && (tickCount >= tickAmountDay)){
+                        day = false;
+                    }
+
+                    if((!day) && (tickCount >= tickAmountNight)){
+                        day = true;
+                    }
                 }
                 else{
                     //Do nothing
+                }
+                synchronized (mPauseLock) {
+                    while (!running) {
+                        try {
+                            mPauseLock.wait();              //Wenn ich das richtig verstehe, wird hier versucht, mPauseLock
+                                                            //solange zu pausieren(xyz.wait() legt eine Thread schlafen bis
+                                                            //er durch xyz.notify() geweckt wird), wie running false ist.
+                                                            //Theoretisch sollte es ausreichen, den Thread einmal schlafen zu legen
+
+                        } catch (InterruptedException e) {
+
+                        }
+                    }
                 }
             }
         }, 0, tick);
@@ -145,20 +186,18 @@ public class RoomActivity extends Activity {
     @Override
     public void onPause() {
         super.onPause();
-        running = false;
-        /*synchronized (mPauseLock) {
-            mPaused = true;
-        }*/
+        synchronized (mPauseLock) {
+            running = false;
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        running = true;
-        /*synchronized (mPauseLock) {
-            mPaused = false;
+        synchronized (mPauseLock) {
+            running = true;
             mPauseLock.notifyAll();
-        }*/
+        }
     }
 
     @Override
