@@ -12,6 +12,9 @@ public class GlobalInformation {
     private static int currentRoom;
     private static List<Room> roomList;
     private static Subject subject;
+    private static int tick = 10;               //10 Millisekunden
+    private static int realTimeDay = 4;         //Dauer eines internen Tages in realen Minuten
+    private static int realTimeNight = 1;       //Dauer einer internen Nacht in realen Minuten
 
     private GlobalInformation(){};
 
@@ -53,5 +56,17 @@ public class GlobalInformation {
 
     public static void setSubject(Subject subject) {
         GlobalInformation.subject = subject;
+    }
+
+    public static int getTick(){
+        return tick;
+    }
+
+    public static int getRealTimeDay(){
+        return realTimeDay;
+    }
+
+    public static int getRealTimeNight(){
+        return realTimeNight;
     }
 }
