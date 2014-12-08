@@ -61,7 +61,7 @@ public class RoomActivity extends Activity {
 
         tick = GlobalInformation.getTick();
 
-        realTimeDay = GlobalInformation.getRealTimeDay();
+        realTimeDay = GlobalInformation.getRealTimeDay(); 
         tickAmountDay = (1000*60*realTimeDay)/ tick;
 
         realTimeNight = GlobalInformation.getRealTimeNight();
