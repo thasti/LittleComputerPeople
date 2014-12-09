@@ -125,10 +125,12 @@ public class RoomActivity extends Activity {
 
                     if((day) && (tickCount >= tickAmountDay)){
                         day = false;
+                        tickCount = 0;
                     }
 
                     if((!day) && (tickCount >= tickAmountNight)){
                         day = true;
+                        tickCount = 0;
                     }
                 }
                 else{
