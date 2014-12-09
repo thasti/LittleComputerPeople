@@ -37,13 +37,14 @@ public class RoomActivity extends Activity {
     private int tick;
 
     //Variablen für interne Uhrzeit
-    private int internalTime = 0;           //Interne Uhrzeit
+    /*
     private int realTimeDay;                //Dauer eines Internen Tages in realen Minuten
     private int realTimeNight;              //Dauer einer Internen Nacht in realen Minuten
     private int tickAmountDay;              //Benötigte Ticks für 1 internen Tag
     private int tickAmountNight;            //Benötigte Ticks für 1 interne Nacht
     private int tickCount = 0;
     private boolean day = true;
+    */
 
 
     @Override
@@ -59,13 +60,6 @@ public class RoomActivity extends Activity {
 
         Resources resources = getResources();
 
-        tick = GlobalInformation.getTick();
-
-        realTimeDay = GlobalInformation.getRealTimeDay(); 
-        tickAmountDay = (1000*60*realTimeDay)/ tick;
-
-        realTimeNight = GlobalInformation.getRealTimeNight();
-        tickAmountNight = (1000*60*realTimeNight)/ tick;
 
         //gets the size of the Display
         Display display = getWindowManager().getDefaultDisplay();
@@ -108,6 +102,22 @@ public class RoomActivity extends Activity {
 
         grafik.invalidate();
 
+        final InternalClock clock = new InternalClock();
+        clock.computeTime();
+
+        tick = GlobalInformation.getTick();
+
+        /*
+        realTimeDay = GlobalInformation.getRealTimeDay();
+        tickAmountDay = (1000*60*realTimeDay)/ tick;
+
+        realTimeNight = GlobalInformation.getRealTimeNight();
+        tickAmountNight = (1000*60*realTimeNight)/ tick;
+
+        if (realTimeDay > 1)    realTimeDay = 1;
+        if (realTimeNight > 1)  realTimeNight = 1;
+        */
+
         if(tick > 100)  tick = 100;
         if(tick < 1)    tick = 1;           //Zu große und zu kleine/negative Werte sollen abgefangen werden
 
@@ -121,6 +131,10 @@ public class RoomActivity extends Activity {
                     GlobalInformation.setCurrentRoom(subject.getAktRoomID());
                     grafik.postInvalidate();
 
+                    clock.internalTime();                                       //returns boolean Value
+                                                                                // true -> it is day
+                                                                                //false -> it is night
+                    /*
                     tickCount++;
 
                     if((day) && (tickCount >= tickAmountDay)){
@@ -132,20 +146,21 @@ public class RoomActivity extends Activity {
                         day = true;
                         tickCount = 0;
                     }
+                    */
                 }
-                else{
-                    //Do nothing
-                }
-                synchronized (mPauseLock) {
-                    while (!running) {
-                        try {
-                            mPauseLock.wait();              //Wenn ich das richtig verstehe, wird hier versucht, mPauseLock
-                                                            //solange zu pausieren(xyz.wait() legt eine Thread schlafen bis
-                                                            //er durch xyz.notify() geweckt wird), wie running false ist.
-                                                            //Theoretisch sollte es ausreichen, den Thread einmal schlafen zu legen
+                else{                               //Eventuell wird der Timer zum pausieren später beendet (cancel in onPause)
+                                                    //und neu erstellt (schedule in onResume())
+                    synchronized (mPauseLock) {
+                        while (!running) {
+                            try {
+                                mPauseLock.wait();              //Wenn ich das richtig verstehe, wird hier versucht, mPauseLock
+                                                                //solange zu pausieren(xyz.wait() legt eine Thread schlafen bis
+                                                                //er durch xyz.notify() geweckt wird), wie running false ist.
+                                                                //Theoretisch sollte es ausreichen, den Thread einmal schlafen zu legen
 
-                        } catch (InterruptedException e) {
+                            } catch (InterruptedException e) {
 
+                            }
                         }
                     }
                 }
