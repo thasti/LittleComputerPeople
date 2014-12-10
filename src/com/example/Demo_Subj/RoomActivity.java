@@ -33,7 +33,6 @@ public class RoomActivity extends Activity {
     private Object mPauseLock;
     private Timer timer;
     private boolean running = true;
-    private boolean mPaused;
     private int tick;
 
     //Variablen für interne Uhrzeit
