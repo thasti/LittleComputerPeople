@@ -6,7 +6,7 @@ import java.util.TreeMap;
 
 public class c_Tree {
 	TreeMap<String,String> parameter = new TreeMap<String, String>();//Parameter des Elements
-	TreeMap<Integer,Integer> child_ids = new TreeMap<Integer,Integer>();//Key die ID, und Value der child-Index
+	TreeMap<Integer,Integer> child_ids = new TreeMap<Integer,Integer>();//Key ist die fortlaufende interne ID, und Value der child-Index von der Liste "childs"
 	List <c_Tree> childs = new ArrayList<c_Tree>();
 	public boolean add_child(String key, String value, Integer id, Integer parent_id){
 		if((parameter.get("id").compareTo(parent_id.toString())==0)||(parent_id==0)){
@@ -23,8 +23,7 @@ public class c_Tree {
 			//eine Ebene herabsteigen
 			if(child_ids.containsKey(parent_id)){
 				//eins der Kinder hat die betreffende Parentid
-				boolean ret = childs.get(child_ids.get(parent_id)).add_child(key, value, id, parent_id);
-				return ret;
+				return childs.get(child_ids.get(parent_id)).add_child(key, value, id, parent_id);
 			}
 			else{
                 //Funktion iterativ ausführen um an die Kindes Kinder zu kommen
@@ -66,10 +65,16 @@ public class c_Tree {
 		return child.parameter.keySet();
 	}
 	public String get_parameter_value(c_Tree child, String key){
-		return child.parameter.get(key);
+		//System.out.println("get_parameter: "+child.parameter.entrySet());
+		if(child.parameter.containsKey(key)){
+			return child.parameter.get(key);
+		}
+		else
+			return "";
 	}
 	public c_Tree get_child(String key, String value){
-		int index = 0;;
+		//sucht nur innerhalb der obersten Childebene
+		int index = 0;
 		int found_childs = 0;
 		int i = 0;
 		while(i<childs.size()){
@@ -87,14 +92,33 @@ public class c_Tree {
 		}
 		
 	}
+	public c_Tree get_child_with_id(Integer id){
+		//id ist die interne id von der Baumstruktur
+		if(child_ids.containsKey(id)){
+			return childs.get(child_ids.get(id));
+		}
+		else{
+			int i = 0;
+			while(i<childs.size()){
+				if(childs.get(i).get_child_with_id(id)!=null)
+					return childs.get(i).get_child_with_id(id);
+				else
+					i++;
+			}
+			return null;
+		}
+	}
 	public String get_child_id(String key, String value){
-		int index = 0;;
+		//sucht nur innerhalb der obersten Childebene
+		int index = 0;
 		int found_childs = 0;
 		int i = 0;
 		while(i<childs.size()){
-			if(childs.get(i).parameter.get(key).equals(value)){
-				found_childs++;
-				index = i;
+			if(childs.get(i).parameter.containsKey(key)){
+				if(childs.get(i).parameter.get(key).equals(value)){
+					found_childs++;
+					index = i;
+				}
 			}
 			i++;
 		}
@@ -114,7 +138,7 @@ public class c_Tree {
 		}
 	}
 	public String get_parent_id(c_Tree child){
-		return get_parameter_value(child,"id");
+		return get_parameter_value(child,"parent_id");
 	}
 	public int string_to_int(String t){
 		char[] a = t.toCharArray();
