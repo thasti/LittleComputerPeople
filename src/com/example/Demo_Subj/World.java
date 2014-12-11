@@ -16,15 +16,22 @@ public class World {
     }
 
     /*******************************************************************************************
+     * From Documentation: A return value of null does not necessarily indicate that the map
+     * contains no mapping for the key; it's also possible that the map explicitly maps the key to null.
+
+     Returns a boolean value, whether the given ID has a room
+     Parameter: ID of the room
+     ******************************************************************************************/
+    public static boolean assertRoomId(int id){
+        return roomTreeMap.containsKey(id);
+    }
+
+    /*******************************************************************************************
         Returns a room that belongs to the given ID or null, if no room owns the given ID
         Parameter: ID of the room
      ******************************************************************************************/
     public static Room getRoomById(int id){
-        Room room = null;
-        if(roomTreeMap.containsKey(id)){
-            room = roomTreeMap.get(id);
-        }
-        return room;
+        return roomTreeMap.get(id);
     }
 
 
@@ -36,14 +43,21 @@ public class World {
     }
 
     /*******************************************************************************************
+     * From Documentation: A return value of null does not necessarily indicate that the map
+     * contains no mapping for the key; it's also possible that the map explicitly maps the key to null.
+
+     Returns a boolean value, whether the given ID has an object
+     Parameter: ID of the Object
+     ******************************************************************************************/
+    public static boolean assertObjectId(int id){
+        return objectTreeMap.containsKey(id);
+    }
+
+    /*******************************************************************************************
         Returns an object that belongs to the given ID or null, if no object owns the given ID
         Parameter: ID of the Object
      ******************************************************************************************/
     public static Object getObjectById(int id){
-        Object obj = null;
-        if(objectTreeMap.containsKey(id)){
-            obj = objectTreeMap.get(id);
-        }
-        return obj;
+        return objectTreeMap.get(id);
     }
 }
