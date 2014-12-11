@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<house>
+    <room name="livingroom" roomID = "0">
+        <object name="tv" objectID ="1">
+            <need>watchtv</need>
+            <Sound>0</Sound>
+            <popup>0</popup>
+            <user>1</user>
+            <x-position>0</x-position>
+            <y-position>0</y-position>
+        </object>
+
+        <object name="clock" objectID = "2">
+            <need>readtime</need>
+            <Sound>0</Sound>
+            <popup>0</popup>
+            <user>0</user>
+            <x-position>0</x-position>
+            <y-position>0</y-position>
+        </object>
+    </room>
+
+    <room name="bedroom" roomID ="1">
+        <object name="plant" objectID = "3">
+            <need>greenthumb</need>
+            <Sound>0</Sound>
+            <popup>0</popup>
+            <user>0</user>
+            <x-position>0</x-position>
+            <y-position>0</y-position>
+        </object>
+
+        <object name="bed" objectID = "4">
+            <need>sleep</need>
+            <Sound>0</Sound>
+            <popup>0</popup>
+            <user>1</user>
+            <x-position>0</x-position>
+            <y-position>0</y-position>
+        </object>
+
+        <object name="computer" objectID = "5">
+            <need>information</need>
+            <Sound>0</Sound>
+            <popup>0</popup>
+            <user>1</user>
+            <x-position>0</x-position>
+            <y-position>0</y-position>
+        </object>
+    </room>
+
+    <room name="kitchen" roomID = "2">
+        <object name="window" objectID = "6">
+            <need>freshair</need>
+            <Sound>0</Sound>
+            <popup>0</popup>
+            <user>1</user>
+            <x-position>0</x-position>
+            <y-position>0</y-position>
+        </object>
+
+        <object name="radio" objectID = "8">
+            <need>hear</need>
+            <Sound>0</Sound>
+            <popup>0</popup>
+            <user>1</user>
+            <x-position>0</x-position>
+            <y-position>0</y-position>
+        </object>
+
+        <object name="cooker" objectID= "15">
+            <need>cook</need>
+            <Sound>0</Sound>
+            <popup>0</popup>
+            <user>1</user>
+            <x-position>0</x-position>
+            <y-position>0</y-position>
+        </object>
+
+        <object name="table" objectID = "7">
+            <need>hunger</need>
+            <Sound>0</Sound>
+            <popup>0</popup>
+            <user>0</user>
+            <x-position>0</x-position>
+            <y-position>0</y-position>
+        </object>
+
+        <object name="boddle" objectID = "9">
+            <need>drink</need>
+            <Sound>0</Sound>
+            <popup>0</popup>
+            <user>0</user>
+            <x-position>0</x-position>
+            <y-position>0</y-position>
+        </object>
+    </room>
+
+
+    <room name = "bath" roomID = "3">
+        <object name="shower" objectID = "10">
+            <need>hygiene</need>
+            <Sound>0</Sound>
+            <popup>0</popup>
+            <user>0</user>
+            <x-position>0</x-position>
+            <y-position>0</y-position>
+        </object>
+
+        <object name="washbasin" objectID = "11">
+            <need>water</need>
+            <Sound>0</Sound>
+            <popup>0</popup>
+            <user>0</user>
+            <x-position>0</x-position>
+            <y-position>0</y-position>
+        </object>
+    </room>
+
+    <room name="staircase_down" roomID = "4">
+        <object name="phone" objectID = "12">
+            <need>talk</need>
+            <Sound>0</Sound>
+            <popup>0</popup>
+            <user>0</user>
+            <x-position>400</x-position>
+            <y-position>400</y-position>
+        </object>
+
+        <object name="lightswitch" objectID = "13">
+            <need>light</need>
+            <Sound>0</Sound>
+            <popup>0</popup>
+            <user>1</user>
+            <x-position>0</x-position>
+            <y-position>0</y-position>
+        </object>
+    </room>
+
+    <room name="staircase_up" roomID = "5">
+        <object name="electricmeter" objectID = "14">
+            <need>readcurrent</need>
+            <Sound>0</Sound>
+            <popup>0</popup>
+            <user>1</user>
+            <x-position>0</x-position>
+            <y-position>0</y-position>
+        </object>
+    </room>
+</house>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<needs>
+    <watchtv objectID ="1">
+        <priority>5</priority>
+        <Daynight>0</Daynight>
+        <toplevel>70</toplevel>
+    </watchtv>
+    <readtime objectID = "2">
+        <priority>2</priority>
+        <Daynight>1</Daynight>
+        <toplevel>70</toplevel>
+    </readtime>
+    <greenthumb ID = "3">
+        <priority>5</priority>
+        <Daynight>1</Daynight>
+        <toplevel>5</toplevel>
+    </greenthumb>
+    <sleep objectID = "4">
+        <priority>6</priority>
+        <Daynight>0</Daynight>
+        <toplevel>30</toplevel>
+    </sleep>
+    <information objectID = "5">
+        <priority>3</priority>
+        <Daynight>0</Daynight>
+        <toplevel>80</toplevel>
+    </information>
+    <freshair objectID = "6">
+        <priority>7</priority>
+        <Daynight>0</Daynight>
+        <toplevel>90</toplevel>
+    </freshair>
+    <hunger objectID = "7">
+        <priority>8</priority>
+        <Daynight>0</Daynight>
+        <toplevel>50</toplevel>
+    </hunger>
+    <hear needD ="8">
+        <priority>4</priority>
+        <Daynight>0</Daynight>
+        <toplevel>80</toplevel>
+    </hear>
+    <drink objectID ="9">
+        <priority>2</priority>
+        <Daynight>0</Daynight>
+        <toplevel>90</toplevel>
+    </drink>
+    <hygiene objectID = "10">
+        <priority>3</priority>
+        <Daynight>0</Daynight>
+        <toplevel>50</toplevel>
+    </hygiene>
+    <water objectID = "11">
+        <priority>4</priority>
+        <Daynight>0</Daynight>
+        <toplevel>100</toplevel>
+    </water>
+    <talk objectID = "12">
+        <priority>7</priority>
+        <Daynight>0</Daynight>
+        <toplevel>60</toplevel>
+    </talk>
+    <light objectID = "13">
+        <priority>9</priority>
+        <Daynight>1</Daynight>
+        <toplevel>10</toplevel>
+    </light>
+    <readcurrent objectID = "14">
+        <priority>3</priority>
+        <Daynight>0</Daynight>
+        <toplevel>90</toplevel>
+    </readcurrent>
+    <cook objectID = "15">
+        <priority>6</priority>
+        <Daynight>0</Daynight>
+        <toplevel>30</toplevel>
+    </cook>
+</needs>
