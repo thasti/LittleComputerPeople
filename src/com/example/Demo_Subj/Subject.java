@@ -45,10 +45,10 @@ public class Subject {
     private Context context;
     private MediaPlayer mediaplayer;
 
-    private KI intel;
+    private Intelligence intel;
     
     public Subject(Bitmap sStand, List<Bitmap> bitmaps, Context c){
-        subjStandBitmap = Bitmap.createScaledBitmap(sStand, 170, 330, false);;
+        subjStandBitmap = Bitmap.createScaledBitmap(sStand, 170, 330, false);
         subjStandBitmapInv = mirrorBitmap(subjStandBitmap);
 
         aktBitmap = sStand;
@@ -77,7 +77,7 @@ public class Subject {
         float posY = (((canvasy/2) - (bitmapy / 2)) + (canvasy/15));
         setDefaultKoords(posX, posY, 1);
 
-        intel = new KI();
+        intel = new Intelligence();
 
         mediaplayer = new MediaPlayer();
     }
