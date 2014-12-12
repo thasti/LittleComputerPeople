@@ -96,12 +96,12 @@ public class Intelligence {
 
     //Aufruf von Subjekt; Gibt Objekt_ID zurück, zu der das Subjekt als nächstes laufen soll
     public int getNextObject(){
-        //ToDo: XMl parsen und XMLParser.getObjectbyID() aufrufen
+        //ToDo: Welt abfragen, welches Objekt zur ObejktID gehört; Objekt zurückgeben
 
         //Bedürfnis mit der höchsten Motivation resetten
-        needs_list.elementAt(maxMotivationIndex).set_current_value(0);
+        needs_list.elementAt(maxMotivationIndex).setCurrentValue(0);
 
-        return needs_list.elementAt(maxMotivationIndex).get_object_id();
+        return needs_list.elementAt(maxMotivationIndex).getObjectID();
     }
 
     //um mit dem unfertigen Projekt kompilieren zu können, wird die Method noch beibehalten
@@ -135,10 +135,10 @@ public class Intelligence {
             beduerfnis = needs_list.elementAt(i);
 
             //Prüfen ob Tag oder Nacht ist und die entsprechenden Bedürfnisse nutzen
-            if (boolDayNight && beduerfnis.get_day_night()) { //es ist Tag und Bedürfnis ist tagaktiv
+            if (boolDayNight && beduerfnis.getActiveDayNight()) { //es ist Tag und Bedürfnis ist tagaktiv
                 motivation_highest = manageList(i, motivation_highest);
 
-            } else if (!boolDayNight && !beduerfnis.get_day_night()) { //es ist Nacht und das Bedürfnis ist nachtaktiv
+            } else if (!boolDayNight && !beduerfnis.getActiveDayNight()) { //es ist Nacht und das Bedürfnis ist nachtaktiv
                 motivation_highest = manageList(i, motivation_highest);
             }
         }
@@ -171,20 +171,20 @@ public class Intelligence {
         //es kann nicht das Objekt "beduerfnis" übergeben werden, da sich die eigenschfaten des Objektes ändern müssen. Dies soll dierekt in der Liste geschehen.
 
         //aktuellen Wert ändern; aktueller Wert = aktueller Wert + Zufallszahl
-        needs_list.elementAt(index).set_current_value(needs_list.elementAt(index).get_current_value() + getIntRandom());
+        needs_list.elementAt(index).setCurrentValue(needs_list.elementAt(index).getCurrentValue() + getIntRandom());
 
         //Motivation neu berechnen; Motivation = Priorität * (aktueller Wert - Schwellwert)
-        needs_list.elementAt(index).set_motivation(needs_list.elementAt(index).get_priority() * (needs_list.elementAt(index).get_current_value() - needs_list.elementAt(index).get_top_level()));
+        needs_list.elementAt(index).setMotivation(needs_list.elementAt(index).getPriority() * (needs_list.elementAt(index).getCurrentValue() - needs_list.elementAt(index).getTopLevel()));
 
         //Höchte Motivation finden:
         //neuer index, wenn neue höchste Motivation
-        if(needs_list.elementAt(index).get_motivation() > motivation_highest){
+        if(needs_list.elementAt(index).getMotivation() > motivation_highest){
             maxMotivationIndex = index;
-            motivation_highest = needs_list.elementAt(index).get_motivation();
+            motivation_highest = needs_list.elementAt(index).getMotivation();
             //neuer Index, wenn Motivationen übereinstimmen UND Priorität des neuen Bedürfnisses größer ist der Priorität des alten Bedürfnisses
-        }else if(needs_list.elementAt(index).get_motivation() == motivation_highest && (needs_list.elementAt(index).get_priority() > needs_list.elementAt(maxMotivationIndex).get_priority())){
+        }else if(needs_list.elementAt(index).getMotivation() == motivation_highest && (needs_list.elementAt(index).getPriority() > needs_list.elementAt(maxMotivationIndex).getPriority())){
             maxMotivationIndex = index;
-            motivation_highest = needs_list.elementAt(index).get_motivation();
+            motivation_highest = needs_list.elementAt(index).getMotivation();
         }
 
         return motivation_highest;
