@@ -35,8 +35,8 @@ public class InternalClock {
     private void checkGlobalInformation(){                          //Check and correct information from GlobalInformation class
         if(tick > 100)  tick = 100;
         if(tick < 1)    tick = 1;
-        if (realTimeDay > 1)    realTimeDay = 1;
-        if (realTimeNight > 1)  realTimeNight = 1;
+        if (realTimeDay < 1)    realTimeDay = 1;
+        if (realTimeNight < 1)  realTimeNight = 1;
     }
 
     private void computeDay(){                                      //Compute the amount of ticks needed for a day
