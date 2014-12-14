@@ -12,7 +12,7 @@
 
         <object name="clock" objectID = "2">
             <need>readtime</need>
-            <Sound>0</Sound>
+            <Sound>1</Sound>
             <popup>0</popup>
             <user>0</user>
             <x-position>0</x-position>
@@ -32,7 +32,7 @@
 
         <object name="bed" objectID = "4">
             <need>sleep</need>
-            <Sound>0</Sound>
+            <Sound>1</Sound>
             <popup>0</popup>
             <user>1</user>
             <x-position>0</x-position>
@@ -41,7 +41,7 @@
 
         <object name="computer" objectID = "5">
             <need>information</need>
-            <Sound>0</Sound>
+            <Sound>1</Sound>
             <popup>0</popup>
             <user>1</user>
             <x-position>0</x-position>
@@ -52,7 +52,7 @@
     <room name="kitchen" roomID = "2">
         <object name="window" objectID = "6">
             <need>freshair</need>
-            <Sound>0</Sound>
+            <Sound>1</Sound>
             <popup>0</popup>
             <user>1</user>
             <x-position>0</x-position>
@@ -61,7 +61,7 @@
 
         <object name="radio" objectID = "8">
             <need>hear</need>
-            <Sound>0</Sound>
+            <Sound>1</Sound>
             <popup>0</popup>
             <user>1</user>
             <x-position>0</x-position>
@@ -100,7 +100,7 @@
     <room name = "bath" roomID = "3">
         <object name="shower" objectID = "10">
             <need>hygiene</need>
-            <Sound>0</Sound>
+            <Sound>1</Sound>
             <popup>0</popup>
             <user>0</user>
             <x-position>0</x-position>
@@ -109,7 +109,7 @@
 
         <object name="washbasin" objectID = "11">
             <need>water</need>
-            <Sound>0</Sound>
+            <Sound>1</Sound>
             <popup>0</popup>
             <user>0</user>
             <x-position>0</x-position>
@@ -120,7 +120,7 @@
     <room name="staircase_down" roomID = "4">
         <object name="phone" objectID = "12">
             <need>talk</need>
-            <Sound>0</Sound>
+            <Sound>1</Sound>
             <popup>0</popup>
             <user>0</user>
             <x-position>400</x-position>
