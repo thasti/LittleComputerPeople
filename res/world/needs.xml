@@ -1,79 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <needs>
-    <watchtv objectID ="1">
+    <watchtv needID ="1">
         <priority>5</priority>
-        <Daynight>0</Daynight>
+        <daynight>0</daynight>
         <toplevel>70</toplevel>
+        <objectID>1</objectID>
     </watchtv>
-    <readtime objectID = "2">
+    <readtime needID = "2">
         <priority>2</priority>
-        <Daynight>1</Daynight>
+        <daynight>1</daynight>
         <toplevel>70</toplevel>
+        <objectID>2</objectID>
     </readtime>
-    <greenthumb ID = "3">
+    <greenthumb needID = "3">
         <priority>5</priority>
-        <Daynight>1</Daynight>
+        <daynight>1</daynight>
         <toplevel>5</toplevel>
+        <objectID>3</objectID>
     </greenthumb>
-    <sleep objectID = "4">
+    <sleep needID = "4">
         <priority>6</priority>
-        <Daynight>0</Daynight>
+        <daynight>0</daynight>
         <toplevel>30</toplevel>
+        <objectID>4</objectID>
     </sleep>
-    <information objectID = "5">
+    <information needID = "5">
         <priority>3</priority>
-        <Daynight>0</Daynight>
+        <daynight>0</daynight>
         <toplevel>80</toplevel>
+        <objectID>5</objectID>
     </information>
-    <freshair objectID = "6">
+    <freshair needID = "6">
         <priority>7</priority>
-        <Daynight>0</Daynight>
+        <daynight>0</daynight>
         <toplevel>90</toplevel>
+        <objectID>6</objectID>
     </freshair>
-    <hunger objectID = "7">
+    <hunger needID = "7">
         <priority>8</priority>
-        <Daynight>0</Daynight>
+        <daynight>0</daynight>
         <toplevel>50</toplevel>
+        <objectID>7</objectID>
     </hunger>
-    <hear needD ="8">
+    <hear needID ="8">
         <priority>4</priority>
-        <Daynight>0</Daynight>
+        <daynight>0</daynight>
         <toplevel>80</toplevel>
+        <objectID>8</objectID>
     </hear>
-    <drink objectID ="9">
+    <drink needID ="9">
         <priority>2</priority>
-        <Daynight>0</Daynight>
+        <daynight>0</daynight>
         <toplevel>90</toplevel>
+        <objectID>9</objectID>
     </drink>
-    <hygiene objectID = "10">
+    <hygiene needID = "10">
         <priority>3</priority>
-        <Daynight>0</Daynight>
+        <daynight>0</daynight>
         <toplevel>50</toplevel>
+        <objectID>10</objectID>
     </hygiene>
-    <water objectID = "11">
+    <water needID = "11">
         <priority>4</priority>
-        <Daynight>0</Daynight>
+        <daynight>0</daynight>
         <toplevel>100</toplevel>
+        <objectID>11</objectID>
     </water>
-    <talk objectID = "12">
+    <talk needID = "12">
         <priority>7</priority>
-        <Daynight>0</Daynight>
+        <daynight>0</daynight>
         <toplevel>60</toplevel>
+        <objectID>12</objectID>
     </talk>
-    <light objectID = "13">
+    <light needID = "13">
         <priority>9</priority>
-        <Daynight>1</Daynight>
+        <daynight>1</daynight>
         <toplevel>10</toplevel>
+        <objectID>13</objectID>
     </light>
-    <readcurrent objectID = "14">
+    <readcurrent needID = "14">
         <priority>3</priority>
-        <Daynight>0</Daynight>
+        <daynight>0</daynight>
         <toplevel>90</toplevel>
+        <objectID>14</objectID>
     </readcurrent>
-    <cook objectID = "15">
+    <cook needID = "15">
         <priority>6</priority>
-        <Daynight>0</Daynight>
+        <daynight>0</daynight>
         <toplevel>30</toplevel>
+        <objectID>15</objectID>
     </cook>
 </needs>
