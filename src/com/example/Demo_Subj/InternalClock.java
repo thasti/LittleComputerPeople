@@ -1,73 +1,59 @@
 package com.example.Demo_Subj;
 
 public class InternalClock {
-    private int tick;
-    private int realTimeDay;                //Dauer eines Internen Tages in realen Minuten
-    private int realTimeNight;              //Dauer einer Internen Nacht in realen Minuten
-    private int tickAmountDay;              //Benötigte Ticks für 1 internen Tag
-    private int tickAmountNight;            //Benötigte Ticks für 1 interne Nacht
-    private int tickCount = 0;
-    private boolean day = true;
 
-    public InternalClock(){
-        this.getGlobalInformation();
-        this.checkGlobalInformation();
-        this.computeDay();
-        this.computeNight();
+    private static int tick = 10;                               //Dauer eines Ticks in Millisekunden
+    private static int realTimeDay = 4;                         //Dauer eines internen Tages in realen Minuten
+    private static int realTimeNight = 1;                       //Dauer einer internen Nacht in realen Minuten
+
+
+    private static int tickAmountDay;                           //Benötigte Ticks für 1 internen Tag
+    private static int tickAmountNight;                         //Benötigte Ticks für 1 interne Nacht
+    private static int tickCount = 0;
+    private static boolean day = true;
+
+
+    public static int getTick(){                                //Übergebe den Tick
+        return tick;
     }
 
-    //Überladener Konstruktor, damit kann Tick direkt übergeben werden
-    public InternalClock(int param){
-        this.getGlobalInformation(param);
-        this.checkGlobalInformation();
-        this.computeDay();
-        this.computeNight();
+    public static void init(){
+        checkInformation();
+        computeDay();
+        computeNight();
     }
 
-    private void getGlobalInformation(){                            //Get information from GlobalInformation class
-        tick = GlobalInformation.getTick();
-        realTimeDay = GlobalInformation.getRealTimeDay();
-        realTimeNight = GlobalInformation.getRealTimeNight();
-    }
-
-    //Überladene Methode, gehört zum Überladenen Konstruktor
-    private void getGlobalInformation(int param){                   //Get information from GlobalInformation class
-        tick = param;
-        realTimeDay = GlobalInformation.getRealTimeDay();
-        realTimeNight = GlobalInformation.getRealTimeNight();
-    }
-
-    private void checkGlobalInformation(){                          //Check and correct information from GlobalInformation class
+    private static void checkInformation(){                     //Check and correct information
         if(tick > 100)  tick = 100;
         if(tick < 1)    tick = 1;
         if (realTimeDay < 1)    realTimeDay = 1;
         if (realTimeNight < 1)  realTimeNight = 1;
     }
 
-    private void computeDay(){                                      //Compute the amount of ticks needed for a day
-        //realTimeDay = GlobalInformation.getRealTimeDay();
+    private static void computeDay(){                           //Compute the amount of ticks needed for a day
         tickAmountDay = (1000*60*realTimeDay)/ tick;
     }
 
-    private void computeNight(){                                    //Compute the amount of ticks needed for a night
-        //realTimeNight = GlobalInformation.getRealTimeNight();
+    private static void computeNight(){                         //Compute the amount of ticks needed for a night
         tickAmountNight = (1000*60*realTimeNight)/ tick;
     }
 
 
-    public boolean computeTime(){                                  //Compute the internal time, has to be called every tick from the timer
+    public static void computeTime(){                           //Compute the internal time, has to be called every tick from the timer
 
         tickCount++;
         if((day) && (tickCount >= tickAmountDay)){
-            day = false;
+            day = false;                                        //Nacht
             tickCount = 0;
         }
 
         if((!day) && (tickCount >= tickAmountNight)){
-            day = true;
+            day = true;                                         //Tag
             tickCount = 0;
         }
-
-        return day;
     }
+
+    public static boolean isDay(){                              //Gibt einen boolschen Wert zurück
+        return day;                                             //true  -> es ist Tag
+    }                                                           //false -> es ist Nacht
 }

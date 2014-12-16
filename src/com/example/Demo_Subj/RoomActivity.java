@@ -30,10 +30,12 @@ public class RoomActivity extends Activity {
     private RoomView grafik;
 
     //Variablen für Timer
-    private Object mPauseLock;
-    private Timer timer;
-    private boolean running = true;
+    private Timer timer = new Timer();      //Tiemr wird global instanziiert, damit alle Methoden in dieser Datei Zugriff auf die richtige Instanz haben
     private int tick;
+
+    //Variablen für das noch nicht implementierte Pausieren
+    //private Object mPauseLock;
+    //private boolean running = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,16 +93,15 @@ public class RoomActivity extends Activity {
         grafik.invalidate();
 
 
-        
-        final InternalClock clock = new InternalClock();
+
+        //final InternalClock clock = new InternalClock();
         //clock.computeTime();
 
-        tick = GlobalInformation.getTick();
+        tick = InternalClock.getTick();
 
-        if(tick > 100)  tick = 100;
-        if(tick < 1)    tick = 1;           //Zu große und zu kleine/negative Werte sollen abgefangen werden
+        InternalClock.init();
 
-        timer = new Timer();
+        //timer = new Timer();
 
         timer.schedule(new TimerTask(){
             @Override
@@ -108,15 +109,13 @@ public class RoomActivity extends Activity {
                 subject.tick();
                 GlobalInformation.setCurrentRoom(subject.getAktRoomID());
                 grafik.postInvalidate();
-                clock.computeTime();                                       //returns boolean Value
+                InternalClock.computeTime();
+                //clock.computeTime();                                       //returns boolean Value
                 //if(running){
-                //  subject.tick();
-                //  GlobalInformation.setCurrentRoom(subject.getAktRoomID());
-                //  grafik.postInvalidate();
-
-                //  clock.computeTime();                                       //returns boolean Value
-                // true -> it is day
-                //false -> it is night
+                    //subject.tick();
+                    //GlobalInformation.setCurrentRoom(subject.getAktRoomID());
+                    //grafik.postInvalidate();
+                    //InternalClock.computeTime();
                 /*}
                 else{                               //Eventuell wird der Timer zum pausieren später beendet (cancel in onPause)
                                                     //und neu erstellt (schedule in onResume())
