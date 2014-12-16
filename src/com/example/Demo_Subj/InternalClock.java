@@ -9,18 +9,16 @@ public class InternalClock {
     private int tickCount = 0;
     private boolean day = true;
 
-    public void computeTime(){
-        /*
-        tick = GlobalInformation.getTick();
-        realTimeDay = GlobalInformation.getRealTimeDay();
-        realTimeNight = GlobalInformation.getRealTimeNight();
-
-        if(tick > 100)  tick = 100;
-        if(tick < 1)    tick = 1;
-        if (realTimeDay > 1)    realTimeDay = 1;
-        if (realTimeNight > 1)  realTimeNight = 1;
-        */
+    public InternalClock(){
         this.getGlobalInformation();
+        this.checkGlobalInformation();
+        this.computeDay();
+        this.computeNight();
+    }
+
+    //Überladener Konstruktor, damit kann Tick direkt übergeben werden
+    public InternalClock(int param){
+        this.getGlobalInformation(param);
         this.checkGlobalInformation();
         this.computeDay();
         this.computeNight();
@@ -28,6 +26,13 @@ public class InternalClock {
 
     private void getGlobalInformation(){                            //Get information from GlobalInformation class
         tick = GlobalInformation.getTick();
+        realTimeDay = GlobalInformation.getRealTimeDay();
+        realTimeNight = GlobalInformation.getRealTimeNight();
+    }
+
+    //Überladene Methode, gehört zum Überladenen Konstruktor
+    private void getGlobalInformation(int param){                   //Get information from GlobalInformation class
+        tick = param;
         realTimeDay = GlobalInformation.getRealTimeDay();
         realTimeNight = GlobalInformation.getRealTimeNight();
     }
@@ -49,17 +54,8 @@ public class InternalClock {
         tickAmountNight = (1000*60*realTimeNight)/ tick;
     }
 
-    /*
-    public int getTickDay(){
-        return tickAmountDay;
-    }
 
-    public int getTickNight(){
-        return tickAmountNight;
-    }
-    */
-
-    public boolean internalTime(){                                  //Compute the internal time, has to be called every tick from the timer
+    public boolean computeTime(){                                  //Compute the internal time, has to be called every tick from the timer
 
         tickCount++;
         if((day) && (tickCount >= tickAmountDay)){

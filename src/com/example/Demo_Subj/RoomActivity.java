@@ -35,17 +35,6 @@ public class RoomActivity extends Activity {
     private boolean running = true;
     private int tick;
 
-    //Variablen für interne Uhrzeit
-    /*
-    private int realTimeDay;                //Dauer eines Internen Tages in realen Minuten
-    private int realTimeNight;              //Dauer einer Internen Nacht in realen Minuten
-    private int tickAmountDay;              //Benötigte Ticks für 1 internen Tag
-    private int tickAmountNight;            //Benötigte Ticks für 1 interne Nacht
-    private int tickCount = 0;
-    private boolean day = true;
-    */
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,21 +90,12 @@ public class RoomActivity extends Activity {
 
         grafik.invalidate();
 
+
+        
         final InternalClock clock = new InternalClock();
-        clock.computeTime();
+        //clock.computeTime();
 
         tick = GlobalInformation.getTick();
-
-        /*
-        realTimeDay = GlobalInformation.getRealTimeDay();
-        tickAmountDay = (1000*60*realTimeDay)/ tick;
-
-        realTimeNight = GlobalInformation.getRealTimeNight();
-        tickAmountNight = (1000*60*realTimeNight)/ tick;
-
-        if (realTimeDay > 1)    realTimeDay = 1;
-        if (realTimeNight > 1)  realTimeNight = 1;
-        */
 
         if(tick > 100)  tick = 100;
         if(tick < 1)    tick = 1;           //Zu große und zu kleine/negative Werte sollen abgefangen werden
@@ -125,27 +105,18 @@ public class RoomActivity extends Activity {
         timer.schedule(new TimerTask(){
             @Override
             public void run(){
-                //if(running){
                 subject.tick();
                 GlobalInformation.setCurrentRoom(subject.getAktRoomID());
                 grafik.postInvalidate();
+                clock.computeTime();                                       //returns boolean Value
+                //if(running){
+                //  subject.tick();
+                //  GlobalInformation.setCurrentRoom(subject.getAktRoomID());
+                //  grafik.postInvalidate();
 
-                clock.internalTime();                                       //returns boolean Value
+                //  clock.computeTime();                                       //returns boolean Value
                 // true -> it is day
                 //false -> it is night
-                    /*
-                    tickCount++;
-
-                    if((day) && (tickCount >= tickAmountDay)){
-                        day = false;
-                        tickCount = 0;
-                    }
-
-                    if((!day) && (tickCount >= tickAmountNight)){
-                        day = true;
-                        tickCount = 0;
-                    }
-                    */
                 /*}
                 else{                               //Eventuell wird der Timer zum pausieren später beendet (cancel in onPause)
                                                     //und neu erstellt (schedule in onResume())
@@ -165,38 +136,6 @@ public class RoomActivity extends Activity {
                 }*/
             }
         }, 0, tick);
-
-        /*
-        mPauseLock = new Object();
-        Thread move = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    // tick everything
-                    subject.tick();
-                    // TODO: find a good way to encapsule current room (world object would be good..)
-                    // i dislike the way it is in Subject only, hmh
-                    // it should be possible to display rooms where the subject is not at the moment
-                    GlobalInformation.setCurrentRoom(subject.getAktRoomID());
-                    grafik.postInvalidate();
-                    // TODO: instead of sleeping, pause the main and wait for signal from Tick-Item (this thread)
-                    try {
-                        Thread.sleep(10);
-                    } catch (Exception e) {
-                        e.getLocalizedMessage();
-                    }
-                    synchronized (mPauseLock) {
-                        while (mPaused) {
-                            try {
-                                mPauseLock.wait();
-                            } catch (InterruptedException e) {
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        move.start();*/
     }
     /*
     @Override
