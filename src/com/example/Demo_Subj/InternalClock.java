@@ -1,5 +1,9 @@
 package com.example.Demo_Subj;
 
+/*
+ *Autor: Jürgen Ullmann
+ */
+
 public class InternalClock {
 
     private static int tick = 10;                               //Dauer eines Ticks in Millisekunden

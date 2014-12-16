@@ -19,7 +19,7 @@ import java.util.TimerTask;
 
 /**
  * Created by JS - note on 29.11.2014.
- * edited by SB
+ * edited by SB and JU
  */
 
 public class RoomActivity extends Activity {
