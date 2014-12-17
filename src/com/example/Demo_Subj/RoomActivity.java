@@ -19,7 +19,7 @@ import java.util.TimerTask;
 
 /**
  * Created by JS - note on 29.11.2014.
- * edited by SB
+ * edited by SB and JU
  */
 
 public class RoomActivity extends Activity {
@@ -29,11 +29,13 @@ public class RoomActivity extends Activity {
 
     private RoomView grafik;
 
-    private Object mPauseLock;
-    private boolean mPaused;
-    private int tick = 10;
-    private Timer timer;
+    //Variablen für Timer
+    private Timer timer = new Timer();      //Tiemr wird global instanziiert, damit alle Methoden in dieser Datei Zugriff auf die richtige Instanz haben
+    private int tick;
 
+    //Variablen für das noch nicht implementierte Pausieren
+    //private Object mPauseLock;
+    //private boolean running = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class RoomActivity extends Activity {
         this.setContentView(R.layout.main);
 
         Resources resources = getResources();
+
 
         //gets the size of the Display
         Display display = getWindowManager().getDefaultDisplay();
@@ -89,10 +92,16 @@ public class RoomActivity extends Activity {
 
         grafik.invalidate();
 
-        if(tick > 100)  tick = 100;
-        if(tick < 1)    tick = 1;           //Zu große und zu kleine/negative Werte sollen abgefangen werden
 
-        timer = new Timer();
+
+        //final InternalClock clock = new InternalClock();
+        //clock.computeTime();
+
+        tick = InternalClock.getTick();
+
+        InternalClock.init();
+
+        //timer = new Timer();
 
         timer.schedule(new TimerTask(){
             @Override
@@ -100,47 +109,39 @@ public class RoomActivity extends Activity {
                 subject.tick();
                 GlobalInformation.setCurrentRoom(subject.getAktRoomID());
                 grafik.postInvalidate();
-            }
-        }, 0, tick);
-
-        /*
-        mPauseLock = new Object();
-        Thread move = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    // tick everything
-                    subject.tick();
-                    // TODO: find a good way to encapsule current room (world object would be good..)
-                    // i dislike the way it is in Subject only, hmh
-                    // it should be possible to display rooms where the subject is not at the moment
-                    GlobalInformation.setCurrentRoom(subject.getAktRoomID());
-                    grafik.postInvalidate();
-                    // TODO: instead of sleeping, pause the main and wait for signal from Tick-Item (this thread)
-                    try {
-                        Thread.sleep(10);
-                    } catch (Exception e) {
-                        e.getLocalizedMessage();
-                    }
+                InternalClock.computeTime();
+                //clock.computeTime();                                       //returns boolean Value
+                //if(running){
+                    //subject.tick();
+                    //GlobalInformation.setCurrentRoom(subject.getAktRoomID());
+                    //grafik.postInvalidate();
+                    //InternalClock.computeTime();
+                /*}
+                else{                               //Eventuell wird der Timer zum pausieren später beendet (cancel in onPause)
+                                                    //und neu erstellt (schedule in onResume())
                     synchronized (mPauseLock) {
-                        while (mPaused) {
+                        while (!running) {
                             try {
-                                mPauseLock.wait();
+                                mPauseLock.wait();              //Wenn ich das richtig verstehe, wird hier versucht, mPauseLock
+                                                                //solange zu pausieren(xyz.wait() legt eine Thread schlafen bis
+                                                                //er durch xyz.notify() geweckt wird), wie running false ist.
+                                                                //Theoretisch sollte es ausreichen, den Thread einmal schlafen zu legen
+
                             } catch (InterruptedException e) {
+
                             }
                         }
                     }
-                }
+                }*/
             }
-        });
-        move.start();*/
+        }, 0, tick);
     }
-/*
+    /*
     @Override
     public void onPause() {
         super.onPause();
         synchronized (mPauseLock) {
-            mPaused = true;
+            running = false;
         }
     }
 
@@ -148,17 +149,17 @@ public class RoomActivity extends Activity {
     public void onResume() {
         super.onResume();
         synchronized (mPauseLock) {
-            mPaused = false;
+            running = true;
             mPauseLock.notifyAll();
         }
     }
-*/
+    */
     @Override
     public void onBackPressed() {
         //Kills the app immediately
         //TODO figure out a way to do this more safely and elegant
         super.onBackPressed();
-        timer.cancel();
+        timer.cancel();             //Timer sauber beenden
         this.finish();
         System.exit(0);
     }

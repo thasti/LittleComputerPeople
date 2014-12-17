@@ -13,6 +13,7 @@ public class GlobalInformation {
     private static List<Room> roomList;
     private static Subject subject;
 
+
     private GlobalInformation(){};
 
     public static int getScreenHeight() {
