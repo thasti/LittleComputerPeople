@@ -18,13 +18,6 @@ public class Intelligence {
     private int	randomStart;		    //Konstante: Startwert für Zufallszahlengenerator
     private int	randomEnd;		        //Konstante: Endwert für Zufallszahlengenerator
     private int	maxMotivationIndex;   //Der Index in der Liste, wo das Bedürfnis mit der höchsten Motivation steht
-    private int	counterDayNight;	    //Zählvariable für den Tick
-    private int	limitDay;		        //hier steht die Grenze, wie lange ein Tag dauern soll in Ticks; wird mit Tick_milsec im Konstruktor berechnet
-    private int	limitNight;		    //hier steht die Grenze, wie lange eine Nacht dauern soll in Ticks; wird mit Tick_milsec im Konstruktor berechnet
-    private boolean boolDayNight;          //Zustandvariable, ob gerade Tag (1) oder Nacht (0) ist
-
-    private final int DAY_TIME = 5*60;   //Ein Tag soll 5 Minuten dauern; Angabe ist in Sekunden
-    private final int NIGHT_TIME = 1*60; //Eine Nacht soll 1 Minute dauern, Angabe ist in Sekunden
 
 
     //Standradkonstrktor - nimmt Werte, die sich als sinnvoll bzw logisch ergeben haben
@@ -34,16 +27,16 @@ public class Intelligence {
         initVector();
 
         //Initialisierung privater Attribute mit eigens festgelegten Werten:
-        initAttributes(1, 10, 100); //Erzeugung von Zufallszahlen zwischen 1 und 10; Tick alle 100ms
+        initAttributes(1, 10); //Erzeugung von Zufallszahlen zwischen 1 und 10
     }
 
     //überladener Konstruktor - für die Tests, um die Intelligence verschieden zu konfigurieren
-    public Intelligence(int randomStart, int randomEnd, int Tick_milsec){
+    public Intelligence(int randomStart, int randomEnd){
         //Initialisierung des Vectors
         initVector();
 
         //Initialisierung privater Attribute:
-        initAttributes(randomStart, randomEnd, Tick_milsec);
+        initAttributes(randomStart, randomEnd);
     }
 
     //Liest die .xml und füllt den Vektor mit Bedürfnissen
@@ -57,41 +50,28 @@ public class Intelligence {
     }
 
     //Belegt die privaten Attribute mit Anfangswerten
-    private void initAttributes(int lokal_randomStart, int lokal_randomEnd, int lokal_Tick_milsec){
-        int temp;       //zum Vertauschen von lokal_randomEnd und lokal_randomStart
+    private void initAttributes(int randomStart, int randomEnd){
+        int temp;       //zum Vertauschen von this.randomEnd und this.randomStart
 
         maxMotivationIndex = 0;
-        counterDayNight = 0;
-        boolDayNight = true;               //beginnend mit Tag
 
+        if(this.randomStart < 0)                        //this.randomStart ist negativ -> * -1
+            this.randomStart = this.randomStart * -1;
 
-        if(lokal_randomStart < 0)                        //lokal_randomStart ist negativ -> * -1
-            lokal_randomStart = lokal_randomStart * -1;
+        if(this.randomEnd < 0)                          //this.randomEnd ist negativ -> * -1
+           this.randomEnd = this.randomEnd * -1;
 
-        if(lokal_randomEnd < 0)                          //lokal_randomEnd ist negativ -> * -1
-           lokal_randomEnd = lokal_randomEnd * -1;
-
-        if(lokal_randomStart > lokal_randomEnd){        //lokal_randomStart ist größer als lokal_randomEnd -> vertauschen
-            temp = lokal_randomStart;
-            lokal_randomStart = lokal_randomEnd;
-            lokal_randomEnd = temp;
+        if(this.randomStart > this.randomEnd){        //this.randomStart ist größer als this.randomEnd -> vertauschen
+            temp = this.randomStart;
+            this.randomStart = this.randomEnd;
+            this.randomEnd = temp;
         }
 
-        if(lokal_randomEnd == lokal_randomStart)        //lokal_randomStart ist identisch lokal_randomEnd -> lokal_randomEnd + 1
-            lokal_randomEnd++;
+        if(this.randomEnd == this.randomStart)        //this.randomStart ist identisch this.randomEnd -> this.randomEnd + 1
+            this.randomEnd++;
 
-        randomStart = lokal_randomStart;
-        randomEnd = lokal_randomEnd;
-
-        if(lokal_Tick_milsec < 0)                         //lokal_Tick_milsec ist negativ -> * -1
-            lokal_Tick_milsec = lokal_Tick_milsec * -1;
-
-        if(lokal_Tick_milsec == 0)                        //wurde kein Tick übergeben, wird dieser als 100 angenommen
-            lokal_Tick_milsec += 100;
-
-        limitDay    = DAY_TIME * 1000 / lokal_Tick_milsec;
-        limitNight  = NIGHT_TIME * 1000 / lokal_Tick_milsec;
-
+        randomStart = this.randomStart;
+        randomEnd = this.randomEnd;
     }
 
     //Aufruf von Subjekt; Gibt Objekt_ID zurück, zu der das Subjekt als nächstes laufen soll
@@ -120,14 +100,13 @@ public class Intelligence {
 
     //Algorithmus, in dem die Intelligence den Vektor verwaltet und alle Bedürfnisse neu berechnet
     public void tick() {
+        boolean day = InternalClock.isDay();
+
         int motivation_highest = 0;
         Need beduerfnis;
 
         //Index der höchsten Motivation zurücksetzen auf 0;
         maxMotivationIndex = 0;
-
-        //feststellen, ob gerade Tag oder Nacht ist
-        setboolDayNight();
 
         //Liste inkrementieren
         for(int i=0; i < needs_list.size(); i++) {
@@ -135,10 +114,10 @@ public class Intelligence {
             beduerfnis = needs_list.elementAt(i);
 
             //Prüfen ob Tag oder Nacht ist und die entsprechenden Bedürfnisse nutzen
-            if (boolDayNight && beduerfnis.getActiveDayNight()) { //es ist Tag und Bedürfnis ist tagaktiv
+            if (day && beduerfnis.getActiveDayNight()) { //es ist Tag und Bedürfnis ist tagaktiv
                 motivation_highest = manageList(i, motivation_highest);
 
-            } else if (!boolDayNight && !beduerfnis.getActiveDayNight()) { //es ist Nacht und das Bedürfnis ist nachtaktiv
+            } else if (!day && !beduerfnis.getActiveDayNight()) { //es ist Nacht und das Bedürfnis ist nachtaktiv
                 motivation_highest = manageList(i, motivation_highest);
             }
         }
@@ -147,23 +126,6 @@ public class Intelligence {
     //Zufallszahl zwischen randomStart und randomEnd erzeugen
     private int getIntRandom(){
         return randomStart + (int) Math.round( Math.random() * (randomEnd - randomStart) );
-    }
-
-    //Feststellen ob Tag oder Nacht ist
-    private void setboolDayNight(){
-        //Zählvariable für Tick inkrementieren
-        counterDayNight++;
-
-        //Zahlvariable zurücksetzen (= boolDayNight umschalten), wenn...
-        if(boolDayNight && counterDayNight >= limitDay){  //... Tag ist und die Zählvaribale das Tageslimit erreicht hat
-            counterDayNight = 0;
-            boolDayNight = false;
-        }else if(!boolDayNight && counterDayNight >= limitNight){//... Nahct  ist und die Zählvariable das Nachtlimit erreicht aht
-            counterDayNight = 0;
-            boolDayNight = true;
-        }
-
-        //sonst bleibt alles beim alten; das heißt: Tag/ NAcht geht weiter
     }
 
     //Werte des Bedürfnisses an der Stelle need_list[index] werden geändert und motivation_highest neu berechnet
