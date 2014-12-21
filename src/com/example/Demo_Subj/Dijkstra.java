@@ -146,7 +146,7 @@ public class Dijkstra {
         }
 
         start = Start.getId();
-        end = Start.getId();
+        end = End.getId();
 
         shortestPaths();
         createShortestPath();
@@ -165,3 +165,7 @@ public class Dijkstra {
         return Result;
     }
 }
+
+//Anmerkungen: Damit das ganze Funktioniert, muss die Raumliste numerisch geordnet sein und mit ElementID 0 anfangen:
+//Sprich das erste Element der Raumliste ist auch der Raum mit der ID "0".
+//Ansonsten muss ich den Algorithmus umbauen (fillMatrix).
