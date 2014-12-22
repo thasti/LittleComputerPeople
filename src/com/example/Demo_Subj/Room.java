@@ -16,6 +16,7 @@ public class Room {
 
     private Bitmap bitmapRoom;
     private int roomID;
+    List<Integer> attachedRooms;
 
     private List<Item> itemList;
 
@@ -47,4 +48,8 @@ public class Room {
     public List<Item> getItemList() {
         return itemList;
     }
+
+    public List<Integer> getAttachedRooms(){return attachedRooms;};
+
+    public int getId(){return roomID;};
 }

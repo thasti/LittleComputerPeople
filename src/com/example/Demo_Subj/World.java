@@ -1,5 +1,6 @@
 package com.example.Demo_Subj;
 
+import java.util.List;
 import java.util.TreeMap;
 
 /*
@@ -10,6 +11,7 @@ public class World {
 
     private static TreeMap<Integer, Room> roomTreeMap = new TreeMap<Integer, Room>();
     private static TreeMap<Integer, Object> objectTreeMap = new TreeMap<Integer, Object>();
+    private static List<Room> Rooms;
 
     /*******************************************************************************************
         Puts a room with the given ID in a TreeMap
@@ -63,4 +65,6 @@ public class World {
     public static Object getObjectById(int id){
         return objectTreeMap.get(id);
     }
+
+    public static List<Room> getAllRooms(){return Rooms;};
 }
