@@ -14,10 +14,11 @@ public class World {
     private static List<Room> Rooms;
 
     /*******************************************************************************************
-        Puts a room with the given ID in a TreeMap
+        Puts a room with the given ID in a TreeMap and fills the List Rooms
      ******************************************************************************************/
     public static void setRoom(int key, Room room){
         roomTreeMap.put(key, room);
+        Rooms.add(room);
     }
 
     /*******************************************************************************************
