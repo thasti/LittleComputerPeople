@@ -28,7 +28,6 @@ public class RoomView extends View {
 
     public RoomView(Context c) {
         super(c);
-
         this.ctx = c;
         this.roomList = GlobalInformation.getRoomList();
         this.subject = GlobalInformation.getSubject();

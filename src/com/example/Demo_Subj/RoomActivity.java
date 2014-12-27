@@ -76,6 +76,10 @@ public class RoomActivity extends Activity {
         subject = new Subject (subjectBStand, bitmapWalkingList, RoomActivity.this);
         GlobalInformation.setSubject(subject);
 
+        InformationPublisher ip = new InformationPublisher(this,"house.xml");
+        ip.set_room_list(null);
+
+
         List<Room> roomList;
         roomList = new ArrayList<Room>();
         // TODO: populate this list via the XML
