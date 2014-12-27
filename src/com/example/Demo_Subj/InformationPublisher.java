@@ -255,6 +255,7 @@ public class InformationPublisher extends ContextWrapper{
             while (i < a.length) {
                 double exp = Math.pow(0.1, i - vk);
                 //System.out.println((int) a[i] - 48);
+
                 m += (a[i] - 48) * exp;
                 i++;
             }
