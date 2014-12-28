@@ -48,7 +48,7 @@ public class Subject {
     private Intelligence intel;
     
     public Subject(Bitmap sStand, List<Bitmap> bitmaps, Context c){
-        subjStandBitmap = Bitmap.createScaledBitmap(sStand, 170, 330, false);
+        subjStandBitmap = Bitmap.createScaledBitmap(sStand, GlobalInformation.getScreenWidth()/5, (int)(GlobalInformation.getScreenHeight()/1.5), false);
         subjStandBitmapInv = mirrorBitmap(subjStandBitmap);
 
         aktBitmap = sStand;
@@ -60,7 +60,7 @@ public class Subject {
 
         for (int i = 0; i <= (bitmaps.size() - 1); i++){
             Bitmap bm = bitmaps.get(i);
-            subjectWalk.add(i,  Bitmap.createScaledBitmap(bm, 170, 330, false));
+            subjectWalk.add(i,  Bitmap.createScaledBitmap(bm, GlobalInformation.getScreenWidth()/5, (int)(GlobalInformation.getScreenHeight()/1.5), false));
         }
 
         for (int i = 0; i <= (subjectWalk.size() - 1); i++){
