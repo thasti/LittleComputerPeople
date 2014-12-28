@@ -17,6 +17,11 @@
         <activity android:name=".HouseActivity"
                   android:configChanges="orientation"
                   android:screenOrientation="landscape"/>
+        <activity android:name=".ChatActivity"
+                  android:theme="@android:style/Theme.Translucent"
+                  android:configChanges="orientation"
+                  android:screenOrientation="landscape"/>
+
     </application>
 </manifest>
 

@@ -85,11 +85,25 @@ public class RoomView extends View {
                             (int)obj.getyPos(),
                             (int)obj.getxPos() + obj.getBitmapO().getWidth(),
                             (int)obj.getyPos() + obj.getBitmapO().getHeight());
+
                     if (boundingBox.contains((int)event.getX(), (int)event.getY())) {
                         // TODO call the use() function of the item
                         Toast.makeText(getContext(), "Click on " + obj.toString(), Toast.LENGTH_SHORT).show();
                     }
                 }
+
+
+                Rect boundingBox = new Rect((int)subject.getxPos(),
+                        (int)subject.getyPos(),
+                        (int)subject.getxPos() + subject.getSubjBitmap().getWidth(),
+                        (int)subject.getyPos() + subject.getSubjBitmap().getHeight());
+
+                if (boundingBox.contains((int)event.getX(), (int)event.getY())) {
+                    // TODO call the use() function of the item
+                    Intent i = new Intent(ctx, ChatActivity.class);
+                    ctx.startActivity(i);
+                }
+
                 Rect changeViewBox = new Rect(0,0, 50, 50);
                 if (changeViewBox.contains((int)event.getX(), (int)event.getY())) {
                     Intent i = new Intent(ctx, HouseActivity.class);
