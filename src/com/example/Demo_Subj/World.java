@@ -23,6 +23,18 @@ public class World {
         Rooms.add(room);
     }
 
+    public static int getRoomlistSize(){
+        return roomTreeMap.size();
+    }
+
+    public static int getRoomlistFirstKey(){
+        return roomTreeMap.firstKey();
+    }
+
+    public static int getRoomlistHigherKey(int lowKey){
+        return roomTreeMap.higherKey(lowKey);
+    }
+
     /*******************************************************************************************
      * From Documentation: A return value of null does not necessarily indicate that the map
      * contains no mapping for the key; it's also possible that the map explicitly maps the key to null.

@@ -22,7 +22,8 @@ public class XML_Parser implements DataSource {
 	private int id = 0;//fortlaufende interne id für die Baumstruktur
 	private String platzhalter = "";//nur für Konsollenausgabe um die Ausgaben einzurücken
 	private Tree welt;//Superparentinstanz welche die Liste mit allen childs enthält
-	public boolean load_file(Object obj) {
+
+    public boolean LoadFile(Object obj) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         Document document;
@@ -36,7 +37,7 @@ public class XML_Parser implements DataSource {
                     System.out.println("existiert Xml-file: "+file.exists());
                     if(file.exists()){
                         document = builder.parse(file);
-                        load_childs(document,0);
+                        LoadChilds(document, 0);
                     }
                     else{
                         System.out.println("XML Datei konnte nicht geladen werden!");
@@ -45,12 +46,12 @@ public class XML_Parser implements DataSource {
                     break;
                 case "AssetManager$AssetInputStream":
                     document = builder.parse((InputStream)obj);
-                    load_childs(document,0);
+                    LoadChilds(document, 0);
                     break;
                 case "String":
                     file = new File((String)obj);
                     document = builder.parse(file);
-                    load_childs(document,0);
+                    LoadChilds(document, 0);
                     break;
                 default:
                     System.out.println("Classtyp unbekannt: "+typ);
@@ -65,8 +66,12 @@ public class XML_Parser implements DataSource {
         }
 		return true;
 
-	}//lädt Datei und befüllt die "welt"(Instanz von Tree)
-	private void load_childs(Node parent, int parent_id){
+	}
+    /**********************************************************************************************
+	lädt Datei und befüllt die "welt"(Instanz von Tree)->Baumstruktur
+    **********************************************************************************************/
+
+    private void LoadChilds(Node parent, int parent_id){
 		System.out.println(platzhalter+"Parent:"+parent.getNodeName());
 		platzhalter+="	";
 		NodeList childs = parent.getChildNodes();
@@ -76,105 +81,139 @@ public class XML_Parser implements DataSource {
 				//#text -> Zeilenumbruch
 				System.out.println(platzhalter+"Childtyp: "+childs.item(i).getNodeName());
 				id++;
-				welt.add_child("typ",childs.item(i).getNodeName() , id, parent_id);
-				load_attributes(childs.item(i),id);
+				welt.addChild("typ", childs.item(i).getNodeName(), id, parent_id);
+				LoadAttributes(childs.item(i), id);
 				if(childs.item(i).hasChildNodes()){
-						load_childs(childs.item(i),id);
+						LoadChilds(childs.item(i), id);
 				}
 			}
 			i++;
 		}
 		platzhalter=platzhalter.substring(1);
-	}//wird innerhalb von load_file() iterativ aufgerufen, lädt alle Unterknoten vom parent
-	private void load_attributes(Node child, int id){
+	}
+    /**********************************************************************************************
+    wird innerhalb von LoadFile() iterativ aufgerufen, lädt alle Unterknoten vom parent
+    **********************************************************************************************/
+
+    private void LoadAttributes(Node child, int id){
 		if(child.getAttributes().getLength()>0){
 			int i = 0;
 			while(i<child.getAttributes().getLength()){
 				if(!child.getAttributes().item(i).toString().equals("#text")){
 					//bei einem Zeilenumbruch equals("#text") == true
 					System.out.println(platzhalter+child.getAttributes().item(i).getNodeName()+"="+child.getAttributes().item(i).getNodeValue());
-					welt.add_parameter(child.getAttributes().item(i).getNodeName(), child.getAttributes().item(i).getNodeValue(),id);
+					welt.addParameter(child.getAttributes().item(i).getNodeName(), child.getAttributes().item(i).getNodeValue(), id);
 				}
 				i++;
 			}
 		}
-	}//wird innerhalb von load_childs() aufgerufen um alle Paramter in der Liste des jeweiligen Elements eingetragen
-	public void print_tree(){
-		welt.print_all_childs(welt);
-	}//Konsollenausgabe
+	}
+    /**********************************************************************************************
+    wird innerhalb von LoadChilds() aufgerufen um alle Paramter in der Liste des jeweiligen Elements eingetragen
+    **********************************************************************************************/
+
+    public void PrintTree(){
+		welt.printAllChilds(welt);
+	}
+    /**********************************************************************************************
+    Konsollenausgabe
+    **********************************************************************************************/
+
     public XML_Parser(){
         //Welt initialisieren
         welt = new Tree("id","0");
-        welt.add_parameter("typ", "welt",0);
+        welt.addParameter("typ", "welt", 0);
     }
-	public TreeNode get_super_parent() {
+
+	public TreeNode getSuperParent() {
 		if(welt.childs.size()<2){
 			TreeNode tmp = new TreeNode();
 			tmp.Nodes = welt.childs.get(0).parameter;
-			tmp.Number = welt.string_to_int(welt.get_parameter_value(welt.childs.get(0), "id"));
+			tmp.Number = welt.StringToInt(welt.getParameterValue(welt.childs.get(0), "id"));
 			return tmp;
 		}
 		else
 			return null;//es gibt kein einzelnes Superparent
 	}
-	public List<TreeNode> get_all_childs_from(TreeNode child) {
+
+	public List<TreeNode> getAllChildsFrom(TreeNode child) {
 		List<TreeNode> list = new ArrayList<TreeNode>();
         if(child!=null) {
-            Tree tmp = welt.get_child_with_id(child.Number);
+            Tree tmp = welt.getChildWithId(child.Number);
             int i = 0;
             while (tmp.childs.size() > i) {
                 TreeNode t = new TreeNode();
                 t.Nodes = tmp.childs.get(i).parameter;
-                t.Number = welt.string_to_int(welt.get_parameter_value(tmp.childs.get(i), "id"));
+                t.Number = welt.StringToInt(welt.getParameterValue(tmp.childs.get(i), "id"));
                 list.add(t);
                 i++;
             }
         }
 		return list;
-	}//Liste ist 0 wenn es keine childs hat
-	public String get_value_with_key_from(TreeNode child, String key) {
-		Tree tmp = welt.get_child_with_id(child.Number);
-		return welt.get_parameter_value(tmp, key);
-	}//gibt leeren String zurück wenn das child in den parametern den key nicht besitzt
-	public TreeNode get_child_from(TreeNode child, String key, String value) {
+	}
+    /**********************************************************************************************
+    Liste ist 0 wenn es keine childs hat
+    **********************************************************************************************/
+
+    public String getValueWithKeyFrom(TreeNode child, String key) {
+		Tree tmp = welt.getChildWithId(child.Number);
+		return welt.getParameterValue(tmp, key);
+	}
+    /**********************************************************************************************
+    gibt leeren String zurück wenn das child in den parametern den key nicht besitzt
+    **********************************************************************************************/
+
+	public TreeNode getChildFrom(TreeNode child, String key, String value) {
 		TreeNode t = new TreeNode();
-		Tree tmp = welt.get_child_with_id(child.Number);
-		if(tmp.get_child(key, value)!=null){
-			tmp = tmp.get_child(key, value);
+		Tree tmp = welt.getChildWithId(child.Number);
+		if(tmp.getChild(key, value)!=null){
+			tmp = tmp.getChild(key, value);
 			t.Nodes = tmp.parameter;
-			t.Number = welt.string_to_int(welt.get_parameter_value(tmp, "id"));
+			t.Number = welt.StringToInt(welt.getParameterValue(tmp, "id"));
 			return t;
 		}
 		return null;
-	}//wenn es das child nicht gibt, kommt null zurück. Sucht nur in der oberesten Childebene des Elements
-	public List<TreeNode> get_childs_with(String key, String value){
+	}
+    /**********************************************************************************************
+    wenn es das child nicht gibt, kommt null zurück. Sucht nur in der oberesten Childebene des Elements
+    **********************************************************************************************/
+
+    public List<TreeNode> getChildsWith(String key, String value){
 		//TreeNode tmp = new TreeNode();
 		List<TreeNode> tmp_list = new ArrayList<TreeNode>();
-		tmp_list = get_childs_with_iterativ(welt, key, value);
+		tmp_list = getChildsWithIterativ(welt, key, value);
 		return tmp_list;
-	}//ruft get_childs_with_iterativ() iterativ auf um alle Childebenen abzufragen. Liste ist 0 wenn es keine Childs gibt
-	private List<TreeNode> get_childs_with_iterativ(Tree parent, String key, String value){
+	}
+    /**********************************************************************************************
+    ruft getChildsWithIterativ() iterativ auf um alle Childebenen abzufragen. Liste ist 0 wenn es keine Childs gibt
+    **********************************************************************************************/
+
+    private List<TreeNode> getChildsWithIterativ(Tree parent, String key, String value){
 		TreeNode tmp = new TreeNode();
 		List<TreeNode> tmp_list = new ArrayList<TreeNode>();
 		int i = 0;
 		while(i<parent.childs.size()){
-			if(welt.get_parameter_value(parent.childs.get(i), key).compareTo(value)==0){
+			if(welt.getParameterValue(parent.childs.get(i), key).compareTo(value)==0){
 				tmp.Nodes = parent.childs.get(i).parameter;
-				tmp.Number = parent.string_to_int(parent.get_parameter_value(parent.childs.get(i), "id"));
+				tmp.Number = parent.StringToInt(parent.getParameterValue(parent.childs.get(i), "id"));
 				tmp_list.add(tmp);
 			}
 			if(parent.childs.size()>0){
-				tmp_list.addAll(this.get_childs_with_iterativ(parent.childs.get(i),key,value));
+				tmp_list.addAll(this.getChildsWithIterativ(parent.childs.get(i), key, value));
 			}
 			i++;
 		}
 		return tmp_list;
-	}//nur für den iterativen aufruf nötig
-	public TreeNode get_parent_from(TreeNode child) {
+	}
+    /**********************************************************************************************
+    nur für den iterativen aufruf nötig
+    **********************************************************************************************/
+
+	public TreeNode getParentFrom(TreeNode child) {
 		TreeNode t = new TreeNode();
-		Tree tmp = welt.get_child_with_id(child.Number);
-		t.Number = welt.string_to_int(welt.get_parameter_value(tmp, "parentid"));
-		t.Nodes = welt.get_child_with_id(t.Number).parameter;
+		Tree tmp = welt.getChildWithId(child.Number);
+		t.Number = welt.StringToInt(welt.getParameterValue(tmp, "parentid"));
+		t.Nodes = welt.getChildWithId(t.Number).parameter;
 		return t;
 	}
 }

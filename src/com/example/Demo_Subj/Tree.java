@@ -8,7 +8,8 @@ public class Tree {
 	TreeMap<String,String> parameter = new TreeMap<String, String>();//Parameter des Elements
 	TreeMap<Integer,Integer> child_ids = new TreeMap<Integer,Integer>();//Key ist die fortlaufende interne ID, und Value der child-Index von der Liste "childs"
 	List <Tree> childs = new ArrayList<Tree>();//Liste mit den Kindern des aktuellen Elements
-	public boolean add_child(String key, String value, Integer id, Integer parent_id){
+
+    public boolean addChild(String key, String value, Integer id, Integer parent_id){
 		if((parameter.get("id").compareTo(parent_id.toString())==0)||(parent_id==0)){
 			if(childs.isEmpty()){
 				childs = new ArrayList<Tree>();
@@ -23,13 +24,13 @@ public class Tree {
 			//eine Ebene herabsteigen
 			if(child_ids.containsKey(parent_id)){
 				//eins der Kinder hat die betreffende Parentid
-				return childs.get(child_ids.get(parent_id)).add_child(key, value, id, parent_id);
+				return childs.get(child_ids.get(parent_id)).addChild(key, value, id, parent_id);
 			}
 			else{
                 //Funktion iterativ ausführen um an die Kindes Kinder zu kommen
 				int i = 0;
 				while(i<childs.size()){
-					boolean ret = childs.get(i).add_child(key, value, id, parent_id);
+					boolean ret = childs.get(i).addChild(key, value, id, parent_id);
 					if(ret==true){
 						break;
 					}
@@ -38,8 +39,12 @@ public class Tree {
 				return false;
 			}
 		}
-	}//child zur Liste hinzufügen
-	public boolean add_parameter(String key, String value, Integer id){
+	}
+    /**********************************************************************************************
+    child zur Liste hinzufügen
+    **********************************************************************************************/
+
+	public boolean addParameter(String key, String value, Integer id){
 		if(parameter.get("id").compareTo(id.toString())==0){
 			parameter.put(key, value);
 			return true;
@@ -47,7 +52,7 @@ public class Tree {
 		else{
 			int i = 0;
 			while(i<childs.size()){
-				boolean ret = childs.get(i).add_parameter(key, value, id);
+				boolean ret = childs.get(i).addParameter(key, value, id);
 				if(ret==true){
 					return true;
 				}
@@ -57,18 +62,24 @@ public class Tree {
 			}
 			return false;
 		}	
-	}//jedes Element besitzt eine Liste mit parametern aus der XML. zb.: Typ,name usw.
-	public Set<String> get_all_parameter(Tree child){
+	}
+    /**********************************************************************************************
+    jedes Element besitzt eine Liste mit parametern aus der XML. zb.: Typ,name usw.
+    **********************************************************************************************/
+
+	public Set<String> getAllParameter(Tree child){
 		return child.parameter.keySet();
 	}
-	public String get_parameter_value(Tree child, String key){
+
+	public String getParameterValue(Tree child, String key){
 		if(child.parameter.containsKey(key)){
 			return child.parameter.get(key);
 		}
 		else
 			return "";
 	}
-	public Tree get_child(String key, String value){
+
+	public Tree getChild(String key, String value){
 		//sucht nur innerhalb der obersten Childebene
 		int index = 0;
 		int found_childs = 0;
@@ -87,8 +98,12 @@ public class Tree {
 			return null;
 		}
 		
-	}//sucht nach einem Child mit einem bestimmten Key-Value. ACHTUNG! Sucht nur in der Liste der Childs von diesem Element, in keiner Ebene darunter!
-	public Tree get_child_with_id(Integer id){
+	}
+    /**********************************************************************************************
+    sucht nach einem Child mit einem bestimmten Key-Value. ACHTUNG! Sucht nur in der Liste der Childs von diesem Element, in keiner Ebene darunter!
+    **********************************************************************************************/
+
+    public Tree getChildWithId(Integer id){
 		//id ist die interne id von der Baumstruktur
 		if(child_ids.containsKey(id)){
 			return childs.get(child_ids.get(id));
@@ -96,15 +111,19 @@ public class Tree {
 		else{
 			int i = 0;
 			while(i<childs.size()){
-				if(childs.get(i).get_child_with_id(id)!=null)
-					return childs.get(i).get_child_with_id(id);
+				if(childs.get(i).getChildWithId(id)!=null)
+					return childs.get(i).getChildWithId(id);
 				else
 					i++;
 			}
 			return null;
 		}
-	}//die ID ist die, der internen Baumstruktur
-	public String get_child_id(String key, String value){
+	}
+    /**********************************************************************************************
+    die ID ist die, der internen Baumstruktur
+    **********************************************************************************************/
+
+    public String getChildId(String key, String value){
 		//sucht nur innerhalb der obersten Childebene
 		int index = 0;
 		int found_childs = 0;
@@ -124,20 +143,32 @@ public class Tree {
 		else{
 			return childs.get(index).parameter.get("id");
 		}
-	}//gibt die interne ID eines childs zurück. ACHTUNG! Sucht nur in der Liste der Childs von diesem Element, in keiner Ebene darunter!
-	public void print_all_childs(Tree child_tmp){
+	}
+    /**********************************************************************************************
+	gibt die interne ID eines childs zurück. ACHTUNG! Sucht nur in der Liste der Childs von diesem Element, in keiner Ebene darunter!
+    **********************************************************************************************/
+
+    public void printAllChilds(Tree child_tmp){
 		System.out.println(child_tmp.parameter.entrySet());
 		int i = 0;
 		while(i<childs.size()){
-			child_tmp.childs.get(i).print_all_childs(childs.get(i));
+			child_tmp.childs.get(i).printAllChilds(childs.get(i));
 			i++;
 		}
-	}//Konsollenausgabe. Gibt alle Childs inklusive Unterebenen aus
-	public String get_parent_id(Tree child){
-		return get_parameter_value(child,"parent_id");
-	}//gibt die parent-id aus der Parameterliste aus
-	public int string_to_int(String t){
-		char[] a = t.toCharArray();
+	}
+    /**********************************************************************************************
+    Konsollenausgabe. Gibt alle Childs inklusive Unterebenen aus
+    **********************************************************************************************/
+
+    public String getParentId(Tree child){
+		return getParameterValue(child, "parent_id");
+	}
+    /**********************************************************************************************
+    gibt die parent-id aus der Parameterliste aus
+    **********************************************************************************************/
+
+	public int StringToInt(String t){
+		/*char[] a = t.toCharArray();
 		int z=0,i=0;
 		while(i<a.length){
 			int exp = (int)Math.pow(10,a.length-i-1);
@@ -146,8 +177,10 @@ public class Tree {
 			z += (a[i]-48)*exp;
 			i++;
 		}
-		return z;
+		return z;*/
+        return Integer.parseInt(t);
 	}
+
 	Tree(String key, String value){
 		parameter.put(key, value);
 	}
