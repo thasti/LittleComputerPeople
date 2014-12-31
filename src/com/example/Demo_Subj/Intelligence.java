@@ -132,12 +132,16 @@ public class Intelligence {
     private int manageList(int index, int motivation_highest){
         //es kann nicht das Objekt "beduerfnis" übergeben werden, da sich die eigenschfaten des Objektes ändern müssen. Dies soll dierekt in der Liste geschehen.
 
-        //aktuellen Wert ändern; aktueller Wert = aktueller Wert + Zufallszahl
-        needs_list.elementAt(index).setCurrentValue(needs_list.elementAt(index).getCurrentValue() + getIntRandom());
+        try {
+            //aktuellen Wert ändern; aktueller Wert = aktueller Wert + Zufallszahl
+            needs_list.elementAt(index).setCurrentValue(needs_list.elementAt(index).getCurrentValue() + getIntRandom());
 
-        //Motivation neu berechnen; Motivation = Priorität * (aktueller Wert - Schwellwert)
-        needs_list.elementAt(index).setMotivation(needs_list.elementAt(index).getPriority() * (needs_list.elementAt(index).getCurrentValue() - needs_list.elementAt(index).getTopLevel()));
-
+            //Motivation neu berechnen; Motivation = Priorität * (aktueller Wert - Schwellwert)
+            needs_list.elementAt(index).setMotivation(needs_list.elementAt(index).getPriority() * (needs_list.elementAt(index).getCurrentValue() - needs_list.elementAt(index).getTopLevel()));
+        }
+        catch(Exception e){ //es sollen Exceptions JEDER Art abgefangen werden, da von dne Funktionen nicht expliziert Exceptions geworfen werden
+            //TODO: Fehlerausgabe auf Android- Systemen
+        }
         //Höchte Motivation finden:
         //neuer index, wenn neue höchste Motivation
         if(needs_list.elementAt(index).getMotivation() > motivation_highest){
