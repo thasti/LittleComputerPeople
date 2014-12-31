@@ -1,6 +1,9 @@
 package com.example.Demo_Subj;
 
 
+import android.app.AlertDialog;
+import android.util.Log;
+
 import java.util.*;
 
 
@@ -140,7 +143,8 @@ public class Intelligence {
             needs_list.elementAt(index).setMotivation(needs_list.elementAt(index).getPriority() * (needs_list.elementAt(index).getCurrentValue() - needs_list.elementAt(index).getTopLevel()));
         }
         catch(Exception e){ //es sollen Exceptions JEDER Art abgefangen werden, da von dne Funktionen nicht expliziert Exceptions geworfen werden
-            //TODO: Fehlerausgabe auf Android- Systemen
+            //Exception wird geloggt
+            Log.e("LCP_Intelligence", "Error while managing needs_list.",e);
         }
         //Höchte Motivation finden:
         //neuer index, wenn neue höchste Motivation
