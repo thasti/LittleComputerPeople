@@ -9,14 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.*;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.net.Uri;
+
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -54,23 +51,19 @@ public class RoomView extends View {
 
     private Bitmap aktBitmap;
 
-
     private int listPointerWalk = 0;
     private int holdAnimation = 0;
     private static int holdAnimationCycles = 20;
 
-    //private MediaPlayer mediaplayer;
-
     private Intelligence intel;
-
     /*****************************************************************************************/
+
+    private Sound sound;
 
     public RoomView(Context c) {
         super(c);
 
         this.ctx = c;
-        //this.roomList = GlobalInformation.getRoomList();
-        //this.subject = GlobalInformation.getSubject();
         this.p = null;
 
 
@@ -94,12 +87,11 @@ public class RoomView extends View {
         GlobalInformation.setCurrentRoom(aktRoomID);
         GlobalInformation.setRoomList(roomList);
 
-
         intel = new Intelligence();
 
-        //mediaplayer = new MediaPlayer();
         /*****************************************************************************************/
 
+        sound = new Sound(this.ctx);
     }
 
     public int getAktRoomID(){
@@ -211,10 +203,7 @@ public class RoomView extends View {
             canvas.drawBitmap(obj.getBitmapO(), obj.getxPos(), obj.getyPos(), p);
         }
 
-        // draw the subject
-        //canvas.drawBitmap(subject.getSubjBitmap(),
-        //        subject.getxPos(),
-        //        subject.getyPos(), p);
+
         canvas.drawBitmap(aktBitmap,
                 xPos,
                 yPos, p);
@@ -249,7 +238,7 @@ public class RoomView extends View {
                 xPos = GlobalInformation.getScreenWidth();
                 //reset walking animation
                 listPointerWalk = 0;
-                //startSound(R.raw.sound_door);
+                sound.startSound(R.raw.sound_door);
             }
         }
         else if (aktRoomID < destRoomID){
@@ -263,7 +252,7 @@ public class RoomView extends View {
                 xPos = 0;
                 //reset walking animation
                 listPointerWalk = 0;
-                //startSound(R.raw.sound_door);
+                sound.startSound(R.raw.sound_door);
             }
         }
     }
