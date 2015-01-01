@@ -16,15 +16,15 @@ public class Room {
 
     private Bitmap bitmapRoom;
     private int roomID;
-    private int lowerRoomID;
-    private int upperRoomID;
-    private int leftRoomID;
-    private int rightRoomID;
+    private int lowerRoomID = -1;
+    private int upperRoomID = -1;
+    private int leftRoomID = -1;
+    private int rightRoomID = -1;
     List<Integer> attachedRooms;
 
     private List<Item> itemList;
 
-    public Room (Bitmap bitmapRoomR, int ID, int leftRoom, int rightRoom, int upperRoom, int lowerRoom, Context ctx) {
+    public Room (Bitmap bitmapRoomR, int ID, Context ctx) {
         bitmapRoom = Bitmap.createScaledBitmap(bitmapRoomR,
                 GlobalInformation.getScreenWidth(),
                 GlobalInformation.getScreenHeight(),
@@ -33,24 +33,6 @@ public class Room {
         roomID = ID;
         itemList = new ArrayList<Item>();
         attachedRooms = new ArrayList<Integer>();
-
-        lowerRoomID = lowerRoom;
-        upperRoomID = upperRoom;
-        leftRoomID = leftRoom;
-        rightRoomID = rightRoom;
-
-        if (lowerRoomID != -1){
-            attachedRooms.add(lowerRoomID);
-        }
-        if (upperRoomID != -1){
-            attachedRooms.add(upperRoomID);
-        }
-        if (leftRoomID != -1){
-            attachedRooms.add(leftRoomID);
-        }
-        if (rightRoomID != -1){
-            attachedRooms.add(rightRoomID);
-        }
 
         Resources resources = ctx.getResources();
 
@@ -77,6 +59,43 @@ public class Room {
     };
 
     public int getId(){return roomID;};
+
+    public void setLowerRoomID(int ID){
+        lowerRoomID = ID;
+    }
+
+    public void setUpperRoomID(int ID){
+        upperRoomID = ID;
+    }
+
+    public void setLeftRoomID(int ID){
+        leftRoomID = ID;
+    }
+
+    public void setRightRoomID(int ID){
+        rightRoomID = ID;
+    }
+
+    public void setAttachedRooms(int leftRoom, int rightRoom, int upperRoom, int lowerRoom)
+    {
+        lowerRoomID = lowerRoom;
+        upperRoomID = upperRoom;
+        leftRoomID = leftRoom;
+        rightRoomID = rightRoom;
+
+        if (lowerRoomID != -1){
+            attachedRooms.add(lowerRoomID);
+        }
+        if (upperRoomID != -1){
+            attachedRooms.add(upperRoomID);
+        }
+        if (leftRoomID != -1){
+            attachedRooms.add(leftRoomID);
+        }
+        if (rightRoomID != -1){
+            attachedRooms.add(rightRoomID);
+        }
+    }
 
     public int getLowerRoomID(){
         return lowerRoomID;

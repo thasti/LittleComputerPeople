@@ -75,8 +75,10 @@ public class RoomActivity extends Activity {
         List<Room> roomList;
         roomList = new ArrayList<Room>();
         // TODO: populate this list via the XML
-        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.wohnzimmer), 0, -1, 1, -1, -1, this));
-        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.schlafzimmer), 1, 0, -1, -1, -1,this));
+        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.wohnzimmer), 0, this));
+        roomList.get(0).setAttachedRooms(-1, 1, -1, -1);
+        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.schlafzimmer), 1, this));
+        roomList.get(1).setAttachedRooms(0, -1, -1, -1);
         World.setAllRooms(roomList);
 
         final Subject subject;
