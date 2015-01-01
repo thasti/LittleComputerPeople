@@ -102,6 +102,10 @@ public class RoomView extends View {
 
     }
 
+    public int getAktRoomID(){
+        return aktRoomID;
+    }
+
     private void fillWalkingArrayLists(Resources resources){
 
         List<Bitmap> subjectWalkingList;                                                                    //Animation des Subjekts und Laufens laden
@@ -116,6 +120,8 @@ public class RoomView extends View {
 
         subjStandBitmap = Bitmap.createScaledBitmap(subjectBStand, 170, 330, false);
         subjStandBitmapInv = mirrorBitmap(subjStandBitmap);
+
+        aktBitmap = subjStandBitmap;
 
         subjectWalk = new ArrayList<Bitmap>();                                                              //Arrays für die einzelnen Bilder der Animation (vorwärts und rückwärts)
         subjectWalkInv = new ArrayList<Bitmap>();
@@ -144,8 +150,8 @@ public class RoomView extends View {
 
     private void fillRoomList(Resources resources){
         roomList = new ArrayList<Room>();
-        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.wohnzimmer), 1, this.ctx));
-        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.schlafzimmer), 2, this.ctx));
+        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.schlafzimmer), 1, this.ctx));
+        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.wohnzimmer), 2, this.ctx));
     }
 
     private void fillObjectAnimList(Resources resources){

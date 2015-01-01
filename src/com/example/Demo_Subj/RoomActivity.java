@@ -63,27 +63,11 @@ public class RoomActivity extends Activity {
         GlobalInformation.setScreenHeight(display.getHeight());
         GlobalInformation.setScreenWidth(display.getWidth());
 
-        // this has to be here (for now) because there is no XML-parser yet
-        List<Bitmap> bitmapWalkingList;
-        Bitmap subjectBStand = BitmapFactory.decodeResource(resources, R.drawable.subjekt);
-        bitmapWalkingList = new ArrayList<Bitmap>();
-        bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_1));
-        bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_2));
-        bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_3));
-        bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_4));
 
         final Subject subject;
-        subject = new Subject (subjectBStand, bitmapWalkingList, RoomActivity.this);
+        subject = new Subject ();
         GlobalInformation.setSubject(subject);
 
-        List<Room> roomList;
-        roomList = new ArrayList<Room>();
-        // TODO: populate this list via the XML
-        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.wohnzimmer), 1, this));
-        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.schlafzimmer), 2, this));
-
-        GlobalInformation.setCurrentRoom(subject.getAktRoomID());
-        GlobalInformation.setRoomList(roomList);
 
         grafik = new RoomView(this);
 
@@ -92,10 +76,6 @@ public class RoomActivity extends Activity {
 
         grafik.invalidate();
 
-
-
-        //final InternalClock clock = new InternalClock();
-        //clock.computeTime();
 
         tick = InternalClock.getTick();
 
@@ -106,8 +86,8 @@ public class RoomActivity extends Activity {
         timer.schedule(new TimerTask(){
             @Override
             public void run(){
-                subject.tick();
-                GlobalInformation.setCurrentRoom(subject.getAktRoomID());
+                //subject.tick();
+                GlobalInformation.setCurrentRoom(grafik.getAktRoomID());
                 grafik.postInvalidate();
                 InternalClock.computeTime();
                 //clock.computeTime();                                       //returns boolean Value
