@@ -1,5 +1,6 @@
 package com.example.Demo_Subj;
 
+//TODO : exceptions,
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -11,45 +12,71 @@ import java.util.List;
 /**
  * Created by johannes on 24.11.2014.
  * Graphical adapations - 04.12.2014
+ * Continued by Karsten Becker
  */
 public class Room {
 
-    private Bitmap bitmapRoom;
+
     private int roomID;
+    private Integer picresource;
+    private Double xPos;
+    private Double yPos;
+    List<Integer> containingitems;
+    private Context context;
     List<Integer> attachedRooms;
 
     private List<Item> itemList;
 
-    public Room (Bitmap bitmapRoomR, int ID, Context ctx) {
-        bitmapRoom = Bitmap.createScaledBitmap(bitmapRoomR,
+    public Room (Integer ID, Integer picresource, Double x, Double y, List<Integer> containingitems,  Context context) {
+        /*bitmapRoom = Bitmap.createScaledBitmap(bitmapRoomR,
                 GlobalInformation.getScreenWidth(),
                 GlobalInformation.getScreenHeight(),
                 false);
-
-        roomID = ID;
-        itemList = new ArrayList<Item>();
-
-        Resources resources = ctx.getResources();
+        */
+        this.roomID = ID;
+        this.picresource = picresource;
+        xPos = x;
+        yPos = y;
+        this.containingitems = containingitems;
 
         //TODO populate this object list from XML information instead
+
+        /*
+        //itemList = new ArrayList<Item>();
+
+        //Resources resources = ctx.getResources();
+
         if (ID == 2) {
-            itemList.add(new Item(BitmapFactory.decodeResource(resources, R.drawable.pflanze), 180, 40));
+            //itemList.add(new Item(BitmapFactory.decodeResource(resources, R.drawable.pflanze),1, 180, 40));
         }
+        */
+    }
+    // returns room-ID
+    public Integer getID() {
+        return this.roomID;
     }
 
-    public int getRoomID() {
-        return roomID;
+    // returns int of drawable ressource
+    public Integer getPicResource(){
+        return this.picresource;
     }
 
-    public Bitmap getBitmapRoom(){
-        return bitmapRoom;
+    // returns x-position
+    public Double getXPos(){
+        return this.xPos;
     }
 
-    public List<Item> getItemList() {
-        return itemList;
+    // returns y-position
+    public Double getYPos(){
+        return this.yPos;
+    }
+
+    //returns a list of int with item ids
+    public List<Integer> getContainingitems() {
+        return containingitems;
     }
 
     public List<Integer> getAttachedRooms(){return attachedRooms;};
 
-    public int getId(){return roomID;};
+
 }

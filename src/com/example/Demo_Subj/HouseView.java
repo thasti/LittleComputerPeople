@@ -6,10 +6,8 @@ package com.example.Demo_Subj;
  */
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
+import android.content.res.Resources;
+import android.graphics.*;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -56,10 +54,25 @@ public class HouseView extends View {
 
         roomList = GlobalInformation.getRoomList();
 
+        /*
         i = 0;
         for (Iterator<Room> iter = roomList.iterator(); iter.hasNext(); ) {
             Room room = iter.next();
             canvas.drawBitmap(room.getBitmapRoom(), screenWidth * i, 0, p);
+            i++;
+        }
+        */
+
+        //Eingefügt von Jürgen als Anpassung an die überarbeiteten Klassen Room und Item
+        Resources resources = getResources();
+        i = 0;
+        for (Iterator<Room> iter = roomList.iterator(); iter.hasNext(); ) {
+            Room room = iter.next();
+            canvas.drawBitmap(Bitmap.createScaledBitmap(
+                    BitmapFactory.decodeResource(resources, room.getPicResource()),
+                    GlobalInformation.getScreenWidth(),
+                    GlobalInformation.getScreenHeight(),
+                    false), screenWidth * i, 0, p);
             i++;
         }
     }

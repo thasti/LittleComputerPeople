@@ -1,5 +1,6 @@
 package com.example.Demo_Subj;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -10,8 +11,9 @@ import java.util.TreeMap;
 public class World {
 
     private static TreeMap<Integer, Room> roomTreeMap = new TreeMap<Integer, Room>();
-    private static TreeMap<Integer, Object> objectTreeMap = new TreeMap<Integer, Object>();
-    private static List<Room> Rooms;
+    private static TreeMap<Integer, Item> itemTreeMap = new TreeMap<Integer, Item>();
+    private static List<Room> Rooms = new ArrayList<Room>();
+    private static List<Item> Items = new ArrayList<Item>();
 
     /*******************************************************************************************
         Puts a room with the given ID in a TreeMap and fills the List Rooms
@@ -44,8 +46,9 @@ public class World {
     /*******************************************************************************************
         Puts an object with the given ID in a TreeMap
      ******************************************************************************************/
-    public static void setObject(int key, Object obj){
-        objectTreeMap.put(key, obj);
+    public static void setObject(int key, Item item){
+        itemTreeMap.put(key, item);
+        Items.add(item);
     }
 
     /*******************************************************************************************
@@ -55,17 +58,19 @@ public class World {
      Returns a boolean value, whether the given ID has an object
      Parameter: ID of the Object
      ******************************************************************************************/
-    public static boolean assertObjectId(int id){
-        return objectTreeMap.containsKey(id);
+    public static boolean assertItemId(int id){
+        return itemTreeMap.containsKey(id);
     }
 
     /*******************************************************************************************
         Returns an object that belongs to the given ID or null, if no object owns the given ID
         Parameter: ID of the Object
      ******************************************************************************************/
-    public static Object getObjectById(int id){
-        return objectTreeMap.get(id);
+    public static Item getItemById(int id){
+        return itemTreeMap.get(id);
     }
 
-    public static List<Room> getAllRooms(){return Rooms;};
+    public static List<Room> getAllRooms(){return Rooms;}
+
+    public static List<Item> getAllItems(){return Items;}
 }
