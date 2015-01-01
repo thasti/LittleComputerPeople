@@ -25,10 +25,13 @@ public class RoomView extends View {
 
     private Context ctx;
     private Paint p;
-    private Subject subject;
+    //private Subject subject;
     private List<Room> roomList;
     private Room drawRoom;
-    private int lastRoom;
+    private int lastRoom = -1;          //Auf einen für die Räume ungültigen Wert vorinitialisieren
+
+    //Variablen für die (noch einzufügenden) verschiedenen Animationen
+    private int animation = 0;          //0 = laufen, 1 = ... usw.
 
 
     //Eigenschaften aus Subject
@@ -50,15 +53,16 @@ public class RoomView extends View {
     private List<Bitmap> subjectWalkInv;
 
     private Bitmap aktBitmap;
-    private Bitmap bm;
+
 
     private int listPointerWalk = 0;
     private int holdAnimation = 0;
     private static int holdAnimationCycles = 20;
 
-    private MediaPlayer mediaplayer;
+    //private MediaPlayer mediaplayer;
 
     private Intelligence intel;
+
     /*****************************************************************************************/
 
     public RoomView(Context c) {
@@ -72,8 +76,37 @@ public class RoomView extends View {
 
         //Aus RoomActivity und Subject
         /*****************************************************************************************/
+
         Resources resources = getResources();
+        fillWalkingArrayLists(resources);
+        fillRoomList(resources);
+        //Zusätzlich müssen hier Methodenaufrufe zum Laden der Objektanimationen hin
+        //fillObjectAnimList(resources);
+
+        float canvasx = (float) GlobalInformation.getScreenWidth();
+        float canvasy = (float) GlobalInformation.getScreenHeight();
+        float bitmapx = (float) subjStandBitmap.getWidth();
+        float bitmapy = (float) subjStandBitmap.getHeight();
+        float posX = ((canvasx/2) - (bitmapx / 2));
+        float posY = (((canvasy/2) - (bitmapy / 2)) + (canvasy/15));
+        setDefaultKoords(posX, posY, aktRoomID);
+
+        GlobalInformation.setCurrentRoom(aktRoomID);
+        GlobalInformation.setRoomList(roomList);
+
+
+        intel = new Intelligence();
+
+        //mediaplayer = new MediaPlayer();
+        /*****************************************************************************************/
+
+    }
+
+    private void fillWalkingArrayLists(Resources resources){
+
         List<Bitmap> subjectWalkingList;                                                                    //Animation des Subjekts und Laufens laden
+        Bitmap bm;                                                                                          //temporäre Bitmap Variable zum spiegeln und befüllen der Arrays
+
         Bitmap subjectBStand = BitmapFactory.decodeResource(resources, R.drawable.subjekt);
         subjectWalkingList = new ArrayList<Bitmap>();
         subjectWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_1));
@@ -98,27 +131,27 @@ public class RoomView extends View {
             subjectWalkInv.add(i, bm);
         }
 
-        List<Room> roomList;                                                                                //Liste der Räume
+    }
+
+    private void setDefaultKoords(float xDef, float yDef, int room) {
+        xPos = xDef;
+        yPos = yDef;
+        aktRoomID = room;
+
+        xDest = xDef;
+        destRoomID = room;
+    }
+
+    private void fillRoomList(Resources resources){
         roomList = new ArrayList<Room>();
-        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.wohnzimmer), 1, c));
-        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.schlafzimmer), 2, c));
+        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.wohnzimmer), 1, this.ctx));
+        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.schlafzimmer), 2, this.ctx));
+    }
 
-        GlobalInformation.setCurrentRoom(aktRoomID);
-        GlobalInformation.setRoomList(roomList);
-
-        float canvasx = (float) GlobalInformation.getScreenWidth();
-        float canvasy = (float) GlobalInformation.getScreenHeight();
-        float bitmapx = (float) subjStandBitmap.getWidth();
-        float bitmapy = (float) subjStandBitmap.getHeight();
-        float posX = ((canvasx/2) - (bitmapx / 2));
-        float posY = (((canvasy/2) - (bitmapy / 2)) + (canvasy/15));
-        setDefaultKoords(posX, posY, 1);
-
-        intel = new Intelligence();
-
-        mediaplayer = new MediaPlayer();
-        /*****************************************************************************************/
-
+    private void fillObjectAnimList(Resources resources){
+        //eine globale Liste für Objektanimationen wird hier befüllt
+        //die Variable animation steht für eine Animation, die ausgeführt werden soll
+        //die switch-case Verzweigung in der Methode onDraw muss zusätzlich erweitert werden
     }
 
     @Override
@@ -128,10 +161,10 @@ public class RoomView extends View {
         // find out which room to draw
         //TODO should be replaced by a proper find() in the list
 
-        if(lastRoom != GlobalInformation.getCurrentRoom()) {
+        if(lastRoom != aktRoomID) {                                                 //hat sich lastroom gegenüber dem letzten Aufruf geändert? wenn ja dann lade den aktuellen Raum
             for (Iterator<Room> iter = roomList.iterator(); iter.hasNext(); ) {
                 Room room = iter.next();
-                if (room.getRoomID() == GlobalInformation.getCurrentRoom()) {
+                if (room.getRoomID() == aktRoomID) {
                     drawRoom = room;
                     lastRoom = room.getRoomID();
                 }
@@ -146,7 +179,42 @@ public class RoomView extends View {
         //Animation für das Subjekt, übernommen aus Subjekt
         /*****************************************************************************************/
         intel.tick();                   //KI aufrufen
+        //hier muss später noch ein Aufruf zum ändern der Animation eingefügt werden, z.B. durch die KI oder durch RoomActivity selbst
+        switch (animation) {
+            case 0:     calculatePosition();
+                        break;
 
+            //Weiter Switch-Cases für weitere Animationen
+
+            default:    aktBitmap = subjStandBitmap;        //entweder das oder eine Fehlermeldung
+                        break;
+        }
+        //calculatePosition();
+
+        /*****************************************************************************************/
+
+
+        // draw the background image
+        canvas.drawBitmap(drawRoom.getBitmapRoom(), 0, 0, p);
+
+        // draw all items (TODO: add layering)
+        List<Item> drawItems = drawRoom.getItemList();
+
+        for (Iterator<Item> iter = drawItems.iterator(); iter.hasNext(); ){
+            Item obj = iter.next();
+            canvas.drawBitmap(obj.getBitmapO(), obj.getxPos(), obj.getyPos(), p);
+        }
+
+        // draw the subject
+        //canvas.drawBitmap(subject.getSubjBitmap(),
+        //        subject.getxPos(),
+        //        subject.getyPos(), p);
+        canvas.drawBitmap(aktBitmap,
+                xPos,
+                yPos, p);
+    }
+
+    private void calculatePosition(){
         if((xPos == xDest) && (aktRoomID == destRoomID)){                   //Animationen basierend auf den Aufrufen
             aktBitmap = subjStandBitmap;
             listPointerWalk = 0;
@@ -175,7 +243,7 @@ public class RoomView extends View {
                 xPos = GlobalInformation.getScreenWidth();
                 //reset walking animation
                 listPointerWalk = 0;
-                startSound(R.raw.sound_door);
+                //startSound(R.raw.sound_door);
             }
         }
         else if (aktRoomID < destRoomID){
@@ -189,46 +257,15 @@ public class RoomView extends View {
                 xPos = 0;
                 //reset walking animation
                 listPointerWalk = 0;
-                startSound(R.raw.sound_door);
+                //startSound(R.raw.sound_door);
             }
         }
-        /*****************************************************************************************/
-
-
-        // draw the background image
-        canvas.drawBitmap(drawRoom.getBitmapRoom(), 0, 0, p);
-
-        // draw all items (TODO: add layering)
-        List<Item> drawItems = drawRoom.getItemList();
-
-        for (Iterator<Item> iter = drawItems.iterator(); iter.hasNext(); ){
-            Item obj = iter.next();
-            canvas.drawBitmap(obj.getBitmapO(), obj.getxPos(), obj.getyPos(), p);
-        }
-
-        // draw the subject
-        //canvas.drawBitmap(subject.getSubjBitmap(),
-        //        subject.getxPos(),
-        //        subject.getyPos(), p);
-        canvas.drawBitmap(aktBitmap,
-                xPos,
-                yPos, p);
     }
-
 
     //Methoden aus Subject
     /*****************************************************************************************/
     public void setDest(float x, int room){
         xDest = x;
-        destRoomID = room;
-    }
-
-    public void setDefaultKoords(float xDef, float yDef, int room) {
-        xPos = xDef;
-        yPos = yDef;
-        aktRoomID = room;
-
-        xDest = xDef;
         destRoomID = room;
     }
 
@@ -267,6 +304,7 @@ public class RoomView extends View {
         return b;
     }
 
+    /*
     private void startSound(int soundRes){                                                      //Ton abspielen
         Uri path = Uri.parse("android.resource://com.example.Demo_Subj/" + soundRes);
         mediaplayer = new MediaPlayer();
@@ -308,7 +346,7 @@ public class RoomView extends View {
             }
         });
         sound.start();
-    }
+    }*/
     /*****************************************************************************************/
 
 
