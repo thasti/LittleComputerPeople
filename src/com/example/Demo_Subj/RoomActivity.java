@@ -61,6 +61,13 @@ public class RoomActivity extends Activity {
         GlobalInformation.setScreenWidth(display.getWidth());
 
 
+        List<Room> roomList;
+        roomList = new ArrayList<Room>();
+        // TODO: populate this list via the XML
+        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.wohnzimmer), 0, -1, 1, -1, -1, this));
+        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.schlafzimmer), 1, 0, -1, -1, -1,this));
+        World.setAllRooms(roomList);
+
         final Subject subject;
         subject = new Subject (this);
         GlobalInformation.setSubject(subject);
