@@ -72,15 +72,16 @@ public class RoomActivity extends Activity {
         bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_3));
         bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_4));
 
-        final Subject subject;
-        subject = new Subject (subjectBStand, bitmapWalkingList, RoomActivity.this);
-        GlobalInformation.setSubject(subject);
-
         List<Room> roomList;
         roomList = new ArrayList<Room>();
         // TODO: populate this list via the XML
-        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.wohnzimmer), 1, this));
-        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.schlafzimmer), 2, this));
+        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.wohnzimmer), 0, -1, 1, -1, -1, this));
+        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.schlafzimmer), 1, 0, -1, -1, -1,this));
+        World.setAllRooms(roomList);
+
+        final Subject subject;
+        subject = new Subject (subjectBStand, bitmapWalkingList, RoomActivity.this);
+        GlobalInformation.setSubject(subject);
 
         GlobalInformation.setCurrentRoom(subject.getAktRoomID());
         GlobalInformation.setRoomList(roomList);

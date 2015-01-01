@@ -16,11 +16,15 @@ public class Room {
 
     private Bitmap bitmapRoom;
     private int roomID;
+    private int lowerRoomID;
+    private int upperRoomID;
+    private int leftRoomID;
+    private int rightRoomID;
     List<Integer> attachedRooms;
 
     private List<Item> itemList;
 
-    public Room (Bitmap bitmapRoomR, int ID, Context ctx) {
+    public Room (Bitmap bitmapRoomR, int ID, int leftRoom, int rightRoom, int upperRoom, int lowerRoom, Context ctx) {
         bitmapRoom = Bitmap.createScaledBitmap(bitmapRoomR,
                 GlobalInformation.getScreenWidth(),
                 GlobalInformation.getScreenHeight(),
@@ -28,12 +32,31 @@ public class Room {
 
         roomID = ID;
         itemList = new ArrayList<Item>();
+        attachedRooms = new ArrayList<Integer>();
+
+        lowerRoomID = lowerRoom;
+        upperRoomID = upperRoom;
+        leftRoomID = leftRoom;
+        rightRoomID = rightRoom;
+
+        if (lowerRoomID != -1){
+            attachedRooms.add(lowerRoomID);
+        }
+        if (upperRoomID != -1){
+            attachedRooms.add(upperRoomID);
+        }
+        if (leftRoomID != -1){
+            attachedRooms.add(leftRoomID);
+        }
+        if (rightRoomID != -1){
+            attachedRooms.add(rightRoomID);
+        }
 
         Resources resources = ctx.getResources();
 
         //TODO populate this object list from XML information instead
-        if (ID == 2) {
-            itemList.add(new Item(BitmapFactory.decodeResource(resources, R.drawable.pflanze), 180, 40));
+        if (ID == 1) {
+            itemList.add(new Item(BitmapFactory.decodeResource(resources, R.drawable.pflanze), 200, 10));
         }
     }
 
@@ -49,7 +72,26 @@ public class Room {
         return itemList;
     }
 
-    public List<Integer> getAttachedRooms(){return attachedRooms;};
+    public List<Integer> getAttachedRooms(){
+        return attachedRooms;
+    };
 
     public int getId(){return roomID;};
+
+    public int getLowerRoomID(){
+        return lowerRoomID;
+    }
+
+    public int getUpperRoomID(){
+        return upperRoomID;
+    }
+
+    public int getLeftRoomID(){
+        return leftRoomID;
+    }
+
+    public int getRightRoomID(){
+        return rightRoomID;
+    }
+
 }
