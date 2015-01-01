@@ -18,6 +18,10 @@ public class Room {
 
 
     private int roomID;
+    private int lowerRoomID;
+    private int upperRoomID;
+    private int leftRoomID;
+    private int rightRoomID;
     private Integer picresource;
     private Double xPos;
     private Double yPos;
@@ -38,10 +42,28 @@ public class Room {
         xPos = x;
         yPos = y;
 
-        if(containingitems == null)
-            this.containingitems = new ArrayList<Integer>();
-        else if(containingitems != null)
-            this.containingitems = containingitems;
+        roomID = ID;
+        itemList = new ArrayList<Item>();
+
+        lowerRoomID = lowerRoom;
+        upperRoomID = upperRoom;
+        leftRoomID = leftRoom;
+        rightRoomID = rightRoom;
+
+        if (lowerRoomID != -1){
+            attachedRooms.add(lowerRoomID);
+        }
+        if (upperRoomID != -1){
+            attachedRooms.add(upperRoomID);
+        }
+        if (leftRoomID != -1){
+            attachedRooms.add(leftRoomID);
+        }
+        if (rightRoomID != -1){
+            attachedRooms.add(rightRoomID);
+        }
+
+        Resources resources = ctx.getResources();
 
         //TODO populate this object list from XML information instead
 
@@ -81,6 +103,27 @@ public class Room {
     }
 
     public List<Integer> getAttachedRooms(){return attachedRooms;};
+    public List<Integer> getAttachedRooms(){
+        return attachedRooms;
+    };
 
+
+    public int getId(){return roomID;};
+
+    public int getLowerRoomID(){
+        return lowerRoomID;
+    }
+
+    public int getUpperRoomID(){
+        return upperRoomID;
+    }
+
+    public int getLeftRoomID(){
+        return leftRoomID;
+    }
+
+    public int getRightRoomID(){
+        return rightRoomID;
+    }
 
 }

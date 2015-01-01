@@ -70,5 +70,5 @@ public class World {
         return itemTreeMap.get(id);
     }
 
-    public static List<Room> getAllRooms(){return Rooms;}
+    public static List<Room> getAllRooms(){return Rooms;};
 }
