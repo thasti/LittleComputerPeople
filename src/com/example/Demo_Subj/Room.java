@@ -37,7 +37,11 @@ public class Room {
         this.picresource = picresource;
         xPos = x;
         yPos = y;
-        this.containingitems = containingitems;
+
+        if(containingitems == null)
+            this.containingitems = new ArrayList<Integer>();
+        else if(containingitems != null)
+            this.containingitems = containingitems;
 
         //TODO populate this object list from XML information instead
 

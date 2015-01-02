@@ -65,7 +65,7 @@ public class RoomActivity extends Activity {
 
 
         final Subject subject;
-        subject = new Subject ();
+        subject = new Subject (this, resources);
         GlobalInformation.setSubject(subject);
 
 
@@ -87,7 +87,8 @@ public class RoomActivity extends Activity {
             @Override
             public void run(){
                 //subject.tick();
-                GlobalInformation.setCurrentRoom(grafik.getAktRoomID());
+                //GlobalInformation.setCurrentRoom(grafik.getAktRoomID());
+                subject.tick();
                 grafik.postInvalidate();
                 InternalClock.computeTime();
                 //clock.computeTime();                                       //returns boolean Value
