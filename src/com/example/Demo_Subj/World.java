@@ -46,7 +46,7 @@ public class World {
     /*******************************************************************************************
         Puts an object with the given ID in a TreeMap
      ******************************************************************************************/
-    public static void setObject(int key, Item item){
+    public static void setItem(int key, Item item){
         itemTreeMap.put(key, item);
         Items.add(item);
     }

@@ -62,6 +62,9 @@ public class RoomView extends View {
     private Sound sound;
     private Resources resources;
 
+    private List<Integer> itemList;                 //Existiert temporär, bis der XML-Parser eingebunden wurde
+    private Item item;                              //Existiert temporär zum Test
+
     public RoomView(Context c) {
         super(c);
 
@@ -74,6 +77,7 @@ public class RoomView extends View {
 
         resources = getResources();
         fillWalkingArrayLists(resources);
+        fillItemList();
         fillRoomList(resources);
         //Zusätzlich müssen hier Methodenaufrufe zum Laden der Objektanimationen hin
         //fillObjectAnimList(resources);
@@ -100,7 +104,7 @@ public class RoomView extends View {
         return aktRoomID;
     }
 
-    private void fillWalkingArrayLists(Resources resources){
+    private void fillWalkingArrayLists(Resources resources){                                        //Existiert temporär, wird ins Subjekt verschoben
 
         List<Bitmap> subjectWalkingList;                                                                    //Animation des Subjekts und Laufens laden
         Bitmap bm;                                                                                          //temporäre Bitmap Variable zum spiegeln und befüllen der Arrays
@@ -142,18 +146,24 @@ public class RoomView extends View {
         destRoomID = room;
     }
 
-    private void fillRoomList(Resources resources){
-        roomList = new ArrayList<Room>();
+    private void fillRoomList(Resources resources){                                             //Existiert temporär, bis der XML-Parser eingebunden wurde
         World.setRoom(1, new Room(1, R.drawable.schlafzimmer, 0.0, 0.0, null, this.ctx));
-        World.setRoom(2, new Room(2, R.drawable.wohnzimmer, 0.0, 0.0, null, this.ctx));
+        World.setRoom(2, new Room(2, R.drawable.wohnzimmer, 0.0, 0.0, itemList, this.ctx));
         //roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.schlafzimmer), 1, this.ctx));
         //roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.wohnzimmer), 2, this.ctx));
     }
 
-    private void fillObjectAnimList(Resources resources){
+    private void fillObjectAnimList(Resources resources){                                       //Existiert temporär, bis der XML-Parser eingebunden wurde
         //eine globale Liste für Objektanimationen wird hier befüllt
         //die Variable animation steht für eine Animation, die ausgeführt werden soll
         //die switch-case Verzweigung in der Methode onDraw muss zusätzlich erweitert werden
+    }
+
+    private void fillItemList(){                                                                //Existiert temporär, bis der XML-Parser eingebunden wurde
+        itemList = new ArrayList<Integer>();
+        item = new Item(1, R.drawable.pflanze, GlobalInformation.getScreenWidth()*0.5, GlobalInformation.getScreenHeight()*0.5, null, R.raw.shower_s, null, null, null, ctx);
+        World.setItem(1, item);
+        itemList.add(World.getItemById(1).getPicresource());
     }
 
     @Override
@@ -178,9 +188,22 @@ public class RoomView extends View {
             }
         }
 
+        if(lastRoom != GlobalInformation.getCurrentRoom()){
+            drawRoom = World.getRoomById(GlobalInformation.getCurrentRoom());
+            drawRoomB = Bitmap.createScaledBitmap(
+                    BitmapFactory.decodeResource(resources, drawRoom.getPicResource()),
+                    GlobalInformation.getScreenWidth(),
+                    GlobalInformation.getScreenHeight(),
+                    false
+            );
+            lastRoom = drawRoom.getID();
+        }
+
+
+
         if (drawRoom == null) {
             // room not found
-            drawRoom = roomList.get(0);
+            drawRoom = World.getRoomById(1);
         }
 
         //Animation für das Subjekt, übernommen aus Subjekt
@@ -206,6 +229,7 @@ public class RoomView extends View {
 
         // draw all items (TODO: add layering)
 
+        /*
         for (Iterator<Item> iter = World.getAllItems().iterator(); iter.hasNext(); ){
             Item item = iter.next();
             int ID = item.getPicresource();
@@ -213,12 +237,34 @@ public class RoomView extends View {
                 if(id.next() == ID){
                     canvas.drawBitmap(
                             BitmapFactory.decodeResource(resources, item.getPicresource()),
-                            item.getXPos().intValue(),
-                            item.getYPos().intValue(),
+                            item.getXPos().floatValue(),
+                            item.getYPos().floatValue(),
                             p);
                 }
             }
+        }*/
+
+        int i = 0;
+        for(Iterator<Integer> it = drawRoom.getContainingitems().iterator(); it.hasNext(); ){
+            //Item item = it.next();
+            if (World.getItemById(i).getPicresource() == it.next()){
+                canvas.drawBitmap(
+                        BitmapFactory.decodeResource(resources, it.next()),
+                        item.getXPos().floatValue(),
+                        item.getYPos().floatValue(),
+                        p
+                );
+            }
+            i++;
         }
+
+        /*
+        canvas.drawBitmap(
+                BitmapFactory.decodeResource(resources, item.getPicresource()),
+                item.getXPos().floatValue(),
+                item.getYPos().floatValue(),
+                p
+        );*/
 
 
         canvas.drawBitmap(aktBitmap,
@@ -237,21 +283,25 @@ public class RoomView extends View {
         else if (aktRoomID == destRoomID) {
             if (xPos > xDest) {
                 swapBitmap(false);
-                xPos --;
+                xPos--;
+                xPos--;                                                     //Subjekt schneller
             }
             else{
                 swapBitmap(true);
                 xPos++;
+                xPos++;                                                     //Subjekt schneller
             }
         }
         else if (aktRoomID > destRoomID){
             if (xPos > 0){
                 swapBitmap(false);
                 xPos--;
+                xPos--;                                                     //Subjekt schneller
             }
             else{
                 aktBitmap = subjStandBitmap;
                 aktRoomID--;
+                GlobalInformation.setCurrentRoom(aktRoomID);                        //Kommt später in Subject
                 xPos = GlobalInformation.getScreenWidth();
                 //reset walking animation
                 listPointerWalk = 0;
@@ -262,10 +312,12 @@ public class RoomView extends View {
             if (xPos < (GlobalInformation.getScreenWidth())){
                 swapBitmap(true);
                 xPos++;
+                xPos++;                                                     //Subjekt schneller
             }
             else{
                 aktBitmap = subjStandBitmapInv;
                 aktRoomID++;
+                GlobalInformation.setCurrentRoom(aktRoomID);                        //Kommt später in Subject
                 xPos = 0;
                 //reset walking animation
                 listPointerWalk = 0;
