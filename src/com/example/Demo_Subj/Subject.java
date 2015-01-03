@@ -26,26 +26,10 @@ public class Subject {
     private int subjStandBitInt;
 
     private int direction = 0;
-    private float xPos = (float)(GlobalInformation.getScreenWidth()/0.5);
-    private float yPos = (float)(GlobalInformation.getScreenHeight()/0.3);
+    private float xPos = (float)(GlobalInformation.getScreenWidth()*0.5);
+    private float yPos = (float)(GlobalInformation.getScreenHeight()*0.3);
 
-    //aktuelle Position
-    private int aktRoomID = 1;
 
-    //Ziel
-    private float xDest;
-    private int destRoomID;
-
-    //Bildverweise
-    private Bitmap subjStandBitmap;
-    private Bitmap subjStandBitmapInv;
-
-    private List<Bitmap> subjectWalk;
-    private List<Bitmap> subjectWalkInv;
-
-    private Bitmap aktBitmap;
-
-    private int listPointerWalk = 0;
     private int holdAnimation = 0;
     private static int holdAnimationCycles = 100;
 
@@ -61,27 +45,12 @@ public class Subject {
         intel = new Intelligence();
         sound = new Sound(ctx);
 
-        fillWalkingIntegerLists(resources);
+        fillWalkingIntegerLists();
 
-        float canvasx = (float) GlobalInformation.getScreenWidth();
-        float canvasy = (float) GlobalInformation.getScreenHeight();
-        float bitmapx = (float) subjStandBitmap.getWidth();
-        float bitmapy = (float) subjStandBitmap.getHeight();
-        float posX = ((canvasx/2) - (bitmapx / 2));
-        float posY = (((canvasy/2) - (bitmapy / 2)) + (canvasy/15));
-        setDefaultKoords(posX, posY, aktRoomID);
     }
 
-    private void setDefaultKoords(float xDef, float yDef, int room) {
-        xPos = xDef;
-        yPos = yDef;
-        aktRoomID = room;
 
-        xDest = xDef;
-        destRoomID = room;
-    }
-
-    private void fillWalkingIntegerLists(Resources resources){                                        //Existiert temporär, wird ins Subjekt verschoben
+    private void fillWalkingIntegerLists(){                                        //Existiert temporär, wird ins Subjekt verschoben
 
         subjWalkBitInt = new ArrayList<Integer>();
         subjWalkBitInt.add(R.drawable.walk_1);
@@ -89,36 +58,6 @@ public class Subject {
         subjWalkBitInt.add(R.drawable.walk_3);
         subjWalkBitInt.add(R.drawable.walk_4);
         subjStandBitInt = R.drawable.subjekt;
-
-        /*
-        List<Bitmap> subjectWalkingList;                                                                    //Animation des Subjekts und Laufens laden
-        Bitmap bm;                                                                                          //temporäre Bitmap Variable zum spiegeln und befüllen der Arrays
-
-        Bitmap subjectBStand = BitmapFactory.decodeResource(resources, R.drawable.subjekt);
-        subjectWalkingList = new ArrayList<Bitmap>();
-        subjectWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_1));
-        subjectWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_2));
-        subjectWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_3));
-        subjectWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_4));
-
-        subjStandBitmap = Bitmap.createScaledBitmap(subjectBStand, 170, 330, false);
-        subjStandBitmapInv = mirrorBitmap(subjStandBitmap);
-
-        aktBitmap = subjStandBitmap;
-
-        subjectWalk = new ArrayList<Bitmap>();                                                              //Arrays für die einzelnen Bilder der Animation (vorwärts und rückwärts)
-        subjectWalkInv = new ArrayList<Bitmap>();
-
-        for (int i = 0; i <= (subjectWalkingList.size() - 1); i++){                                         //Vorwärtsarray befüllen
-            bm = subjectWalkingList.get(i);
-            subjectWalk.add(i,  Bitmap.createScaledBitmap(bm, 170, 330, false));
-        }
-
-        for (int i = 0; i <= (subjectWalk.size() - 1); i++){                                                //Rückwärtsarray ist gespiegeltes Vorwärtsarray
-            bm = subjectWalk.get(i);
-            bm = this.mirrorBitmap(bm);
-            subjectWalkInv.add(i, bm);
-        }*/
     }
 
     public List<Integer> getPictureWalkID(){
@@ -167,7 +106,6 @@ public class Subject {
                 holdAnimation = 0;
             }
         }
-
 
         //Nach dem KI-Aufruf müssen direction, x und y-Koordinate gesetzt werden
 
@@ -264,18 +202,6 @@ public class Subject {
         }
     }
 
-    private Bitmap mirrorBitmap(Bitmap b){
-        Matrix matrixMirror = new Matrix();
-        matrixMirror.preScale(-1.0f, 1.0f);
-        b = Bitmap.createBitmap(b, 0, 0, b.getWidth(), b.getHeight(), matrixMirror, false);
-        return b;
-    }*/
-
-
-
-    /*public Bitmap getBitmap(){
-        return aktBitmap;
-    }*/
 
     /*
     private void startSound(int soundRes){

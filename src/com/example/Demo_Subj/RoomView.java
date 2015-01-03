@@ -38,7 +38,7 @@ public class RoomView extends View {
     private float subjXPos;
     private float subjYPos;
 
-    private int holdAnimCycles = 20;
+    private int holdAnimCycles = 15;
     private int animCycle = 0;
     private int drawIndex = 0;
 
@@ -76,7 +76,11 @@ public class RoomView extends View {
         for(int j = 0; j < subjWalkForward.size(); j++){
             subjWalkBackward.add(mirrorBitmap(subjWalkForward.get(j)));
         }
-        subjStand = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, subject.getPictureStandID()), 170, 330, false);
+        subjStand = Bitmap.createScaledBitmap(
+                BitmapFactory.decodeResource(resources, subject.getPictureStandID()),
+                GlobalInformation.getScreenWidth()/5,
+                (int)(GlobalInformation.getScreenHeight()/1.5),
+                false);
     }
 
     private Bitmap mirrorBitmap(Bitmap b){
@@ -122,7 +126,6 @@ public class RoomView extends View {
             lastRoom = drawRoom.getID();
         }
 
-
         if (drawRoom == null) {
             // room not found
             drawRoom = World.getRoomById(1);
@@ -147,29 +150,31 @@ public class RoomView extends View {
 
         getSubjectMovement();
 
+
+
         switch(direction){
             case 0:
                 drawIndex = 0;
                 animCycle = 0;
-                canvas.drawBitmap(subjStand,
-                        subjXPos,
-                        subjYPos, p
+                canvas.drawBitmap(this.subjStand,
+                        this.subjXPos,
+                        this.subjYPos, this.p
                 );
                 break;
 
             case 1:
                 animation();
-                canvas.drawBitmap(subjWalkForward.get(drawIndex),
-                        subjXPos,
-                        subjYPos, p
+                canvas.drawBitmap(this.subjWalkForward.get(drawIndex),
+                        this.subjXPos,
+                        this.subjYPos, this.p
                 );
                 break;
 
             case -1:
                 animation();
-                canvas.drawBitmap(subjWalkBackward.get(drawIndex),
-                        subjXPos,
-                        subjYPos, p
+                canvas.drawBitmap(this.subjWalkBackward.get(drawIndex),
+                        this.subjXPos,
+                        this.subjYPos, this.p
                 );
                 break;
 
