@@ -1,12 +1,10 @@
 package com.example.Demo_Subj;
 
 
+import android.util.Log;
+
 import java.util.*;
 
-
-/*
-    TODO:      der Intelligence Pfad für bedürfnisse.xml in Konstruktor übergeben
-*/
 
 /**
  * Completely created by Michael on 02.12.2014.
@@ -44,6 +42,7 @@ public class Intelligence {
         /*ToDo:
             - InformationProvider aufrufen und fertige Liste von Bedürfnissen übergeben lassen
             - Bedürfnisse beim Instanziieren in Vektor schieben
+            - eventuell nochmals prüfen, ob an allen Indizees ein Bedürfnis stehhe, um
 
              needs_list.addElement( new Need(top_level, priority, description, object_ID, day_night));
          */
@@ -75,13 +74,11 @@ public class Intelligence {
     }
 
     //Aufruf von Subjekt; Gibt Objekt_ID zurück, zu der das Subjekt als nächstes laufen soll
-    public int getNextObject(){
-        //ToDo: Welt abfragen, welches Objekt zur ObejktID gehört; Objekt zurückgeben
-
+    public Object getNextObject(){
         //Bedürfnis mit der höchsten Motivation resetten
         needs_list.elementAt(maxMotivationIndex).setCurrentValue(0);
 
-        return needs_list.elementAt(maxMotivationIndex).getObjectID();
+        return World.getObjectById(needs_list.elementAt(maxMotivationIndex).getObjectID());
     }
 
     //um mit dem unfertigen Projekt kompilieren zu können, wird die Method noch beibehalten
@@ -132,11 +129,34 @@ public class Intelligence {
     private int manageList(int index, int motivation_highest){
         //es kann nicht das Objekt "beduerfnis" übergeben werden, da sich die eigenschfaten des Objektes ändern müssen. Dies soll dierekt in der Liste geschehen.
 
-        //aktuellen Wert ändern; aktueller Wert = aktueller Wert + Zufallszahl
-        needs_list.elementAt(index).setCurrentValue(needs_list.elementAt(index).getCurrentValue() + getIntRandom());
+        try {
+            //aktuellen Wert ändern; aktueller Wert = aktueller Wert + Zufallszahl
+            needs_list.elementAt(index).setCurrentValue(needs_list.elementAt(index).getCurrentValue() + getIntRandom());
 
-        //Motivation neu berechnen; Motivation = Priorität * (aktueller Wert - Schwellwert)
-        needs_list.elementAt(index).setMotivation(needs_list.elementAt(index).getPriority() * (needs_list.elementAt(index).getCurrentValue() - needs_list.elementAt(index).getTopLevel()));
+            //Motivation neu berechnen; Motivation = Priorität * (aktueller Wert - Schwellwert)
+            needs_list.elementAt(index).setMotivation(needs_list.elementAt(index).getPriority() * (needs_list.elementAt(index).getCurrentValue() - needs_list.elementAt(index).getTopLevel()));
+        }
+        catch(ArrayIndexOutOfBoundsException e){ //Wird von elementAt(index) geworfen, wenn dieser Index nicht im Vektor existiert.
+            //Exception wird geloggt
+            Log.e("LCP_Intelligence", "Index " + index + " does not exist in needs_list.",e);
+
+            //Im Fehlerfall wird der übergeben Wert zurückgegeben
+            return motivation_highest;
+        }
+        catch(Exception e){ // Andere Exceptions können auf Grund anderer Sicherheitsvorkehrungen nicht auftreten. Werden hier für den unvorhergesehenen Fall dennoch abgefangen.
+            //Exception wird geloggt
+            Log.e("LCP_Intelligence", "Exception while managing needs_list.",e);
+
+            //Im Fehlerfall wird der übergeben Wert zurückgegeben
+            return motivation_highest;
+        }
+        catch(Error e){     //irgendwo ist ein (gravierender) Fehler aufgetreten
+            //Error wird geloggt
+            Log.e("LCP_Intelligence", "Error while managing needs_list.",e);
+
+            //Im Fehlerfall wird der übergeben Wert zurückgegeben
+            return motivation_highest;
+        }
 
         //Höchte Motivation finden:
         //neuer index, wenn neue höchste Motivation
