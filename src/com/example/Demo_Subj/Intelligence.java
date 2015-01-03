@@ -1,15 +1,10 @@
 package com.example.Demo_Subj;
 
 
-import android.app.AlertDialog;
 import android.util.Log;
 
 import java.util.*;
 
-
-/*
-    TODO:      der Intelligence Pfad für bedürfnisse.xml in Konstruktor übergeben
-*/
 
 /**
  * Completely created by Michael on 02.12.2014.
@@ -47,6 +42,7 @@ public class Intelligence {
         /*ToDo:
             - InformationProvider aufrufen und fertige Liste von Bedürfnissen übergeben lassen
             - Bedürfnisse beim Instanziieren in Vektor schieben
+            - eventuell nochmals prüfen, ob an allen Indizees ein Bedürfnis stehhe, um
 
              needs_list.addElement( new Need(top_level, priority, description, object_ID, day_night));
          */
@@ -140,10 +136,28 @@ public class Intelligence {
             //Motivation neu berechnen; Motivation = Priorität * (aktueller Wert - Schwellwert)
             needs_list.elementAt(index).setMotivation(needs_list.elementAt(index).getPriority() * (needs_list.elementAt(index).getCurrentValue() - needs_list.elementAt(index).getTopLevel()));
         }
-        catch(Exception e){ //es sollen Exceptions JEDER Art abgefangen werden, da von dne Funktionen nicht expliziert Exceptions geworfen werden
+        catch(ArrayIndexOutOfBoundsException e){ //Wird von elementAt(index) geworfen, wenn dieser Index nicht im Vektor existiert.
             //Exception wird geloggt
-            Log.e("LCP_Intelligence", "Error while managing needs_list.",e);
+            Log.e("LCP_Intelligence", "Index " + index + " does not exist in needs_list.",e);
+
+            //Im Fehlerfall wird der übergeben Wert zurückgegeben
+            return motivation_highest;
         }
+        catch(Exception e){ // Andere Exceptions können auf Grund anderer Sicherheitsvorkehrungen nicht auftreten. Werden hier für den unvorhergesehenen Fall dennoch abgefangen.
+            //Exception wird geloggt
+            Log.e("LCP_Intelligence", "Exception while managing needs_list.",e);
+
+            //Im Fehlerfall wird der übergeben Wert zurückgegeben
+            return motivation_highest;
+        }
+        catch(Error e){     //irgendwo ist ein (gravierender) Fehler aufgetreten
+            //Error wird geloggt
+            Log.e("LCP_Intelligence", "Error while managing needs_list.",e);
+
+            //Im Fehlerfall wird der übergeben Wert zurückgegeben
+            return motivation_highest;
+        }
+
         //Höchte Motivation finden:
         //neuer index, wenn neue höchste Motivation
         if(needs_list.elementAt(index).getMotivation() > motivation_highest){
