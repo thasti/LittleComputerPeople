@@ -65,7 +65,7 @@ public class RoomActivity extends Activity {
 
 
         final Subject subject;
-        subject = new Subject (this, resources);
+        subject = new Subject (this);
         GlobalInformation.setSubject(subject);
 
 

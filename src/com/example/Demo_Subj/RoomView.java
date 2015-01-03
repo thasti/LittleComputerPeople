@@ -53,28 +53,31 @@ public class RoomView extends View {
 
         resources = getResources();
 
+        subject = GlobalInformation.getSubject();
         initSubject();
         fillItemList();
         fillRoomList();
 
         GlobalInformation.setCurrentRoom(aktRoomID);
 
-        subject = GlobalInformation.getSubject();
     }
 
     private void initSubject(){
+
         List<Integer> subjList = subject.getPictureWalkID();
         subjWalkForward = new ArrayList<Bitmap>();
+        subjWalkBackward = new ArrayList<Bitmap>();
+
         for(int i = 0; i < subjList.size(); i++){
-            subjWalkForward.add(Bitmap.createScaledBitmap(
+            subjWalkBackward.add(Bitmap.createScaledBitmap(
                     BitmapFactory.decodeResource(resources, subjList.get(i)),
                     GlobalInformation.getScreenWidth()/5,
                     (int)(GlobalInformation.getScreenHeight()/1.5),
                     false
             ));
         }
-        for(int j = 0; j < subjWalkForward.size(); j++){
-            subjWalkBackward.add(mirrorBitmap(subjWalkForward.get(j)));
+        for(int j = 0; j < subjWalkBackward.size(); j++){
+            subjWalkForward.add(mirrorBitmap(subjWalkBackward.get(j)));
         }
         subjStand = Bitmap.createScaledBitmap(
                 BitmapFactory.decodeResource(resources, subject.getPictureStandID()),
@@ -104,7 +107,7 @@ public class RoomView extends View {
         itemListWohn.add(World.getItemById(2).getID());
 
         itemListSchlaf = new ArrayList<Integer>();
-        World.setItem(3, new Item(3, R.drawable.boddle, GlobalInformation.getScreenWidth()*0.3, GlobalInformation.getScreenHeight()*0.5, null, null, null, null, null, ctx));
+        World.setItem(3, new Item(3, R.drawable.boddle, GlobalInformation.getScreenWidth() * 0.3, GlobalInformation.getScreenHeight() * 0.5, null, null, null, null, null, ctx));
         itemListSchlaf.add(World.getItemById(3).getID());
     }
 
@@ -149,7 +152,6 @@ public class RoomView extends View {
         }
 
         getSubjectMovement();
-
 
 
         switch(direction){

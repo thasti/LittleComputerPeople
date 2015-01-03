@@ -41,7 +41,7 @@ public class Subject {
     private int animation = 0;          //0 = laufen, 1 = ... usw.
 
 
-    public Subject(Context ctx, Resources resources){
+    public Subject(Context ctx){
         intel = new Intelligence();
         sound = new Sound(ctx);
 
@@ -62,6 +62,10 @@ public class Subject {
 
     public List<Integer> getPictureWalkID(){
         return this.subjWalkBitInt;
+    }
+
+    public int getPictureWalkID2(int ele){
+        return this.subjWalkBitInt.get(ele);
     }
 
     public int getPictureStandID(){
@@ -93,7 +97,7 @@ public class Subject {
         if(direction == 1){
             holdAnimation++;
             xPos++;
-            if(holdAnimation == holdAnimationCycles){
+            if(holdAnimation == holdAnimationCycles*2){
                 direction = -1;
                 holdAnimation = 0;
             }
@@ -101,8 +105,8 @@ public class Subject {
         if(direction == -1){
             holdAnimation++;
             xPos--;
-            if(holdAnimation == holdAnimationCycles){
-                direction = 01;
+            if(holdAnimation == holdAnimationCycles*2){
+                direction = 0;
                 holdAnimation = 0;
             }
         }
