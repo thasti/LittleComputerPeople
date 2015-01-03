@@ -75,13 +75,11 @@ public class Intelligence {
     }
 
     //Aufruf von Subjekt; Gibt Objekt_ID zurück, zu der das Subjekt als nächstes laufen soll
-    public int getNextObject(){
-        //ToDo: Welt abfragen, welches Objekt zur ObejktID gehört; Objekt zurückgeben
-
+    public Object getNextObject(){
         //Bedürfnis mit der höchsten Motivation resetten
         needs_list.elementAt(maxMotivationIndex).setCurrentValue(0);
 
-        return needs_list.elementAt(maxMotivationIndex).getObjectID();
+        return World.getObjectById(needs_list.elementAt(maxMotivationIndex).getObjectID());
     }
 
     //um mit dem unfertigen Projekt kompilieren zu können, wird die Method noch beibehalten
