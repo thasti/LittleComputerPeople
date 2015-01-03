@@ -31,10 +31,19 @@ public class RoomView extends View {
 
     private Resources resources;
 
+    private List<Bitmap> subjWalkForward;
+    private List<Bitmap> subjWalkBackward;
+    private Bitmap subjStand;
+    private int direction;
+    private float subjXPos;
+    private float subjYPos;
+
+    private int holdAnimCycles = 20;
+    private int animCycle = 0;
+    private int drawIndex = 0;
+
     private List<Integer> itemListWohn;                 //Existiert temporär, bis der XML-Parser eingebunden wurde
     private List<Integer> itemListSchlaf;               //Existiert temporär, bis der XML-Parser eingebunden wurde
-
-    boolean b = true;
 
     public RoomView(Context c) {
         super(c);
@@ -44,6 +53,7 @@ public class RoomView extends View {
 
         resources = getResources();
 
+        initSubject();
         fillItemList();
         fillRoomList();
 
@@ -51,6 +61,31 @@ public class RoomView extends View {
 
         subject = GlobalInformation.getSubject();
     }
+
+    private void initSubject(){
+        List<Integer> subjList = subject.getPictureWalkID();
+        subjWalkForward = new ArrayList<Bitmap>();
+        for(int i = 0; i < subjList.size(); i++){
+            subjWalkForward.add(Bitmap.createScaledBitmap(
+                    BitmapFactory.decodeResource(resources, subjList.get(i)),
+                    GlobalInformation.getScreenWidth()/5,
+                    (int)(GlobalInformation.getScreenHeight()/1.5),
+                    false
+            ));
+        }
+        for(int j = 0; j < subjWalkForward.size(); j++){
+            subjWalkBackward.add(mirrorBitmap(subjWalkForward.get(j)));
+        }
+        subjStand = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, subject.getPictureStandID()), 170, 330, false);
+    }
+
+    private Bitmap mirrorBitmap(Bitmap b){
+        Matrix matrixMirror = new Matrix();
+        matrixMirror.preScale(-1.0f, 1.0f);
+        b = Bitmap.createBitmap(b, 0, 0, b.getWidth(), b.getHeight(), matrixMirror, false);
+        return b;
+    }
+
 
     private void fillRoomList(){                                                                //Existiert temporär, bis der XML-Parser eingebunden wurde
         World.setRoom(1, new Room(1, R.drawable.schlafzimmer, 0.0, 0.0, itemListSchlaf, this.ctx));
@@ -60,13 +95,13 @@ public class RoomView extends View {
     private void fillItemList(){                                                                //Existiert temporär, bis der XML-Parser eingebunden wurde
         itemListWohn = new ArrayList<Integer>();
         World.setItem(1, new Item(1, R.drawable.pflanze, GlobalInformation.getScreenWidth()*0.5, GlobalInformation.getScreenHeight()*0.5, null, null, null, null, null, ctx));
-        b &= itemListWohn.add(World.getItemById(1).getID());
+        itemListWohn.add(World.getItemById(1).getID());
         World.setItem(2, new Item(2, R.drawable.boddle, GlobalInformation.getScreenWidth()*0.3, GlobalInformation.getScreenHeight()*0.5, null, null, null, null, null, ctx));
-        b &= itemListWohn.add(World.getItemById(2).getID());
+        itemListWohn.add(World.getItemById(2).getID());
 
         itemListSchlaf = new ArrayList<Integer>();
         World.setItem(3, new Item(3, R.drawable.boddle, GlobalInformation.getScreenWidth()*0.3, GlobalInformation.getScreenHeight()*0.5, null, null, null, null, null, ctx));
-        b &= itemListSchlaf.add(World.getItemById(3).getID());
+        itemListSchlaf.add(World.getItemById(3).getID());
     }
 
     @Override
@@ -98,25 +133,65 @@ public class RoomView extends View {
         // draw all items (TODO: add layering)
         //Layer als zusätzliche Eigenschaft von Item benötigt, wird ein Offset zur Y-Koordinate von Objekten hinzufügen
 
+
         int itemId;
-        if(b){
-            for(int i = 0; i < drawRoom.getContainingitems().size(); i++){
-                itemId = drawRoom.getContainingitems().get(i);
-                canvas.drawBitmap(
-                        BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresource()),
-                        World.getItemById(itemId).getXPos().floatValue(),
-                        World.getItemById(itemId).getYPos().floatValue(),
-                        p
-                );
-            }
+        for(int i = 0; i < drawRoom.getContainingitems().size(); i++){
+            itemId = drawRoom.getContainingitems().get(i);
+            canvas.drawBitmap(
+                    BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresource()),
+                    World.getItemById(itemId).getXPos().floatValue(),
+                    World.getItemById(itemId).getYPos().floatValue(),
+                    p
+            );
         }
 
-        canvas.drawBitmap(subject.getBitmap(),
-                subject.getXPos(),
-                subject.getYPos(), p);
+        getSubjectMovement();
+
+        switch(direction){
+            case 0:
+                drawIndex = 0;
+                animCycle = 0;
+                canvas.drawBitmap(subjStand,
+                        subjXPos,
+                        subjYPos, p
+                );
+                break;
+
+            case 1:
+                animation();
+                canvas.drawBitmap(subjWalkForward.get(drawIndex),
+                        subjXPos,
+                        subjYPos, p
+                );
+                break;
+
+            case -1:
+                animation();
+                canvas.drawBitmap(subjWalkBackward.get(drawIndex),
+                        subjXPos,
+                        subjYPos, p
+                );
+                break;
+
+            default:
+                break;
+        }
     }
 
+    private void getSubjectMovement(){
+        direction = subject.getDirection();
+        subjXPos = subject.getXPos();
+        subjYPos = subject.getYPos();
+    }
 
+    private void animation(){
+        animCycle++;
+        if(animCycle == holdAnimCycles){
+            animCycle = 0;
+            drawIndex++;
+            if(drawIndex == subjWalkForward.size()) drawIndex = 0;
+        }
+    }
 
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
@@ -126,21 +201,19 @@ public class RoomView extends View {
         switch (eventAction) {
             case MotionEvent.ACTION_DOWN:
                 // Traverse all Objects in the current room
+
                 int itemId;
-                if(b){
-                    for(int i = 0; i < drawRoom.getContainingitems().size(); i++){
-                        itemId = drawRoom.getContainingitems().get(i);
-                        RectF boundingBox = new RectF(World.getItemById(itemId).getXPos().floatValue(),
-                                World.getItemById(itemId).getYPos().floatValue(),
-                                World.getItemById(itemId).getXPos().floatValue() + BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresource()).getWidth(),
-                                World.getItemById(itemId).getYPos().floatValue() + BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresource()).getHeight());
-                        if (boundingBox.contains((int)event.getX(), (int)event.getY())) {
-                            // TODO call the use() function of the item
-                            Toast.makeText(getContext(), "Click on " + World.getItemById(itemId).toString(), Toast.LENGTH_SHORT).show();
-                        }
+                for(int i = 0; i < drawRoom.getContainingitems().size(); i++){
+                    itemId = drawRoom.getContainingitems().get(i);
+                    RectF boundingBox = new RectF(World.getItemById(itemId).getXPos().floatValue(),
+                            World.getItemById(itemId).getYPos().floatValue(),
+                            World.getItemById(itemId).getXPos().floatValue() + BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresource()).getWidth(),
+                            World.getItemById(itemId).getYPos().floatValue() + BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresource()).getHeight());
+                    if (boundingBox.contains((int)event.getX(), (int)event.getY())) {
+                        // TODO call the use() function of the item
+                        Toast.makeText(getContext(), "Click on " + World.getItemById(itemId).toString(), Toast.LENGTH_SHORT).show();
                     }
                 }
-
                 Rect changeViewBox = new Rect(0,0, 50, 50);
                 if (changeViewBox.contains((int)event.getX(), (int)event.getY())) {
                     Intent i = new Intent(ctx, HouseActivity.class);
