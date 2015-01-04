@@ -22,14 +22,13 @@ public class RoomView extends View {
 
     private Context ctx;
     private Paint p;
+    private Resources resources;
+
     private Subject subject;
     private Room drawRoom;
     private Bitmap drawRoomB;
-    private int lastRoom = -1;          //Auf einen für die Räume ungültigen Wert vorinitialisieren
-
+    private int lastRoom = -1;                          //Auf einen für die Räume ungültigen Wert vorinitialisieren
     private int aktRoomID = 1;
-
-    private Resources resources;
 
     private List<Bitmap> subjWalkForward;
     private List<Bitmap> subjWalkBackward;
@@ -59,7 +58,6 @@ public class RoomView extends View {
         fillRoomList();
 
         GlobalInformation.setCurrentRoom(aktRoomID);
-
     }
 
     private void initSubject(){
@@ -139,7 +137,6 @@ public class RoomView extends View {
         // draw all items (TODO: add layering)
         //Layer als zusätzliche Eigenschaft von Item benötigt, wird ein Offset zur Y-Koordinate von Objekten hinzufügen
 
-
         int itemId;
         for(int i = 0; i < drawRoom.getContainingitems().size(); i++){
             itemId = drawRoom.getContainingitems().get(i);
@@ -152,7 +149,6 @@ public class RoomView extends View {
         }
 
         getSubjectMovement();
-
 
         switch(direction){
             case 0:

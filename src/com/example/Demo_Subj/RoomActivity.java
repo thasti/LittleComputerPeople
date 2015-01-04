@@ -33,9 +33,6 @@ public class RoomActivity extends Activity {
     private Timer timer = new Timer();      //Tiemr wird global instanziiert, damit alle Methoden in dieser Datei Zugriff auf die richtige Instanz haben
     private int tick;
 
-    //Variablen für das noch nicht implementierte Pausieren
-    //private Object mPauseLock;
-    //private boolean running = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,55 +83,13 @@ public class RoomActivity extends Activity {
         timer.schedule(new TimerTask(){
             @Override
             public void run(){
-                //subject.tick();
-                //GlobalInformation.setCurrentRoom(grafik.getAktRoomID());
                 subject.tick();
                 grafik.postInvalidate();
                 InternalClock.computeTime();
-                //clock.computeTime();                                       //returns boolean Value
-                //if(running){
-                    //subject.tick();
-                    //GlobalInformation.setCurrentRoom(subject.getAktRoomID());
-                    //grafik.postInvalidate();
-                    //InternalClock.computeTime();
-                /*}
-                else{                               //Eventuell wird der Timer zum pausieren später beendet (cancel in onPause)
-                                                    //und neu erstellt (schedule in onResume())
-                    synchronized (mPauseLock) {
-                        while (!running) {
-                            try {
-                                mPauseLock.wait();              //Wenn ich das richtig verstehe, wird hier versucht, mPauseLock
-                                                                //solange zu pausieren(xyz.wait() legt eine Thread schlafen bis
-                                                                //er durch xyz.notify() geweckt wird), wie running false ist.
-                                                                //Theoretisch sollte es ausreichen, den Thread einmal schlafen zu legen
-
-                            } catch (InterruptedException e) {
-
-                            }
-                        }
-                    }
-                }*/
             }
         }, 0, tick);
     }
-    /*
-    @Override
-    public void onPause() {
-        super.onPause();
-        synchronized (mPauseLock) {
-            running = false;
-        }
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        synchronized (mPauseLock) {
-            running = true;
-            mPauseLock.notifyAll();
-        }
-    }
-    */
     @Override
     public void onBackPressed() {
         //Kills the app immediately

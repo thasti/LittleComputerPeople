@@ -71,6 +71,4 @@ public class World {
     }
 
     public static List<Room> getAllRooms(){return Rooms;}
-
-    public static List<Item> getAllItems(){return Items;}
 }
