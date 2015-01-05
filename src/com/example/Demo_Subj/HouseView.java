@@ -6,10 +6,8 @@ package com.example.Demo_Subj;
  */
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
+import android.content.res.Resources;
+import android.graphics.*;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -21,18 +19,21 @@ import java.util.List;
 public class HouseView extends View {
 
     private Paint p;
+    private Context ctx;
     private int screenWidth;
     private int numRooms;
+
 
     public HouseView(Context c) {
         super(c);
 
-        List <Room> roomList;
-        roomList = GlobalInformation.getRoomList();
-        numRooms = roomList.size();
+        //List <Room> roomList;
+        //roomList = GlobalInformation.getRoomList();
+        numRooms = World.getAllRooms().size();
         screenWidth = GlobalInformation.getScreenWidth();
-
+        this.ctx = c;
         this.p = null;
+
     }
 
     @Override
@@ -50,16 +51,31 @@ public class HouseView extends View {
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
 
-        int numRooms;
+        //int numRooms;
         int i;
-        List <Room> roomList;
+        //List <Room> roomList;
 
-        roomList = GlobalInformation.getRoomList();
+        //roomList = GlobalInformation.getRoomList();
 
+        /*
         i = 0;
         for (Iterator<Room> iter = roomList.iterator(); iter.hasNext(); ) {
             Room room = iter.next();
             canvas.drawBitmap(room.getBitmapRoom(), screenWidth * i, 0, p);
+            i++;
+        }
+        */
+
+        //Eingefügt von Jürgen als Anpassung an die überarbeiteten Klassen Room und Item
+        Resources resources = getResources();
+        i = 0;
+        for (Iterator<Room> iter = World.getAllRooms().iterator(); iter.hasNext(); ) {
+            Room room = iter.next();
+            canvas.drawBitmap(Bitmap.createScaledBitmap(
+                    BitmapFactory.decodeResource(resources, room.getPicResource()),
+                    GlobalInformation.getScreenWidth(),
+                    GlobalInformation.getScreenHeight(),
+                    false), screenWidth * i, 0, p);
             i++;
         }
     }

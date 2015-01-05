@@ -33,9 +33,6 @@ public class RoomActivity extends Activity {
     private Timer timer = new Timer();      //Tiemr wird global instanziiert, damit alle Methoden in dieser Datei Zugriff auf die richtige Instanz haben
     private int tick;
 
-    //Variablen für das noch nicht implementierte Pausieren
-    //private Object mPauseLock;
-    //private boolean running = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,27 +60,11 @@ public class RoomActivity extends Activity {
         GlobalInformation.setScreenHeight(display.getHeight());
         GlobalInformation.setScreenWidth(display.getWidth());
 
-        // this has to be here (for now) because there is no XML-parser yet
-        List<Bitmap> bitmapWalkingList;
-        Bitmap subjectBStand = BitmapFactory.decodeResource(resources, R.drawable.subjekt);
-        bitmapWalkingList = new ArrayList<Bitmap>();
-        bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_1));
-        bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_2));
-        bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_3));
-        bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_4));
 
         final Subject subject;
-        subject = new Subject (subjectBStand, bitmapWalkingList, RoomActivity.this);
+        subject = new Subject (this);
         GlobalInformation.setSubject(subject);
 
-        List<Room> roomList;
-        roomList = new ArrayList<Room>();
-        // TODO: populate this list via the XML
-        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.wohnzimmer), 1, this));
-        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.schlafzimmer), 2, this));
-
-        GlobalInformation.setCurrentRoom(subject.getAktRoomID());
-        GlobalInformation.setRoomList(roomList);
 
         grafik = new RoomView(this);
 
@@ -92,10 +73,6 @@ public class RoomActivity extends Activity {
 
         grafik.invalidate();
 
-
-
-        //final InternalClock clock = new InternalClock();
-        //clock.computeTime();
 
         tick = InternalClock.getTick();
 
@@ -107,53 +84,12 @@ public class RoomActivity extends Activity {
             @Override
             public void run(){
                 subject.tick();
-                GlobalInformation.setCurrentRoom(subject.getAktRoomID());
                 grafik.postInvalidate();
                 InternalClock.computeTime();
-                //clock.computeTime();                                       //returns boolean Value
-                //if(running){
-                    //subject.tick();
-                    //GlobalInformation.setCurrentRoom(subject.getAktRoomID());
-                    //grafik.postInvalidate();
-                    //InternalClock.computeTime();
-                /*}
-                else{                               //Eventuell wird der Timer zum pausieren später beendet (cancel in onPause)
-                                                    //und neu erstellt (schedule in onResume())
-                    synchronized (mPauseLock) {
-                        while (!running) {
-                            try {
-                                mPauseLock.wait();              //Wenn ich das richtig verstehe, wird hier versucht, mPauseLock
-                                                                //solange zu pausieren(xyz.wait() legt eine Thread schlafen bis
-                                                                //er durch xyz.notify() geweckt wird), wie running false ist.
-                                                                //Theoretisch sollte es ausreichen, den Thread einmal schlafen zu legen
-
-                            } catch (InterruptedException e) {
-
-                            }
-                        }
-                    }
-                }*/
             }
         }, 0, tick);
     }
-    /*
-    @Override
-    public void onPause() {
-        super.onPause();
-        synchronized (mPauseLock) {
-            running = false;
-        }
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        synchronized (mPauseLock) {
-            running = true;
-            mPauseLock.notifyAll();
-        }
-    }
-    */
     @Override
     public void onBackPressed() {
         //Kills the app immediately
