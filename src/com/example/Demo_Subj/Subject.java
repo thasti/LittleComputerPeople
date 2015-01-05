@@ -76,7 +76,7 @@ public class Subject {
             //ToDO: Schnittstelle muss auf getNextObject() umgestellt werdne; ist aber noch nicht genau spezifiziert
             SubjectMoveAction nextAction = intel.getNextAction();
             setDest(nextAction.getDestX(), nextAction.getDestRoom());
-            route = dijkstra.dijkstra(World.getRoomByIdJS(GlobalInformation.getCurrentRoom()), World.getRoomByIdJS(destRoomID));
+            route = dijkstra.dijkstra(World.getRoomById(GlobalInformation.getCurrentRoom()), World.getRoomById(destRoomID));
             // move.getDestItem().use();
         }
         else if (GlobalInformation.getCurrentRoom() == destRoomID) {

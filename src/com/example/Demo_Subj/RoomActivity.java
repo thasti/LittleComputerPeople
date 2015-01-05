@@ -50,18 +50,13 @@ public class RoomActivity extends Activity {
 
         //gets the size of the Display
         Display display = getWindowManager().getDefaultDisplay();
-        /*
-        Point size = new Point();
-        display.getSize(size);
-        screenWidth = size.x;
-        screenHeight = size.y;
-        */
+
         // workaround for my older API 10 smartphone
         GlobalInformation.setScreenHeight(display.getHeight());
         GlobalInformation.setScreenWidth(display.getWidth());
         GlobalInformation.setCurrentRoom(0);
 
-        fillItemList();
+        //VOR dem Subjekt müssen die Räume erzeugt werden, sonst funktioniert die Navigation nicht
         fillRoomList();
 
         final Subject subject;
@@ -74,7 +69,6 @@ public class RoomActivity extends Activity {
         fl.addView(grafik);
 
         grafik.invalidate();
-
 
         tick = InternalClock.getTick();
 
@@ -102,19 +96,12 @@ public class RoomActivity extends Activity {
         System.exit(0);
     }
 
-    private List<Integer> itemListWohn;                 //Existiert temporär, bis der XML-Parser eingebunden wurde
-    private List<Integer> itemListSchlaf;               //Existiert temporär, bis der XML-Parser eingebunden wurde//Existiert temporär, bis der XML-Parser eingebunden wurde
+    private void fillRoomList(){                    //Existiert temporär, bis der XML-Parser eingebunden wurde
+
+        List<Integer> itemListWohn;                 //Existiert temporär, bis der XML-Parser eingebunden wurde
+        List<Integer> itemListSchlaf;               //Existiert temporär, bis der XML-Parser eingebunden wurde//Existiert temporär, bis der XML-Parser eingebunden wurde
 
 
-    private void fillRoomList(){                                                                //Existiert temporär, bis der XML-Parser eingebunden wurde
-        World.setRoom(0, new Room(0, R.drawable.schlafzimmer, 0.0, 0.0, itemListSchlaf, this.getApplicationContext()));
-        World.getRoomById(0).setAttachedRooms(-1, 1, -1, -1);
-        World.setRoom(1, new Room(1, R.drawable.wohnzimmer, 0.0, 0.0, itemListWohn, this.getApplicationContext()));
-        World.getRoomById(1).setAttachedRooms(0, -1, -1, -1);
-
-    }
-
-    private void fillItemList(){
         itemListWohn = new ArrayList<Integer>();
         World.setItem(0, new Item(0, R.drawable.pflanze, GlobalInformation.getScreenWidth()*0.5, GlobalInformation.getScreenHeight()*0.5, null, null, null, null, null, this.getApplicationContext()));
         itemListWohn.add(World.getItemById(0).getID());
@@ -124,5 +111,11 @@ public class RoomActivity extends Activity {
         itemListSchlaf = new ArrayList<Integer>();
         World.setItem(2, new Item(2, R.drawable.boddle, GlobalInformation.getScreenWidth() * 0.3, GlobalInformation.getScreenHeight() * 0.5, null, null, null, null, null, this.getApplicationContext()));
         itemListSchlaf.add(World.getItemById(2).getID());
+
+        World.setRoom(0, new Room(0, R.drawable.schlafzimmer, 0.0, 0.0, itemListSchlaf, this.getApplicationContext()));
+        World.getRoomById(0).setAttachedRooms(-1, 1, -1, -1);
+        World.setRoom(1, new Room(1, R.drawable.wohnzimmer, 0.0, 0.0, itemListWohn, this.getApplicationContext()));
+        World.getRoomById(1).setAttachedRooms(0, -1, -1, -1);
+
     }
 }

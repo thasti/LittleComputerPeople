@@ -73,8 +73,4 @@ public class World {
     public static List<Room> getAllRooms(){return Rooms;};
 
     public static void setAllRooms(List<Room> room){Rooms = room;};
-
-    public static Room getRoomByIdJS(int id){
-        return Rooms.get(id);
-    }
 }
