@@ -12,17 +12,21 @@ import java.util.List;
 
 public class Subject {
 
+    //aktuelle Position
+    private float xPos;
+    private float yPos;
+    private int aktRoomID = 1;
 
     private List<Integer> subjWalkBitInt;
     private int subjStandBitInt;
 
-    private int direction = 0;
-    private float xPos = (float)(GlobalInformation.getScreenWidth()*0.5);
-    private float yPos = (float)(GlobalInformation.getScreenHeight()*0.3);
-    private float xDest = (float)(GlobalInformation.getScreenWidth()*0.5);
-    private int destRoomID = GlobalInformation.getCurrentRoom();
+    //Bildverweise
+    //TODO: List/Array of bitmaps for animations
+    private Bitmap subjStandBitmap;
+    private Bitmap subjStandBitmapInv;
 
-    private Dijkstra dijkstra;
+    private List<Bitmap> subjectWalk;
+    private List<Bitmap> subjectWalkInv;
 
     private List<Room> route;
     private int routeRoomNum = 0;
@@ -32,11 +36,30 @@ public class Subject {
     private Sound sound;
 
 
-    public Subject(Context ctx){
+        for (int i = 0; i <= (bitmaps.size() - 1); i++){
+            Bitmap bm = bitmaps.get(i);
+            subjectWalk.add(i,  Bitmap.createScaledBitmap(bm, GlobalInformation.getScreenWidth()/5, (int)(GlobalInformation.getScreenHeight()/1.5), false));
+        }
+
+        for (int i = 0; i <= (subjectWalk.size() - 1); i++){
+            Bitmap bm = subjectWalk.get(i);
+            bm = this.mirrorBitmap(bm);
+            subjectWalkInv.add(i, bm);
+        }
+
+        float canvasx = (float) GlobalInformation.getScreenWidth();
+        float canvasy = (float) GlobalInformation.getScreenHeight();
+        float bitmapx = (float) subjStandBitmap.getWidth();
+        float bitmapy = (float) subjStandBitmap.getHeight();
+        float posX = ((canvasx/2) - (bitmapx / 2));
+        float posY = (((canvasy/2) - (bitmapy / 2)) + (canvasy/15));
+        setDefaultKoords(posX, posY, 1);
+
         intel = new Intelligence();
         sound = new Sound(ctx);                     //Zum abspielen von Sound
 
-        fillWalkingIntegerLists();
+        mediaplayer = new MediaPlayer();
+    }
 
         xPos = (float)(GlobalInformation.getScreenWidth()*0.5);
         xDest = (float)(GlobalInformation.getScreenWidth()*0.5);
@@ -46,7 +69,10 @@ public class Subject {
         dijkstra = new Dijkstra();
     }
 
-    private void fillWalkingIntegerLists(){
+    public void setDefaultKoords(float xDef, float yDef, int room) {
+        xPos = xDef;
+        yPos = yDef;
+        aktRoomID = room;
 
         subjWalkBitInt = new ArrayList<Integer>();
         subjWalkBitInt.add(R.drawable.walk_1);
@@ -56,9 +82,16 @@ public class Subject {
         subjStandBitInt = R.drawable.subjekt;
     }
 
-    public List<Integer> getPictureWalkID(){
-        return this.subjWalkBitInt;
+    public int reachedDest(){
+        if ((xPos == xDest) && (aktRoomID == destRoomID)){
+            return 1;
+        }
+        else {
+            return 0;
+        }
     }
+
+
 
     //kann das Ziel des Subjektes verändern
     public void setDest(float x, int room) {
@@ -97,13 +130,13 @@ public class Subject {
 
         // TODO hier sollte das Animations-Zeugs eigentlich nicht gemacht werden, nur die Bewegung
         // die Animation sollte das GraphicalOutput dann aus dem Zustand und der Richtung erzeugen (oder?)
-        if((xPos == xDest) && (GlobalInformation.getCurrentRoom() == destRoomID)){
-            routeRoomNum = 0;
+        if((xPos == xDest) && (aktRoomID == destRoomID)){
+            aktBitmap = subjStandBitmap;
+            listPointerWalk = 0;
             // we finished the last action, so get the next from the KI
             //ToDO: Schnittstelle muss auf getNextObject() umgestellt werdne; ist aber noch nicht genau spezifiziert
             SubjectMoveAction nextAction = intel.getNextAction();
             setDest(nextAction.getDestX(), nextAction.getDestRoom());
-            route = dijkstra.dijkstra(World.getRoomById(GlobalInformation.getCurrentRoom()), World.getRoomById(destRoomID));
             // move.getDestItem().use();
         }
         else if (GlobalInformation.getCurrentRoom() == destRoomID) {
@@ -116,29 +149,31 @@ public class Subject {
                 xPos++;
             }
         }
-        else if (GlobalInformation.getCurrentRoom() != destRoomID){
-            if (xPos == 0){
-                routeRoomNum++;
-                GlobalInformation.setCurrentRoom(route.get(routeRoomNum).getID());
-                xPos = GlobalInformation.getScreenWidth() - 1;//kann nicht GlobalInformation.getScreenWidth() sein sonst geht die Fkt unten wieder rein
+        else if (aktRoomID > destRoomID){
+            if (xPos > 0){
+                swapBitmap(false);
+                xPos--;
+            }
+            else{
+                aktBitmap = subjStandBitmap;
+                aktRoomID--;
+                xPos = GlobalInformation.getScreenWidth();
                 //reset walking animation
                 //startSound(R.raw.sound_door);
             }
-            else if (xPos == (GlobalInformation.getScreenWidth())){
-                routeRoomNum++;
-                GlobalInformation.setCurrentRoom(route.get(routeRoomNum).getID());
-                xPos = 1;//kann nicht 0 sein sonst geht die Fkt oben wieder rein (xPos == 0)
-                //reset walking animation
-                //startSound(R.raw.sound_door);
+        }
+        else if (aktRoomID < destRoomID){
+            if (xPos < (GlobalInformation.getScreenWidth())){
+                swapBitmap(true);
+                xPos++;
             }
-            else if ((xPos == (GlobalInformation.getScreenWidth()/2)) &&
-                    ((route.get(routeRoomNum + 1).getID() == World.getRoomById(GlobalInformation.getCurrentRoom()).getLowerRoomID()) ||
-                     (route.get(routeRoomNum + 1).getID() == World.getRoomById(GlobalInformation.getCurrentRoom()).getUpperRoomID()))){
-                routeRoomNum++;
-                GlobalInformation.setCurrentRoom(route.get(routeRoomNum).getID());
-                xPos = 1;//kann nicht 0 sein sonst geht die Fkt oben wieder rein (xPos == 0)
+            else{
+                aktBitmap = subjStandBitmapInv;
+                aktRoomID++;
+                xPos = 0;
                 //reset walking animation
-                //startSound(R.raw.sound_door);
+                listPointerWalk = 0;
+                startSound(R.raw.sound_door);
             }
             else{
                 if (route.get(routeRoomNum + 1).getID() == World.getRoomById(GlobalInformation.getCurrentRoom()).getRightRoomID()){

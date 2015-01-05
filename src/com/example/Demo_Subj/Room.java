@@ -50,10 +50,9 @@ public class Room {
         /*
         //itemList = new ArrayList<Item>();
 
-        //Resources resources = ctx.getResources();
-
-        if (ID == 2) {
-            //itemList.add(new Item(BitmapFactory.decodeResource(resources, R.drawable.pflanze),1, 180, 40));
+        //TODO populate this object list from XML information instead
+        if (ID == 1) {
+            itemList.add(new Item(BitmapFactory.decodeResource(resources, R.drawable.pflanze), 200, 10));
         }
         */
     }
