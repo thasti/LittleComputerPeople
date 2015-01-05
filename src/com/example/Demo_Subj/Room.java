@@ -18,10 +18,6 @@ public class Room {
 
 
     private int roomID;
-    private int lowerRoomID;
-    private int upperRoomID;
-    private int leftRoomID;
-    private int rightRoomID;
     private Integer picresource;
     private Double xPos;
     private Double yPos;
@@ -48,9 +44,7 @@ public class Room {
 
         roomID = ID;
         itemList = new ArrayList<Item>();
-
-        Resources resources = ctx.getResources();
-
+        attachedRooms = new ArrayList<Integer>();
         //TODO populate this object list from XML information instead
 
         /*
@@ -88,13 +82,9 @@ public class Room {
         return containingitems;
     }
 
-    public List<Integer> getAttachedRooms(){return attachedRooms;};
     public List<Integer> getAttachedRooms(){
         return attachedRooms;
     };
-
-
-    public int getId(){return roomID;};
 
     public void setLowerRoomID(int ID){
         lowerRoomID = ID;

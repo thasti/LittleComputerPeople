@@ -31,7 +31,15 @@ public class Dijkstra {
 
     //constructor
     public Dijkstra (){
-        Nodes = World.getAllRooms();
+
+        Nodes = new ArrayList<Room>();
+        //Soll leere Liste abfangen
+        try{
+            Nodes = World.getAllRooms();
+        }catch(NullPointerException e){
+            e.printStackTrace();
+        }
+
         matrix = new float[Nodes.size()][Nodes.size()];
         way = new float [getNodeNumber()][2];
         path = new int[getNodeNumber()];
@@ -64,7 +72,16 @@ public class Dijkstra {
         //rest f the matrix filled with distance between nodes
 
         for (count = 0; count < matrix.length; count++){
-            n = Nodes.get(count);
+
+            //in case try catch fails
+            n = World.getRoomById(GlobalInformation.getCurrentRoom());
+
+            try{
+                n = Nodes.get(count);
+            }catch(NullPointerException e){
+                e.printStackTrace();
+            }
+
             neighbours_ids = n.getAttachedRooms();
             for (count2 = 0; count2 < neighbours_ids.size(); count2++){
                 neighbour_id = neighbours_ids.get(count2);

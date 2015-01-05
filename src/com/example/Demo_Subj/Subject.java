@@ -19,14 +19,13 @@ public class Subject {
     private int direction = 0;
     private float xPos = (float)(GlobalInformation.getScreenWidth()*0.5);
     private float yPos = (float)(GlobalInformation.getScreenHeight()*0.3);
+    private float xDest = (float)(GlobalInformation.getScreenWidth()*0.5);
+    private int destRoomID = GlobalInformation.getCurrentRoom();
 
     private Dijkstra dijkstra;
 
     private List<Room> route;
     private int routeRoomNum = 0;
-
-    private int holdAnimation = 0;
-    private static int holdAnimationCycles = 100;
 
     private Intelligence intel;
 
@@ -38,7 +37,12 @@ public class Subject {
         sound = new Sound(ctx);                     //Zum abspielen von Sound
 
         fillWalkingIntegerLists();
-        
+
+        xPos = (float)(GlobalInformation.getScreenWidth()*0.5);
+        xDest = (float)(GlobalInformation.getScreenWidth()*0.5);
+        GlobalInformation.setCurrentRoom(0);
+        destRoomID = GlobalInformation.getCurrentRoom();
+
         dijkstra = new Dijkstra();
     }
 
@@ -50,35 +54,6 @@ public class Subject {
         subjWalkBitInt.add(R.drawable.walk_3);
         subjWalkBitInt.add(R.drawable.walk_4);
         subjStandBitInt = R.drawable.subjekt;
-    }
-
-    public void tick(){
-        intel.tick();                   //KI aufrufen
-
-        if(direction == 0){
-            holdAnimation++;
-            if(holdAnimation == holdAnimationCycles){
-                direction = 1;
-                holdAnimation = 0;
-            }
-        }
-        if(direction == 1){
-            holdAnimation++;
-            xPos++;
-            if(holdAnimation == holdAnimationCycles*2){
-                direction = -1;
-                holdAnimation = 0;
-            }
-        }
-        if(direction == -1){
-            holdAnimation++;
-            xPos--;
-            if(holdAnimation == holdAnimationCycles*2){
-                direction = 0;
-                holdAnimation = 0;
-            }
-        }
-        //Nach dem KI-Aufruf müssen direction, x und y-Koordinate gesetzt werden
     }
 
     public List<Integer> getPictureWalkID(){
@@ -106,116 +81,75 @@ public class Subject {
         return yPos;
     }
 
-    //gibt den Raum zurück in dem sich das Subjekt gerade befindet
-    public int getAktRoomID() {
-        return aktRoomID;
-    }
-
-    public Bitmap getSubjBitmap(){
-        return aktBitmap;
-    }
-
     public void tick() {
+
+        int lower = GlobalInformation.getCurrentRoom();
+        int upper = GlobalInformation.getCurrentRoom();
+
+        try{
+            lower = World.getRoomById(GlobalInformation.getCurrentRoom()).getLowerRoomID();
+            upper = World.getRoomById(GlobalInformation.getCurrentRoom()).getUpperRoomID();
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+
         intel.tick();
 
         // TODO hier sollte das Animations-Zeugs eigentlich nicht gemacht werden, nur die Bewegung
         // die Animation sollte das GraphicalOutput dann aus dem Zustand und der Richtung erzeugen (oder?)
-        if((xPos == xDest) && (aktRoomID == destRoomID)){
+        if((xPos == xDest) && (GlobalInformation.getCurrentRoom() == destRoomID)){
             routeRoomNum = 0;
-            aktBitmap = subjStandBitmap;
-            listPointerWalk = 0;
             // we finished the last action, so get the next from the KI
             //ToDO: Schnittstelle muss auf getNextObject() umgestellt werdne; ist aber noch nicht genau spezifiziert
             SubjectMoveAction nextAction = intel.getNextAction();
             setDest(nextAction.getDestX(), nextAction.getDestRoom());
-            route = dijkstra.dijkstra(World.getRoomByIdJS(aktRoomID), World.getRoomByIdJS(destRoomID));
+            route = dijkstra.dijkstra(World.getRoomById(GlobalInformation.getCurrentRoom()), World.getRoomById(destRoomID));
             // move.getDestItem().use();
         }
-        else if (aktRoomID == destRoomID) {
+        else if (GlobalInformation.getCurrentRoom() == destRoomID) {
             if (xPos > xDest) {
-                swapBitmap(false);
+                direction = -1;
                 xPos --;
             }
             else{
-                swapBitmap(true);
+                direction = 1;
                 xPos++;
             }
         }
-        else if (aktRoomID != destRoomID){
+        else if (GlobalInformation.getCurrentRoom() != destRoomID){
             if (xPos == 0){
-                aktBitmap = subjStandBitmap;
                 routeRoomNum++;
-                aktRoomID = route.get(routeRoomNum).getId();
+                GlobalInformation.setCurrentRoom(route.get(routeRoomNum).getID());
                 xPos = GlobalInformation.getScreenWidth() - 1;//kann nicht GlobalInformation.getScreenWidth() sein sonst geht die Fkt unten wieder rein
                 //reset walking animation
-                listPointerWalk = 0;
-                startSound(R.raw.sound_door);
+                //startSound(R.raw.sound_door);
             }
             else if (xPos == (GlobalInformation.getScreenWidth())){
-                aktBitmap = subjStandBitmapInv;
                 routeRoomNum++;
-                aktRoomID = route.get(routeRoomNum).getId();
+                GlobalInformation.setCurrentRoom(route.get(routeRoomNum).getID());
                 xPos = 1;//kann nicht 0 sein sonst geht die Fkt oben wieder rein (xPos == 0)
                 //reset walking animation
-                listPointerWalk = 0;
-                startSound(R.raw.sound_door);
+                //startSound(R.raw.sound_door);
             }
-            else if ((xPos == (GlobalInformation.getScreenWidth())) &&
-                    ((route.get(routeRoomNum + 1).getId() == World.getRoomById(aktRoomID).getLowerRoomID()) ||
-                     (route.get(routeRoomNum + 1).getId() == World.getRoomById(aktRoomID).getUpperRoomID()))){
-                aktBitmap = subjStandBitmapInv;
+            else if ((xPos == (GlobalInformation.getScreenWidth()/2)) &&
+                    ((route.get(routeRoomNum + 1).getID() == World.getRoomById(GlobalInformation.getCurrentRoom()).getLowerRoomID()) ||
+                     (route.get(routeRoomNum + 1).getID() == World.getRoomById(GlobalInformation.getCurrentRoom()).getUpperRoomID()))){
                 routeRoomNum++;
-                aktRoomID = route.get(routeRoomNum).getId();
+                GlobalInformation.setCurrentRoom(route.get(routeRoomNum).getID());
                 xPos = 1;//kann nicht 0 sein sonst geht die Fkt oben wieder rein (xPos == 0)
                 //reset walking animation
-                listPointerWalk = 0;
-                startSound(R.raw.sound_door);
+                //startSound(R.raw.sound_door);
             }
             else{
-                if (route.get(routeRoomNum + 1).getId() == World.getRoomByIdJS(aktRoomID).getRightRoomID()){
-                    swapBitmap(true);
+                if (route.get(routeRoomNum + 1).getID() == World.getRoomById(GlobalInformation.getCurrentRoom()).getRightRoomID()){
+                    direction = 1;
                     xPos++;
                 }
-                else if (route.get(routeRoomNum + 1).getId() == World.getRoomByIdJS(aktRoomID).getLeftRoomID()){
-                    swapBitmap(false);
+                else if (route.get(routeRoomNum + 1).getID() == World.getRoomById(GlobalInformation.getCurrentRoom()).getLeftRoomID()){
+                    direction = -1;
                     xPos--;
                 }
             }
         }
-    }
-
-    private void swapBitmap(boolean mirror){
-        if (mirror == true){
-            if (holdAnimation < holdAnimationCycles){
-                holdAnimation++;
-            }
-            else{
-                holdAnimation = 0;
-                aktBitmap = subjectWalkInv.get(listPointerWalk);
-                listPointerWalk++;
-                if (listPointerWalk > (subjectWalkInv.size() - 1)){
-                    listPointerWalk = 0;
-                }
-            }
-        }
-        else
-            if (holdAnimation < holdAnimationCycles){
-                holdAnimation++;
-            }
-            else {
-                holdAnimation = 0;
-                aktBitmap = subjectWalk.get(listPointerWalk);
-                listPointerWalk++;
-                if (listPointerWalk > (subjectWalk.size() - 1)) {
-                    listPointerWalk = 0;
-                }
-            }
-    }
-
-    private Bitmap mirrorBitmap(Bitmap b){
-        Matrix matrixMirror = new Matrix();
-        matrixMirror.preScale(-1.0f, 1.0f);
-        b = Bitmap.createBitmap(b, 0, 0, b.getWidth(), b.getHeight(), matrixMirror, false);
-        return b;
     }
 }
