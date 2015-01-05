@@ -26,9 +26,6 @@ public class Subject {
     private List<Room> route;
     private int routeRoomNum = 0;
 
-    private int holdAnimation = 0;
-    private static int holdAnimationCycles = 100;
-
     private Intelligence intel;
 
     private Sound sound;
@@ -56,6 +53,20 @@ public class Subject {
 
     public void tick() {
         intel.tick();
+
+        int lower = GlobalInformation.getCurrentRoom();
+        int upper = GlobalInformation.getCurrentRoom();
+        int left = GlobalInformation.getCurrentRoom();
+        int right = GlobalInformation.getCurrentRoom();
+
+        try{
+            lower = World.getRoomById(GlobalInformation.getCurrentRoom()).getLowerRoomID();
+            upper = World.getRoomById(GlobalInformation.getCurrentRoom()).getUpperRoomID();
+            left = World.getRoomById(GlobalInformation.getCurrentRoom()).getLeftRoomID();
+            right = World.getRoomById(GlobalInformation.getCurrentRoom()).getRightRoomID();
+        }catch (NullPointerException e){
+             e.printStackTrace();
+        }
 
         // TODO hier sollte das Animations-Zeugs eigentlich nicht gemacht werden, nur die Bewegung
         // die Animation sollte das GraphicalOutput dann aus dem Zustand und der Richtung erzeugen (oder?)
@@ -92,19 +103,19 @@ public class Subject {
                 //startSound(R.raw.sound_door);
             }
             else if ((xPos == (GlobalInformation.getScreenWidth())) &&
-                    ((route.get(routeRoomNum + 1).getID() == World.getRoomById(GlobalInformation.getCurrentRoom()).getLowerRoomID()) ||
-                            (route.get(routeRoomNum + 1).getID() == World.getRoomById(GlobalInformation.getCurrentRoom()).getUpperRoomID()))){
+                    ((route.get(routeRoomNum + 1).getID() == lower) ||
+                    (route.get(routeRoomNum + 1).getID() == upper))){
                 routeRoomNum++;
                 GlobalInformation.setCurrentRoom(route.get(routeRoomNum).getID());
                 xPos = 1;//kann nicht 0 sein sonst geht die Fkt oben wieder rein (xPos == 0)
                 //startSound(R.raw.sound_door);
             }
             else{
-                if (route.get(routeRoomNum + 1).getID() == World.getRoomByIdJS(GlobalInformation.getCurrentRoom()).getRightRoomID()){
+                if (route.get(routeRoomNum + 1).getID() == right){
                     direction = 1;
                     xPos++;
                 }
-                else if (route.get(routeRoomNum + 1).getID() == World.getRoomByIdJS(GlobalInformation.getCurrentRoom()).getLeftRoomID()){
+                else if (route.get(routeRoomNum + 1).getID() == left){
                     direction = -1;
                     xPos--;
                 }
