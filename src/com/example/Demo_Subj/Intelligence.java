@@ -78,7 +78,7 @@ public class Intelligence {
         //Bedürfnis mit der höchsten Motivation resetten
         needs_list.elementAt(maxMotivationIndex).setCurrentValue(0);
 
-        return World.getObjectById(needs_list.elementAt(maxMotivationIndex).getObjectID());
+        return World.getItemById(needs_list.elementAt(maxMotivationIndex).getObjectID());
     }
 
     //um mit dem unfertigen Projekt kompilieren zu können, wird die Method noch beibehalten

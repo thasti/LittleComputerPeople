@@ -218,10 +218,10 @@ public class RoomView extends View {
                 }
 
 
-                Rect boundingBox = new Rect((int)subject.getxPos(),
-                        (int)subject.getyPos(),
-                        (int)subject.getxPos() + subject.getSubjBitmap().getWidth(),
-                        (int)subject.getyPos() + subject.getSubjBitmap().getHeight());
+                Rect boundingBox = new Rect((int)subject.getXPos(),
+                        (int)subject.getYPos(),
+                        (int)subject.getXPos() + subjStand.getWidth(),
+                        (int)subject.getYPos() + subjStand.getHeight());
 
                 if (boundingBox.contains((int)event.getX(), (int)event.getY())) {
                     // TODO call the use() function of the item
