@@ -163,8 +163,8 @@ public class Dijkstra {
             path[i] = -1;
         }
 
-        start = Start.getId();
-        end = End.getId();
+        start = Start.getID();
+        end = End.getID();
 
         shortestPaths();
         createShortestPath();
