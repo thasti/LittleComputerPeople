@@ -33,9 +33,6 @@ public class RoomActivity extends Activity {
     private Timer timer = new Timer();      //Tiemr wird global instanziiert, damit alle Methoden in dieser Datei Zugriff auf die richtige Instanz haben
     private int tick;
 
-    //Variablen für das noch nicht implementierte Pausieren
-    //private Object mPauseLock;
-    //private boolean running = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,41 +50,20 @@ public class RoomActivity extends Activity {
 
         //gets the size of the Display
         Display display = getWindowManager().getDefaultDisplay();
-        /*
-        Point size = new Point();
-        display.getSize(size);
-        screenWidth = size.x;
-        screenHeight = size.y;
-        */
+
         // workaround for my older API 10 smartphone
         GlobalInformation.setScreenHeight(display.getHeight());
         GlobalInformation.setScreenWidth(display.getWidth());
+        GlobalInformation.setCurrentRoom(0);
 
-        // this has to be here (for now) because there is no XML-parser yet
-        List<Bitmap> bitmapWalkingList;
-        Bitmap subjectBStand = BitmapFactory.decodeResource(resources, R.drawable.subjekt);
-        bitmapWalkingList = new ArrayList<Bitmap>();
-        bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_1));
-        bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_2));
-        bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_3));
-        bitmapWalkingList.add(BitmapFactory.decodeResource(resources, R.drawable.walk_4));
+        //VOR dem Subjekt müssen die Räume erzeugt werden, sonst funktioniert die Navigation nicht
+        //fillRoomList();
+        InformationPublisher parser = new InformationPublisher(this.getApplicationContext(),"house.xml");
+        parser.setRoomlist(null);
 
         final Subject subject;
-        subject = new Subject (subjectBStand, bitmapWalkingList, RoomActivity.this);
+        subject = new Subject (this);
         GlobalInformation.setSubject(subject);
-
-        InformationPublisher ip = new InformationPublisher(this,"house.xml");
-        ip.set_room_list(null);
-
-
-        List<Room> roomList;
-        roomList = new ArrayList<Room>();
-        // TODO: populate this list via the XML
-        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.wohnzimmer), 1, this));
-        roomList.add(new Room(BitmapFactory.decodeResource(resources, R.drawable.schlafzimmer), 2, this));
-
-        GlobalInformation.setCurrentRoom(subject.getAktRoomID());
-        GlobalInformation.setRoomList(roomList);
 
         grafik = new RoomView(this);
 
@@ -95,11 +71,6 @@ public class RoomActivity extends Activity {
         fl.addView(grafik);
 
         grafik.invalidate();
-
-
-
-        //final InternalClock clock = new InternalClock();
-        //clock.computeTime();
 
         tick = InternalClock.getTick();
 
@@ -111,53 +82,12 @@ public class RoomActivity extends Activity {
             @Override
             public void run(){
                 subject.tick();
-                GlobalInformation.setCurrentRoom(subject.getAktRoomID());
                 grafik.postInvalidate();
                 InternalClock.computeTime();
-                //clock.computeTime();                                       //returns boolean Value
-                //if(running){
-                    //subject.tick();
-                    //GlobalInformation.setCurrentRoom(subject.getAktRoomID());
-                    //grafik.postInvalidate();
-                    //InternalClock.computeTime();
-                /*}
-                else{                               //Eventuell wird der Timer zum pausieren später beendet (cancel in onPause)
-                                                    //und neu erstellt (schedule in onResume())
-                    synchronized (mPauseLock) {
-                        while (!running) {
-                            try {
-                                mPauseLock.wait();              //Wenn ich das richtig verstehe, wird hier versucht, mPauseLock
-                                                                //solange zu pausieren(xyz.wait() legt eine Thread schlafen bis
-                                                                //er durch xyz.notify() geweckt wird), wie running false ist.
-                                                                //Theoretisch sollte es ausreichen, den Thread einmal schlafen zu legen
-
-                            } catch (InterruptedException e) {
-
-                            }
-                        }
-                    }
-                }*/
             }
         }, 0, tick);
     }
-    /*
-    @Override
-    public void onPause() {
-        super.onPause();
-        synchronized (mPauseLock) {
-            running = false;
-        }
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        synchronized (mPauseLock) {
-            running = true;
-            mPauseLock.notifyAll();
-        }
-    }
-    */
     @Override
     public void onBackPressed() {
         //Kills the app immediately
@@ -166,5 +96,32 @@ public class RoomActivity extends Activity {
         timer.cancel();             //Timer sauber beenden
         this.finish();
         System.exit(0);
+    }
+
+    private void fillRoomList(){                    //Existiert temporär, bis der XML-Parser eingebunden wurde
+
+        List<Integer> itemListWohn;                 //Existiert temporär, bis der XML-Parser eingebunden wurde
+        List<Integer> itemListSchlaf;               //Existiert temporär, bis der XML-Parser eingebunden wurde//Existiert temporär, bis der XML-Parser eingebunden wurde
+
+
+        itemListWohn = new ArrayList<Integer>();
+        World.setItem(0, new Item(0, R.drawable.pflanze, GlobalInformation.getScreenWidth()*0.5, GlobalInformation.getScreenHeight()*0.5, null, null, null, null, null, this.getApplicationContext()));
+        itemListWohn.add(World.getItemById(0).getID());
+        World.setItem(1, new Item(1, R.drawable.boddle, GlobalInformation.getScreenWidth()*0.3, GlobalInformation.getScreenHeight()*0.5, null, null, null, null, null, this.getApplicationContext()));
+        itemListWohn.add(World.getItemById(1).getID());
+
+        itemListSchlaf = new ArrayList<Integer>();
+        World.setItem(2, new Item(2, R.drawable.boddle, GlobalInformation.getScreenWidth() * 0.3, GlobalInformation.getScreenHeight() * 0.5, null, null, null, null, null, this.getApplicationContext()));
+        itemListSchlaf.add(World.getItemById(2).getID());
+
+        World.setRoom(0, new Room(0, R.drawable.schlafzimmer, 0.0, 0.0, itemListSchlaf, this.getApplicationContext()));
+        World.getRoomById(0).setAttachedRooms(-1, 1, -1, -1);
+        World.setRoom(1, new Room(1, R.drawable.wohnzimmer, 0.0, 0.0, itemListWohn, this.getApplicationContext()));
+        World.getRoomById(1).setAttachedRooms(0, 2, -1, -1);
+        /*hab mal noch nen 3.raum eingefügt zum testen, um zu sehen ob er in mehr als 2 räume geht.*/
+        /*macht er  nicht weil er in einem raum nur bis zur mitte geht und im anderen offensichtlich nur eine Tür?*/
+        World.setRoom(2, new Room(2, R.drawable.bath, 0.0, 0.0, itemListWohn, this.getApplicationContext()));
+        World.getRoomById(2).setAttachedRooms(1, -1, -1, -1);
+
     }
 }

@@ -96,7 +96,7 @@ public class XML_Parser implements DataSource {
     **********************************************************************************************/
 
     private void LoadAttributes(Node child, int id){
-		if(child.getAttributes().getLength()>0){
+		if(child.hasAttributes()){
 			int i = 0;
 			while(i<child.getAttributes().getLength()){
 				if(!child.getAttributes().item(i).toString().equals("#text")){

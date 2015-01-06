@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<allneeds>
+
+    <need name = "watchtv" needID ="1" priority = "5" daynight="0" toplevel="70" objectID="1"></need>
+
+    <need name = "readtime" needID = "2" priority="2" daynight="1" toplevel="70" objectID="2"></need>
+
+    <need name = "greenthumb" needID = "3" priority="5" daynight="1" toplevel="5" objectID="3"></need>
+
+    <need name="sleep" needID = "4" priority="6" daynight="0" toplevel="30" objectID="4"></need>
+
+    <need name = "information" needID = "5" priority="3" daynight="0" toplevel="80" objectID="5"></need>
+
+    <need name = "hear" needID ="6" priority="4" daynight="0" toplevel="80" objectID="6"></need>
+
+    <need name = "freshair" needID = "7" priority="7" daynight="0" toplevel="90" objectID="7"></need>
+
+    <need name = "cook" needID = "8" priority="6" daynight="0" toplevel="30" objectID="8"></need>
+
+    <need name = "hunger" needID = "9" priority="8" daynight="0" toplevel="50" objectID="9"></need>
+
+    <need name = "drink" needID ="10" priority="2" daynight="0" toplevel="90" objectID="10"></need>
+
+    <need name = "hygiene" needID = "11" priority="3" daynight="0" toplevel="50" objectID="11"></need>
+
+    <need name = "water" needID = "12" priority="4" daynight="0" toplevel="100" objectID="12"></need>
+
+    <need name = "talk" needID = "13" priority="7" daynight="0" toplevel="60" objectID="13"></need>
+
+    <need name = "light" needID = "14" priority="9" daynight="1" toplevel="10" objectID="14"></need>
+
+    <need name = "readcurrent" needID = "15" priority="3" daynight="0" toplevel="90" objectID="15"></need>
+
+</allneeds>
