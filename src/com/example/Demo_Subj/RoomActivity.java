@@ -2,6 +2,9 @@ package com.example.Demo_Subj;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Window;
@@ -43,6 +46,7 @@ public class RoomActivity extends Activity {
 
         Resources resources = getResources();
 
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         //gets the size of the Display
         Display display = getWindowManager().getDefaultDisplay();

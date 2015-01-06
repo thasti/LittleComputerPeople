@@ -2,6 +2,7 @@ package com.example.Demo_Subj;
 
 import android.app.Activity;
 import android.content.Context;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,6 +21,8 @@ public class ChatActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.setContentView(R.layout.chat);
@@ -29,6 +32,7 @@ public class ChatActivity extends Activity {
             public void onClick(View v) {
                 Toast toast = Toast.makeText(getApplicationContext(), R.string.resp1_subj, Toast.LENGTH_SHORT);
                 toast.show();
+                finish();
             }
         });
 
@@ -37,6 +41,7 @@ public class ChatActivity extends Activity {
             public void onClick(View v) {
                 Toast toast = Toast.makeText(getApplicationContext(), R.string.resp2_subj, Toast.LENGTH_SHORT);
                 toast.show();
+                finish();
             }
         });
 
@@ -45,6 +50,7 @@ public class ChatActivity extends Activity {
             public void onClick(View v) {
                 Toast toast = Toast.makeText(getApplicationContext(), R.string.resp3_subj, Toast.LENGTH_SHORT);
                 toast.show();
+                finish();
             }
         });
 
