@@ -19,8 +19,21 @@ public class World {
         Puts a room with the given ID in a TreeMap and fills the List Rooms
      ******************************************************************************************/
     public static void setRoom(int key, Room room){
+        System.out.println("new Room:"+room.getID()+" leftRoom:"+room.getLeftRoomID()+" rightRoom:"+room.getRightRoomID());
         roomTreeMap.put(key, room);
         Rooms.add(room);
+    }
+
+    public static int getRoomlistSize(){
+        return roomTreeMap.size();
+    }
+
+    public static int getRoomlistFirstKey(){
+        return roomTreeMap.firstKey();
+    }
+
+    public static int getRoomlistHigherKey(int lowKey){
+        return roomTreeMap.higherKey(lowKey);
     }
 
     /*******************************************************************************************

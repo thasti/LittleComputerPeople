@@ -57,7 +57,9 @@ public class RoomActivity extends Activity {
         GlobalInformation.setCurrentRoom(0);
 
         //VOR dem Subjekt müssen die Räume erzeugt werden, sonst funktioniert die Navigation nicht
-        fillRoomList();
+        //fillRoomList();
+        InformationPublisher parser = new InformationPublisher(this.getApplicationContext(),"house.xml");
+        parser.setRoomlist(null);
 
         final Subject subject;
         subject = new Subject (this);
@@ -115,7 +117,11 @@ public class RoomActivity extends Activity {
         World.setRoom(0, new Room(0, R.drawable.schlafzimmer, 0.0, 0.0, itemListSchlaf, this.getApplicationContext()));
         World.getRoomById(0).setAttachedRooms(-1, 1, -1, -1);
         World.setRoom(1, new Room(1, R.drawable.wohnzimmer, 0.0, 0.0, itemListWohn, this.getApplicationContext()));
-        World.getRoomById(1).setAttachedRooms(0, -1, -1, -1);
+        World.getRoomById(1).setAttachedRooms(0, 2, -1, -1);
+        /*hab mal noch nen 3.raum eingefügt zum testen, um zu sehen ob er in mehr als 2 räume geht.*/
+        /*macht er  nicht weil er in einem raum nur bis zur mitte geht und im anderen offensichtlich nur eine Tür?*/
+        World.setRoom(2, new Room(2, R.drawable.bath, 0.0, 0.0, itemListWohn, this.getApplicationContext()));
+        World.getRoomById(2).setAttachedRooms(1, -1, -1, -1);
 
     }
 }
