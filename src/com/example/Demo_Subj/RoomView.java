@@ -33,6 +33,7 @@ public class RoomView extends View {
 
     private List<Bitmap> subjWalkForward;
     private List<Bitmap> subjWalkBackward;
+    private List<Bitmap> decodedObjBitmap;
     private Bitmap subjStand;
     private int direction;
     private float subjXPos;
@@ -49,6 +50,8 @@ public class RoomView extends View {
         this.p = null;
 
         resources = getResources();
+
+        decodedObjBitmap = new ArrayList<Bitmap>();
 
         subject = GlobalInformation.getSubject();
         initSubject();
@@ -93,7 +96,6 @@ public class RoomView extends View {
         // find out which room to draw
         //TODO should be replaced by a proper find() in the list
 
-
         if(lastRoom != GlobalInformation.getCurrentRoom()){                                     //hat sich lastroom gegenüber dem letzten Aufruf geändert? wenn ja dann lade den aktuellen Raum
             drawRoom = World.getRoomById(GlobalInformation.getCurrentRoom());
             drawRoomB = Bitmap.createScaledBitmap(
@@ -103,6 +105,24 @@ public class RoomView extends View {
                     false
             );
             lastRoom = drawRoom.getID();
+
+            //vor dem Laden der neuen bmps die alten löschen
+            decodedObjBitmap.clear();
+
+            int itemcount = 0;
+            int itemId;
+
+            //Versuchen die Items zu bekommen, die der Raum enthält
+            try{
+                itemcount = drawRoom.getContainingitems().size();
+            }catch (NullPointerException e){
+                e.printStackTrace();
+            }
+
+            for(int i = 0; i < itemcount; i++){
+                itemId = drawRoom.getContainingitems().get(i);
+                decodedObjBitmap.add(BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresource()));
+            }
         }
 
         if (drawRoom == null) {
@@ -112,27 +132,30 @@ public class RoomView extends View {
 
         canvas.drawBitmap(drawRoomB, 0, 0, p);
 
-        // draw all items (TODO: add layering)
-        //Layer als zusätzliche Eigenschaft von Item benötigt, wird ein Offset zur Y-Koordinate von Objekten hinzufügen
+        //zeichnet die bereits beim Raumwechsel dekodierten Bitmaps
+        int itemBmp = 0;
 
-        int itemcount = 0;
-
+        //wenn es keine Items gibt, dann gibt es auch keine Bitmaps
         try{
-            itemcount = drawRoom.getContainingitems().size();
+            itemBmp = drawRoom.getContainingitems().size();
         }catch (NullPointerException e){
             e.printStackTrace();
         }
 
+        //zeichnet die Bitmaps
         int itemId;
-        for(int i = 0; i < itemcount; i++){
+        for(int i = 0; i < itemBmp; i++){
             itemId = drawRoom.getContainingitems().get(i);
             canvas.drawBitmap(
-                    BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresource()),
+                    decodedObjBitmap.get(i),
                     World.getItemById(itemId).getXPos().floatValue(),
                     World.getItemById(itemId).getYPos().floatValue(),
                     p
             );
         }
+
+        // draw all items (TODO: add layering)
+        //Layer als zusätzliche Eigenschaft von Item benötigt, wird ein Offset zur Y-Koordinate von Objekten hinzufügen
 
         getSubjectMovement();
 
@@ -199,7 +222,6 @@ public class RoomView extends View {
                 }catch (NullPointerException e){
                     e.printStackTrace();
                 }
-
 
                 for(int i = 0; i < itemcount; i++){
                     itemId = drawRoom.getContainingitems().get(i);

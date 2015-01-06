@@ -108,7 +108,7 @@ public class Subject {
                 routeRoomNum++;
                 GlobalInformation.setCurrentRoom(route.get(routeRoomNum).getID());
                 xPos = 1;//kann nicht 0 sein sonst geht die Fkt oben wieder rein (xPos == 0)
-                sound.startSound(R.raw.sound_door);
+                //sound.startSound(R.raw.sound_door);
             }
             else{
                 if (route.get(routeRoomNum + 1).getID() == right){
