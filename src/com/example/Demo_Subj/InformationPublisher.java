@@ -15,17 +15,7 @@ public class InformationPublisher extends ContextWrapper{
 
     /*nur solange bis world global fertig ist*/
 	class welt{
-		//TreeMap<Integer,item> welt_object_list = new TreeMap<Integer,item>();
-		//TreeMap<Integer,room> welt_room_list = new TreeMap<Integer,room>();
 		TreeMap<Integer,Object> welt_house_list = new TreeMap<Integer,Object>();
-        /*public void add_room(Integer id, room Room){
-            this.welt_room_list.put(id, Room);
-            System.out.println("Room der Liste hinzugefügt mit ID:"+id);
-        }
-        public void add_object(Integer id, item object){
-            this.welt_object_list.put(id, object);
-            System.out.println("Object der Liste hinzugefügt mit ID:"+id);
-        }*/
         public void add_house(Integer id, Object object){
             this.welt_house_list.put(id, object);
             System.out.println("House der Liste hinzugefügt mit ID:"+id);
@@ -43,28 +33,6 @@ public class InformationPublisher extends ContextWrapper{
                 i++;
             }
         }
-    }
-    /*Testklasse für Raum*/
-    /*class room{
-        room(Integer ID, Integer bildresource, Double x, Double y, List<Integer>EnthalteneObjekte){
-            System.out.println("Neuer Raum wird angelegt mit ID: "+ID+" Grafik: "+bildresource+" X: "+x+" Y:"+y+" enthaltene Objekte:");
-            int i=0;
-            while(i<EnthalteneObjekte.size()){
-                System.out.println("ObjektID: "+EnthalteneObjekte.get(i));
-                i++;
-            }
-        }
-    }*/
-    /*Testklasse für Objekte/items*/
-    class item{
-       item(Integer ID, Integer bildresource, Double x, Double y, String need, Integer sound, Integer popup, Integer user,List<String>BilderFuerAnimation){
-           System.out.println("Neues Objekt wird angelegt mit ID: "+ID+" Grafik: "+bildresource+" X: "+x+" Y:"+y+" need:"+need+" sound:"+sound+" popup:"+popup+" user:"+user+" Animationsgrafiken:");
-           int i=0;
-           while(i<BilderFuerAnimation.size()){
-               System.out.println("Grafik: "+BilderFuerAnimation.get(i));
-               i++;
-           }
-       }
     }
 
 	public List<Integer> setObjectlistForOneRoom(Integer roomid){
