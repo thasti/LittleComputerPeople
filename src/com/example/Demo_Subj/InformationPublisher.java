@@ -93,8 +93,8 @@ public class InformationPublisher extends ContextWrapper{
                         m++;
                     }
                     Integer ResId = ResourceNameToInt(object_list.get(i).Nodes.get("name"));
-                    Item it_tmp = new Item(StringToInt(object_list.get(i).Nodes.get("objectID")),ResId, StringToDouble(object_list.get(i).Nodes.get("x-position")), StringToDouble(object_list.get(i).Nodes.get("y-position")),object_list.get(i).Nodes.get("need"), StringToInt(object_list.get(i).Nodes.get("sound")), StringToInt(object_list.get(i).Nodes.get("popup")), StringToInt(object_list.get(i).Nodes.get("user")),animationImages,ctx);
-					World.setObject(StringToInt(object_list.get(i).Nodes.get("objectID")), it_tmp);
+                    Item it_tmp = new Item(StringToInt(object_list.get(i).Nodes.get("objectID")),ResId, GlobalInformation.getScreenWidth()*StringToDouble(object_list.get(i).Nodes.get("x-position")), GlobalInformation.getScreenHeight()*StringToDouble(object_list.get(i).Nodes.get("y-position")),object_list.get(i).Nodes.get("need"), StringToInt(object_list.get(i).Nodes.get("sound")), StringToInt(object_list.get(i).Nodes.get("popup")), StringToInt(object_list.get(i).Nodes.get("user")),animationImages,ctx);
+					World.setItem(StringToInt(object_list.get(i).Nodes.get("objectID")), it_tmp);
 				}
 				i++;
 			}
@@ -142,8 +142,25 @@ public class InformationPublisher extends ContextWrapper{
                     List<Integer> object_list = setObjectlistForOneRoom(StringToInt(room_list.get(i).Nodes.get("roomID")));
                     Integer ResId = ResourceNameToInt(room_list.get(i).Nodes.get("name"));
                     Room room_tmp= new Room(StringToInt(room_list.get(i).Nodes.get("roomID")),ResId, StringToDouble(room_list.get(i).Nodes.get("x-position")), StringToDouble(room_list.get(i).Nodes.get("y-position")),object_list,ctx);
+
+                    /*fuer Raumnavigation die jeweils benachbarten Raeume einstellen*/
+                    /*Festlegung, alles erstmal nur nen Schlauch*/
+                    int left_room,right_room;
+                    if(i==0)
+                        left_room=-1;
+                    else
+                        left_room = StringToInt(room_list.get(i-1).Nodes.get("roomID"));
+                    if(i==(room_list.size()-1))
+                        right_room=-1;
+                    else
+                        right_room = StringToInt(room_list.get(i+1).Nodes.get("roomID"));
+                    room_tmp.setAttachedRooms(left_room,right_room,-1,-1);
+                    /*Ende*/
+                    /*Hier muessen spaeter die Informationen aus der XML geholt werden*/
+
                     roomId_list.add(StringToInt(room_list.get(i).Nodes.get("roomID")));
                     World.setRoom(StringToInt(room_list.get(i).Nodes.get("roomID")), room_tmp);
+
 				}
 				i++;
 			}
@@ -240,16 +257,6 @@ public class InformationPublisher extends ContextWrapper{
 
     public Integer StringToInt(String t){
         if(t!=null) {
-            /*char[] a = t.toCharArray();
-            int z = 0, i = 0;
-            while (i < a.length) {
-                int exp = (int) Math.pow(10, a.length - i - 1);
-                if (exp == 0)
-                    exp = 1;
-                z += (a[i] - 48) * exp;
-                i++;
-            }
-            return z;*/
             return Integer.parseInt(t);
         }
         return null;
@@ -257,34 +264,45 @@ public class InformationPublisher extends ContextWrapper{
 
     public Double StringToDouble(String t){
         if(t!=null) {
-            /*char[] a = t.toCharArray();
-            int i = 0, vk;
-            double m = 0;
-            while ((i < a.length) && (a[i] != '.')) {
-                i++;
-            }
-            vk = i;
-            i = 0;
-            while (i < vk) {
-                int exp = (int) Math.pow(10, vk - i - 1);
-                if (exp == 0)
-                    exp = 1;
-                //System.out.println((int) a[i] - 48);
-                m += (a[i] - 48) * exp;
-                i++;
-            }
-            i++;
-            while (i < a.length) {
-                double exp = Math.pow(0.1, i - vk);
-                //System.out.println((int) a[i] - 48);
-                m += (a[i] - 48) * exp;
-                i++;
-            }
-            return m;*/
             return Double.parseDouble(t);
         }
         return null;
     }
+
+    public List<Need> getNeedsFromXml(String file){
+        DataSource NeedsParser= new XML_Parser();
+        InputStream is = null;
+        try {
+            is = getAssets().open(file);
+            NeedsParser.LoadFile(is);
+            TreeNode allneeds = NeedsParser.getSuperParent();
+            List<TreeNode> NeedsListTmp = NeedsParser.getAllChildsFrom(allneeds);
+            List<Need> NeedsList = new ArrayList();
+            int i = 0;
+            while(i<NeedsList.size()) {
+                boolean activeDayNight;
+                if(StringToInt(NeedsListTmp.get(i).Nodes.get("daynight")) == 1) {
+                    activeDayNight = true;
+                }
+                else {
+                    activeDayNight = false;
+                }
+                NeedsList.add(new Need(StringToInt(NeedsListTmp.get(i).Nodes.get("toplevel")),
+                        StringToInt(NeedsListTmp.get(i).Nodes.get("priority")).byteValue(),
+                        NeedsListTmp.get(i).Nodes.get("name"),
+                        StringToInt(NeedsListTmp.get(i).Nodes.get("objectID")),
+                        activeDayNight));
+                i++;
+            }
+            return NeedsList;
+        } catch (IOException e) {
+            System.out.println("Fehler beim NeedsXML parsen!");
+        }
+        return null;
+    }
+    /**********************************************************************************************
+    liest XML-File need aus
+     */
 
     public InformationPublisher(Context base, String file) {
         super(base);

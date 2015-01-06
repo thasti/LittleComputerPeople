@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--angepasst und neu pushen-->
 <house>
     <room name="livingroom" roomID = "0">
-        <object name="tv" objectID ="1" need="watchtv" sound="0" popup="0" user="1" x-position="0.53" y-position="0.5"></object>
-        <object name="clock" objectID = "2" need="readtime" sound="1" popup="0" user="0" x-position="0.81" y-position="0.52"></object>
+        <object name="tv" objectID ="1" need="watchtv" sound="0" popup="0" user="1" x-position="0.38" y-position="0.4"></object>
+        <object name="clock" objectID = "2" need="readtime" sound="1" popup="0" user="0" x-position="0.75" y-position="0.1"></object>
     </room>
     <room name="bedroom" roomID ="1">
         <object name="plant" objectID = "3" need="greenthumb" sound="0" popup="0" user="0" x-position="0.63" y-position="0.46"></object>
         <object name="bed" objectID = "4" need="sleep" sound="1" popup="0" user="1" x-position="0.24" y-position="0.59"></object>
         <object name="computer" objectID = "5" need="information" sound="1" popup="0" user="1" x-position="0.79" y-position="0.49"></object>
+        <object name="radio" objectID = "6" need="hear" sound="1" popup="0" user="1" x-position="0.27" y-position="0.41"></object>
     </room>
-    <object name="radio" objectID = "6" need="hear" sound="1" popup="0" user="1" x-position="0.27" y-position="0.41"></object>
     <room name="kitchen" roomID = "2">
         <object name="window" objectID = "7" need="freshair" sound="1" popup="0" user="1" x-position="0.6" y-position="0.42"></object>
         <object name="cooker" objectID= "8" need="cook" sound="0" popup="0" user="1" x-position="0.81" y-position="0.47"> </object>
