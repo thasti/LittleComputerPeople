@@ -29,9 +29,7 @@ public class Room {
     private int rightRoomID = -1;
     List<Integer> attachedRooms;
 
-    private List<Item> itemList;
-
-    public Room (Integer ID, Integer picresource, Double x, Double y, List<Integer> containingitems,  Context context) {
+    public Room (Integer ID, Integer picresource, Double x, Double y, List<Integer> containingitemslist,  Context context) {
         /*bitmapRoom = Bitmap.createScaledBitmap(bitmapRoomR,
                 GlobalInformation.getScreenWidth(),
                 GlobalInformation.getScreenHeight(),
@@ -43,8 +41,9 @@ public class Room {
         yPos = y;
 
         roomID = ID;
-        itemList = new ArrayList<Item>();
         attachedRooms = new ArrayList<Integer>();
+        containingitems = new ArrayList<Integer>();
+        containingitems = containingitemslist;
         //TODO populate this object list from XML information instead
 
         /*
