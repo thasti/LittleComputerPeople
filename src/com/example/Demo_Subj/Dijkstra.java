@@ -30,8 +30,16 @@ public class Dijkstra {
 
 
     //constructor
-    public Dijkstra (Context context){
-        Nodes = World.getAllRooms();
+    public Dijkstra (){
+
+        Nodes = new ArrayList<Room>();
+        //Soll leere Liste abfangen
+        try{
+            Nodes = World.getAllRooms();
+        }catch(NullPointerException e){
+            e.printStackTrace();
+        }
+
         matrix = new float[Nodes.size()][Nodes.size()];
         way = new float [getNodeNumber()][2];
         path = new int[getNodeNumber()];
@@ -64,7 +72,16 @@ public class Dijkstra {
         //rest f the matrix filled with distance between nodes
 
         for (count = 0; count < matrix.length; count++){
-            n = Nodes.get(count);
+
+            //in case try catch fails
+            n = World.getRoomById(GlobalInformation.getCurrentRoom());
+
+            try{
+                n = Nodes.get(count);
+            }catch(NullPointerException e){
+                e.printStackTrace();
+            }
+
             neighbours_ids = n.getAttachedRooms();
             for (count2 = 0; count2 < neighbours_ids.size(); count2++){
                 neighbour_id = neighbours_ids.get(count2);
@@ -140,6 +157,7 @@ public class Dijkstra {
     public List<Room> dijkstra(Room Start, Room End){
 
         int elements = 0;
+        Result.clear();
 
         for (int i = 0; i < path.length; i++){
             path[i] = -1;
@@ -152,10 +170,18 @@ public class Dijkstra {
         createShortestPath();
 
         //array has to be shortened and transferred into a list
+        //Result.add(Start);
 
-        for (elements = 0; path[elements] != -1; elements++){
+        while ((path[elements] != -1)){
             Result.add(Nodes.get(path[elements]));
+            elements++;
+            if (elements == path.length){
+                break;
+            }
         }
+/*        for (elements = 0; ((path[elements] != -1) && (elements < path.length)); elements++){
+            Result.add(Nodes.get(path[elements]));
+        }*/
 
         // List includes the inverse path
         // inversion of the path

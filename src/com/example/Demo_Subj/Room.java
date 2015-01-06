@@ -23,11 +23,13 @@ public class Room {
     private Double yPos;
     List<Integer> containingitems;
     private Context context;
+    private int lowerRoomID = -1;
+    private int upperRoomID = -1;
+    private int leftRoomID = -1;
+    private int rightRoomID = -1;
     List<Integer> attachedRooms;
 
-    private List<Item> itemList;
-
-    public Room (Integer ID, Integer picresource, Double x, Double y, List<Integer> containingitems,  Context context) {
+    public Room (Integer ID, Integer picresource, Double x, Double y, List<Integer> containingitemslist,  Context context) {
         /*bitmapRoom = Bitmap.createScaledBitmap(bitmapRoomR,
                 GlobalInformation.getScreenWidth(),
                 GlobalInformation.getScreenHeight(),
@@ -38,20 +40,18 @@ public class Room {
         xPos = x;
         yPos = y;
 
-        if(containingitems == null)
-            this.containingitems = new ArrayList<Integer>();
-        else if(containingitems != null)
-            this.containingitems = containingitems;
-
+        roomID = ID;
+        attachedRooms = new ArrayList<Integer>();
+        containingitems = new ArrayList<Integer>();
+        containingitems = containingitemslist;
         //TODO populate this object list from XML information instead
 
         /*
         //itemList = new ArrayList<Item>();
 
-        //Resources resources = ctx.getResources();
-
-        if (ID == 2) {
-            //itemList.add(new Item(BitmapFactory.decodeResource(resources, R.drawable.pflanze),1, 180, 40));
+        //TODO populate this object list from XML information instead
+        if (ID == 1) {
+            itemList.add(new Item(BitmapFactory.decodeResource(resources, R.drawable.pflanze), 200, 10));
         }
         */
     }
@@ -80,7 +80,61 @@ public class Room {
         return containingitems;
     }
 
-    public List<Integer> getAttachedRooms(){return attachedRooms;};
+    public List<Integer> getAttachedRooms(){
+        return attachedRooms;
+    };
 
+    public void setLowerRoomID(int ID){
+        lowerRoomID = ID;
+    }
+
+    public void setUpperRoomID(int ID){
+        upperRoomID = ID;
+    }
+
+    public void setLeftRoomID(int ID){
+        leftRoomID = ID;
+    }
+
+    public void setRightRoomID(int ID){
+        rightRoomID = ID;
+    }
+
+    public void setAttachedRooms(int leftRoom, int rightRoom, int upperRoom, int lowerRoom)
+    {
+        lowerRoomID = lowerRoom;
+        upperRoomID = upperRoom;
+        leftRoomID = leftRoom;
+        rightRoomID = rightRoom;
+
+        if (lowerRoomID != -1){
+            attachedRooms.add(lowerRoomID);
+        }
+        if (upperRoomID != -1){
+            attachedRooms.add(upperRoomID);
+        }
+        if (leftRoomID != -1){
+            attachedRooms.add(leftRoomID);
+        }
+        if (rightRoomID != -1){
+            attachedRooms.add(rightRoomID);
+        }
+    }
+
+    public int getLowerRoomID(){
+        return lowerRoomID;
+    }
+
+    public int getUpperRoomID(){
+        return upperRoomID;
+    }
+
+    public int getLeftRoomID(){
+        return leftRoomID;
+    }
+
+    public int getRightRoomID(){
+        return rightRoomID;
+    }
 
 }

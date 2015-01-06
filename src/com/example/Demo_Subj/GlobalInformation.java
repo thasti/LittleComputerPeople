@@ -9,7 +9,7 @@ import java.util.List;
 public class GlobalInformation {
     private static int screenWidth;
     private static int screenHeight;
-    private static int currentRoom;
+    private static int currentRoom = 0;
     private static List<Room> roomList;
     private static Subject subject;
 
