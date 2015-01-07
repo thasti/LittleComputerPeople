@@ -31,7 +31,7 @@ public class RoomActivity extends Activity {
     //Variablen für Timer
     private Timer timer = new Timer();      //Tiemr wird global instanziiert, damit alle Methoden in dieser Datei Zugriff auf die richtige Instanz haben
     private int tick;
-
+    private boolean paused = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,9 +82,11 @@ public class RoomActivity extends Activity {
         timer.schedule(new TimerTask(){
             @Override
             public void run(){
-                subject.tick();
-                grafik.postInvalidate();
-                InternalClock.computeTime();
+                if (paused == false) {
+                    subject.tick();
+                    grafik.postInvalidate();
+                    InternalClock.computeTime();
+                }
             }
         }, 0, tick);
     }
@@ -98,6 +100,24 @@ public class RoomActivity extends Activity {
         this.finish();
         System.exit(0);
     }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        paused = false;
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        paused = true;
+    }
+
 
     private void fillRoomList(){                    //Existiert temporär, bis der XML-Parser eingebunden wurde
 
