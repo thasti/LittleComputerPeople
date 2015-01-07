@@ -71,9 +71,15 @@ public class Intelligence {
     //Aufruf von Subjekt; Gibt Objekt_ID zurück, zu der das Subjekt als nächstes laufen soll
     public Item getNextItem(){
         //Bedürfnis mit der höchsten Motivation resetten
-        needs_list.get(maxMotivationIndex).setCurrentValue(0);
+        try {
+            needs_list.get(maxMotivationIndex).setCurrentValue(0);
+            return World.getItemById(needs_list.get(maxMotivationIndex).getObjectID());
+        }
+        catch(IndexOutOfBoundsException e){
+            Log.e("LCP_Intelligence", "Index " + maxMotivationIndex + " does not exist in needs_list mit " + needs_list.size() + " Elementen.",e);
 
-        return World.getItemById(needs_list.get(maxMotivationIndex).getObjectID());
+            return null;
+        }
     }
 
     //um mit dem unfertigen Projekt kompilieren zu können, wird die Method noch beibehalten
