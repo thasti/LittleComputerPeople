@@ -9,13 +9,17 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class InformationPublisher extends ContextWrapper{
-    Context ctx;
-	DataSource parser= new XML_Parser();
-	boolean ret = false;
+    static Context ctx;
+	static DataSource parser= new XML_Parser();
+	static boolean ret = false;
+
+    public InformationPublisher(Context base) {
+        super(base);
+    }
 
     /*nur solange bis world global fertig ist*/
 	class welt{
-		TreeMap<Integer,Object> welt_house_list = new TreeMap<Integer,Object>();
+		TreeMap<Integer,Object> welt_house_list = new TreeMap<>();
         public void add_house(Integer id, Object object){
             this.welt_house_list.put(id, object);
             System.out.println("House der Liste hinzugefügt mit ID:"+id);
@@ -35,7 +39,7 @@ public class InformationPublisher extends ContextWrapper{
         }
     }
 
-	public List<Integer> setObjectlistForOneRoom(Integer roomid){
+	public static List<Integer> setObjectlistForOneRoom(Integer roomid){
 		if(ret){
 			//Liste ist in class world enthalten
 			List<TreeNode> object_list;
@@ -48,12 +52,12 @@ public class InformationPublisher extends ContextWrapper{
 			else{
 				object_list = parser.getAllChildsFrom(room_list.get(0));
 			}
-            List<Integer>ObjectIds = new ArrayList<Integer>();
+            List<Integer>ObjectIds = new ArrayList<>();
 			int i = 0;
 			while(i<object_list.size()){
 				if(object_list.get(i).Nodes.containsKey("objectID")){
                     ObjectIds.add(StringToInt(object_list.get(i).Nodes.get("objectID")));
-                    List<String>animationImages = new ArrayList<String>();
+                    List<String>animationImages = new ArrayList<>();
                     List<TreeNode>animationImagesList = parser.getAllChildsFrom(parser.getChildFrom(object_list.get(i), "name", "Animation"));
                     int m = 0;
                     while(m<animationImagesList.size()) {
@@ -77,10 +81,10 @@ public class InformationPublisher extends ContextWrapper{
     Rückgabe von null bei einem Fehler!
     **********************************************************************************************/
 
-    public List<Integer> setRoomlist(Integer houseid){
+    public static List<Integer> setRoomlist(Integer houseid){
 		//Liste ist in class welt enthalten
 		List<TreeNode> room_list;
-        List<Integer> roomId_list = new ArrayList<Integer>();
+        List<Integer> roomId_list = new ArrayList<>();
 		if(ret){	
 			if(houseid==null){
 				//es gibt zur zeit nicht mehrere H�user
@@ -148,7 +152,7 @@ public class InformationPublisher extends ContextWrapper{
 		//Liste ist in class welt enthalten
 		TreeNode superparent = parser.getSuperParent();
 		List<TreeNode> house_list = parser.getAllChildsFrom(superparent);
-        List<Integer> houseId_list = new ArrayList<Integer>();
+        List<Integer> houseId_list = new ArrayList<>();
         if(ret) {
             //von Ebene zu Ebene nach unten hangeln, bis ich auf der haus-ebene bin
             //es gibt nur ein parent-container wo alle haeuser drin sind
@@ -208,44 +212,42 @@ public class InformationPublisher extends ContextWrapper{
     konnte der DataSource instanziert werden? wenn das XML-File nicht geladen werden konnte bleibt ret auf false!
     **********************************************************************************************/
 
-    public Integer ResourceNameToInt(String name){
+    public static Integer ResourceNameToInt(String name){
         if(name!=null) {
             try {
                 Field f = R.drawable.class.getDeclaredField(name);
                 return f.getInt(f);
 
-            } catch (IllegalAccessException e) {
-                System.out.println("Fehler beim beziehen der ResourceId");
-            } catch (NoSuchFieldException e) {
+            } catch (IllegalAccessException | NoSuchFieldException e) {
                 System.out.println("Fehler beim beziehen der ResourceId");
             }
         }
         return null;
     }
 
-    public Integer StringToInt(String t){
+    public static Integer StringToInt(String t){
         if(t!=null) {
             return Integer.parseInt(t);
         }
         return null;
 	}
 
-    public Double StringToDouble(String t){
+    public static Double StringToDouble(String t){
         if(t!=null) {
             return Double.parseDouble(t);
         }
         return null;
     }
 
-    public List<Need> getNeedsFromXml(String file){
+    public static List<Need> getNeedsFromXml(String file){
         DataSource NeedsParser= new XML_Parser();
         InputStream is = null;
         try {
-            is = getAssets().open(file);
+            is = ctx.getAssets().open(file);
             NeedsParser.LoadFile(is);
             TreeNode allneeds = NeedsParser.getSuperParent();
             List<TreeNode> NeedsListTmp = NeedsParser.getAllChildsFrom(allneeds);
-            List<Need> NeedsList = new ArrayList();
+            List<Need> NeedsList = new ArrayList<>();
             int i = 0;
             while(i<NeedsList.size()) {
                 boolean activeDayNight;
@@ -272,11 +274,11 @@ public class InformationPublisher extends ContextWrapper{
     liest XML-File need aus
      */
 
-    public InformationPublisher(Context base, String file) {
-        super(base);
+    public static void init_InformationPublisher(Context base, String file) {
+        //super(base);
         ctx = base;
         try {
-            InputStream is = getAssets().open(file);
+            InputStream is = base.getAssets().open(file);
             ret = parser.LoadFile(is);
             /*InputStreamReader isr = new InputStreamReader(is);
             BufferedReader br = new BufferedReader(isr);

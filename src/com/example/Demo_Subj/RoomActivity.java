@@ -1,12 +1,8 @@
 package com.example.Demo_Subj;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
@@ -58,8 +54,9 @@ public class RoomActivity extends Activity {
 
         //VOR dem Subjekt müssen die Räume erzeugt werden, sonst funktioniert die Navigation nicht
         //fillRoomList();
-        InformationPublisher parser = new InformationPublisher(this.getApplicationContext(),"house.xml");
-        parser.setRoomlist(null);
+        InformationPublisher.init_InformationPublisher(this.getApplicationContext(),"house.xml");
+        InformationPublisher.setRoomlist(null);
+        InformationPublisher.getNeedsFromXml("needs.xml");//für Micha -> in die KI einfügen
 
         final Subject subject;
         subject = new Subject (this);
