@@ -12,7 +12,7 @@ import java.util.*;
 public class Intelligence {
     private int state = 0;      //Zustandvaribale für getNextAction; wird final nicht mehr benötigt
 
-    private Vector<Need> needs_list = new Vector<Need>(); 		//verwaltet die Bedürfnisse als abstrakte Objekte ohne konkretem Namen als Vektor
+    private List<Need> needs_list = new ArrayList<Need>(); 		//verwaltet die Bedürfnisse als abstrakte Objekte ohne konkretem Namen als Vektor
     private int	randomStart;		    //Konstante: Startwert für Zufallszahlengenerator
     private int	randomEnd;		        //Konstante: Endwert für Zufallszahlengenerator
     private int	maxMotivationIndex;   //Der Index in der Liste, wo das Bedürfnis mit der höchsten Motivation steht
@@ -39,13 +39,8 @@ public class Intelligence {
 
     //Liest die .xml und füllt den Vektor mit Bedürfnissen
     private void initVector(){
-        /*ToDo:
-            - InformationProvider aufrufen und fertige Liste von Bedürfnissen übergeben lassen
-            - Bedürfnisse beim Instanziieren in Vektor schieben
-            - eventuell nochmals prüfen, ob an allen Indizees ein Bedürfnis stehhe, um
-
-             needs_list.addElement( new Need(top_level, priority, description, object_ID, day_night));
-         */
+        needs_list.clear();
+        needs_list.addAll(InformationPublisher.getNeedsFromXml("needs.xml"));
     }
 
     //Belegt die privaten Attribute mit Anfangswerten
@@ -76,9 +71,9 @@ public class Intelligence {
     //Aufruf von Subjekt; Gibt Objekt_ID zurück, zu der das Subjekt als nächstes laufen soll
     public Object getNextObject(){
         //Bedürfnis mit der höchsten Motivation resetten
-        needs_list.elementAt(maxMotivationIndex).setCurrentValue(0);
+        needs_list.get(maxMotivationIndex).setCurrentValue(0);
 
-        return World.getItemById(needs_list.elementAt(maxMotivationIndex).getObjectID());
+        return World.getItemById(needs_list.get(maxMotivationIndex).getObjectID());
     }
 
     //um mit dem unfertigen Projekt kompilieren zu können, wird die Method noch beibehalten
@@ -108,7 +103,7 @@ public class Intelligence {
         //Liste inkrementieren
         for(int i=0; i < needs_list.size(); i++) {
             //bedürfnis aus Liste nehmen
-            beduerfnis = needs_list.elementAt(i);
+            beduerfnis = needs_list.get(i);
 
             //Prüfen ob Tag oder Nacht ist und die entsprechenden Bedürfnisse nutzen
             if (day && beduerfnis.getActiveDayNight()) { //es ist Tag und Bedürfnis ist tagaktiv
@@ -131,12 +126,12 @@ public class Intelligence {
 
         try {
             //aktuellen Wert ändern; aktueller Wert = aktueller Wert + Zufallszahl
-            needs_list.elementAt(index).setCurrentValue(needs_list.elementAt(index).getCurrentValue() + getIntRandom());
+            needs_list.get(index).setCurrentValue(needs_list.get(index).getCurrentValue() + getIntRandom());
 
             //Motivation neu berechnen; Motivation = Priorität * (aktueller Wert - Schwellwert)
-            needs_list.elementAt(index).setMotivation(needs_list.elementAt(index).getPriority() * (needs_list.elementAt(index).getCurrentValue() - needs_list.elementAt(index).getTopLevel()));
+            needs_list.get(index).setMotivation(needs_list.get(index).getPriority() * (needs_list.get(index).getCurrentValue() - needs_list.get(index).getTopLevel()));
         }
-        catch(ArrayIndexOutOfBoundsException e){ //Wird von elementAt(index) geworfen, wenn dieser Index nicht im Vektor existiert.
+        catch(ArrayIndexOutOfBoundsException e){ //Wird von get(index) geworfen, wenn dieser Index nicht im Vektor existiert.
             //Exception wird geloggt
             Log.e("LCP_Intelligence", "Index " + index + " does not exist in needs_list.",e);
 
@@ -160,13 +155,13 @@ public class Intelligence {
 
         //Höchte Motivation finden:
         //neuer index, wenn neue höchste Motivation
-        if(needs_list.elementAt(index).getMotivation() > motivation_highest){
+        if(needs_list.get(index).getMotivation() > motivation_highest){
             maxMotivationIndex = index;
-            motivation_highest = needs_list.elementAt(index).getMotivation();
+            motivation_highest = needs_list.get(index).getMotivation();
             //neuer Index, wenn Motivationen übereinstimmen UND Priorität des neuen Bedürfnisses größer ist der Priorität des alten Bedürfnisses
-        }else if(needs_list.elementAt(index).getMotivation() == motivation_highest && (needs_list.elementAt(index).getPriority() > needs_list.elementAt(maxMotivationIndex).getPriority())){
+        }else if(needs_list.get(index).getMotivation() == motivation_highest && (needs_list.get(index).getPriority() > needs_list.get(maxMotivationIndex).getPriority())){
             maxMotivationIndex = index;
-            motivation_highest = needs_list.elementAt(index).getMotivation();
+            motivation_highest = needs_list.get(index).getMotivation();
         }
 
         return motivation_highest;
