@@ -9,6 +9,8 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.provider.MediaStore;
+
 import java.io.IOException;
 
 public class Sound {
@@ -51,8 +53,9 @@ public class Sound {
                 mediaplayer.start();
                 mediaplayer.setVolume(1.0f, 1.0f);
 
-                AudioManager mAudioManager = (AudioManager)ctx.getSystemService(ctx.AUDIO_SERVICE);
-                mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mAudioManager.getStreamMaxVolume (AudioManager.STREAM_MUSIC), 0);
+                //AudioManager mAudioManager = (AudioManager)ctx.getSystemService(ctx.AUDIO_SERVICE);
+                //mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mAudioManager.getStreamMaxVolume (AudioManager.STREAM_MUSIC), 0);
+
 
                 while (mediaplayer.getCurrentPosition() != mediaplayer.getDuration()) {
 

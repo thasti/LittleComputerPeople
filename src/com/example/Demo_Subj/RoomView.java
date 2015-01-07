@@ -38,6 +38,7 @@ public class RoomView extends View {
     private int direction;
     private float subjXPos;
     private float subjYPos;
+    private Sound sound;
 
     private int holdAnimCycles = 15;
     private int animCycle = 0;
@@ -51,6 +52,8 @@ public class RoomView extends View {
         resources = getResources();
 
         decodedObjBitmap = new ArrayList<Bitmap>();
+
+        sound = new Sound(this.getContext());
 
         subject = GlobalInformation.getSubject();
         initSubject();
@@ -122,6 +125,8 @@ public class RoomView extends View {
                 itemId = drawRoom.getContainingitems().get(i);
                 decodedObjBitmap.add(BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresource()));
             }
+
+            sound.startSound(R.raw.sound_door);
         }
 
         if (drawRoom == null) {
@@ -212,8 +217,19 @@ public class RoomView extends View {
         switch (eventAction) {
             case MotionEvent.ACTION_DOWN:
                 // Traverse all Objects in the current room
-                int itemId;
 
+                Rect boundingBoxSubject = new Rect((int)subject.getXPos(),
+                        (int)subject.getYPos(),
+                        (int)subject.getXPos() + subjStand.getWidth(),
+                        (int)subject.getYPos() + subjStand.getHeight());
+
+                if (boundingBoxSubject.contains((int)event.getX(), (int)event.getY())) {
+                    // TODO call the use() function of the item
+                    Intent i = new Intent(ctx, ChatActivity.class);
+                    ctx.startActivity(i);
+                }
+
+                int itemId;
                 int itemcount = 0;
 
                 try{
@@ -224,26 +240,14 @@ public class RoomView extends View {
 
                 for(int i = 0; i < itemcount; i++){
                     itemId = drawRoom.getContainingitems().get(i);
-                    RectF boundingBox = new RectF(World.getItemById(itemId).getXPos().floatValue(),
+                    RectF boundingBoxItem = new RectF(World.getItemById(itemId).getXPos().floatValue(),
                             World.getItemById(itemId).getYPos().floatValue(),
                             World.getItemById(itemId).getXPos().floatValue() + BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresource()).getWidth(),
                             World.getItemById(itemId).getYPos().floatValue() + BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresource()).getHeight());
-                    if (boundingBox.contains((int)event.getX(), (int)event.getY())) {
+                    if (boundingBoxItem.contains((int)event.getX(), (int)event.getY())) {
                         // TODO call the use() function of the item
                         Toast.makeText(getContext(), "Click on " + World.getItemById(itemId).toString(), Toast.LENGTH_SHORT).show();
                     }
-                }
-
-
-                Rect boundingBox = new Rect((int)subject.getXPos(),
-                        (int)subject.getYPos(),
-                        (int)subject.getXPos() + subjStand.getWidth(),
-                        (int)subject.getYPos() + subjStand.getHeight());
-
-                if (boundingBox.contains((int)event.getX(), (int)event.getY())) {
-                    // TODO call the use() function of the item
-                    Intent i = new Intent(ctx, ChatActivity.class);
-                    ctx.startActivity(i);
                 }
 
                 Rect changeViewBox = new Rect(0,0, 50, 50);
