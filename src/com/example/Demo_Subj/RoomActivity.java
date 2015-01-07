@@ -60,7 +60,6 @@ public class RoomActivity extends Activity {
         //fillRoomList();
         InformationPublisher.init_InformationPublisher(this.getApplicationContext(),"house.xml");
         InformationPublisher.setRoomlist(null);
-        InformationPublisher.getNeedsFromXml("needs.xml");//für Micha -> in die KI einfügen
 
         final Subject subject;
         subject = new Subject (this);
