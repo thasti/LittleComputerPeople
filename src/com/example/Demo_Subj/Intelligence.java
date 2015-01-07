@@ -74,7 +74,7 @@ public class Intelligence {
     }
 
     //Aufruf von Subjekt; Gibt Objekt_ID zurück, zu der das Subjekt als nächstes laufen soll
-    public Object getNextObject(){
+    public Item getNextItem(){
         //Bedürfnis mit der höchsten Motivation resetten
         needs_list.elementAt(maxMotivationIndex).setCurrentValue(0);
 
