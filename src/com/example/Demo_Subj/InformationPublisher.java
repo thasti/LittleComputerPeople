@@ -249,7 +249,7 @@ public class InformationPublisher extends ContextWrapper{
             List<TreeNode> NeedsListTmp = NeedsParser.getAllChildsFrom(allneeds);
             List<Need> NeedsList = new ArrayList<>();
             int i = 0;
-            while(i<NeedsList.size()) {
+            while(i<NeedsListTmp.size()) {
                 boolean activeDayNight;
                 if(StringToInt(NeedsListTmp.get(i).Nodes.get("daynight")) == 1) {
                     activeDayNight = true;
@@ -264,6 +264,7 @@ public class InformationPublisher extends ContextWrapper{
                         activeDayNight));
                 i++;
             }
+            System.out.println("Groeße Needslist:"+NeedsList.size());
             return NeedsList;
         } catch (IOException e) {
             System.out.println("Fehler beim NeedsXML parsen!");
