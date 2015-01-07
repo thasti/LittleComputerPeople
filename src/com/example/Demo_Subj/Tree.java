@@ -168,16 +168,6 @@ public class Tree {
     **********************************************************************************************/
 
 	public int StringToInt(String t){
-		/*char[] a = t.toCharArray();
-		int z=0,i=0;
-		while(i<a.length){
-			int exp = (int)Math.pow(10,a.length-i-1);
-			if(exp ==0)
-				exp = 1;
-			z += (a[i]-48)*exp;
-			i++;
-		}
-		return z;*/
         return Integer.parseInt(t);
 	}
 
