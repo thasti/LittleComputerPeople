@@ -126,7 +126,7 @@ public class RoomView extends View {
                 decodedObjBitmap.add(BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresource()));
             }
 
-            //sound.startSound(R.raw.sound_door);
+            sound.startSound(R.raw.sound_door);
         }
 
         if (drawRoom == null) {
