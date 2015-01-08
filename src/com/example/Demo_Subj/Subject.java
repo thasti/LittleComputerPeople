@@ -73,9 +73,34 @@ public class Subject {
         if((xPos == xDest) && (GlobalInformation.getCurrentRoom() == destRoomID)){
             routeRoomNum = 0;
             // we finished the last action, so get the next from the KI
-            //ToDO: Schnittstelle muss auf getNextObject() umgestellt werdne; ist aber noch nicht genau spezifiziert
-            SubjectMoveAction nextAction = intel.getNextAction();
-            setDest(nextAction.getDestX(), nextAction.getDestRoom());
+            //ToDO: Schnittstelle muss auf getNextItem() umgestellt werdne; ist aber noch nicht genau spezifiziert
+
+            Item destItem = null;
+
+            try{
+                destItem = intel.getNextItem();
+            }catch(NullPointerException e){
+                e.printStackTrace();
+            }
+
+            if (destItem == null){
+                SubjectMoveAction nextAction = intel.getNextAction();
+                setDest(nextAction.getDestX(), nextAction.getDestRoom());
+            }
+
+            else{
+                //Quasi ein getRoomByItem()- muss dann in World rein
+                for (int i = 0; i < GlobalInformation.getRoomList().size(); i++) { //geht jeden Raum durch
+                    Room j = World.getRoomById(i);
+                    for (int k = 0; k < j.getContainingitems().size(); k++) {        //geht jedes Objekt im aktuellen Raum durch
+                        if (destItem.getID() == j.getContainingitems().get(k)) {    //wenn die ItemID im aktuellen Raum ist
+                            destRoomID = i;                                          //dann ist der destRoom = i;
+                        }
+                    }
+                }
+                setDest(destItem.getXPos().floatValue(), destRoomID);
+            }
+
             route = dijkstra.dijkstra(World.getRoomById(GlobalInformation.getCurrentRoom()), World.getRoomById(destRoomID));
             // move.getDestItem().use();
         }
