@@ -65,9 +65,21 @@ public class InformationPublisher extends ContextWrapper{
                         m++;
                     }
                     Integer ResId = ResourceNameToInt(object_list.get(i).Nodes.get("name"));
-                    Item it_tmp = new Item(StringToInt(object_list.get(i).Nodes.get("objectID")),ResId, GlobalInformation.getScreenWidth()*StringToDouble(object_list.get(i).Nodes.get("x-position")), GlobalInformation.getScreenHeight()*StringToDouble(object_list.get(i).Nodes.get("y-position")),object_list.get(i).Nodes.get("need"), StringToInt(object_list.get(i).Nodes.get("sound")), StringToInt(object_list.get(i).Nodes.get("popup")), StringToInt(object_list.get(i).Nodes.get("user")),animationImages,ctx);
-					World.setItem(StringToInt(object_list.get(i).Nodes.get("objectID")), it_tmp);
-				}
+                    try {
+                        Item it_tmp = new Item(StringToInt(object_list.get(i).Nodes.get("objectID")), ResId, GlobalInformation.getScreenWidth() * StringToDouble(object_list.get(i).Nodes.get("x-position")), GlobalInformation.getScreenHeight() * StringToDouble(object_list.get(i).Nodes.get("y-position")), object_list.get(i).Nodes.get("need"), StringToInt(object_list.get(i).Nodes.get("sound")), StringToInt(object_list.get(i).Nodes.get("popup")), StringToInt(object_list.get(i).Nodes.get("user")), animationImages, ctx);
+                        World.setItem(StringToInt(object_list.get(i).Nodes.get("objectID")), it_tmp);
+                    }
+                    catch(NullPointerException e){
+                        System.out.println("Fehler beim erzeugen von Item"+i);
+                        try{
+                            System.out.println("ItemID:"+object_list.get(i).Nodes.get("objectID"));
+                        }
+                        catch(NullPointerException f){
+                            System.out.println("ItemID kann nicht angezeigt werden!");
+                        }
+                        System.out.println("Parameter zum befüllen fehlt?");
+                    }
+                }
 				i++;
 			}
             return ObjectIds;
@@ -113,25 +125,48 @@ public class InformationPublisher extends ContextWrapper{
 				if(room_list.get(i).Nodes.get("roomID")!=null){
                     List<Integer> object_list = setObjectlistForOneRoom(StringToInt(room_list.get(i).Nodes.get("roomID")));
                     Integer ResId = ResourceNameToInt(room_list.get(i).Nodes.get("name"));
-                    Room room_tmp= new Room(StringToInt(room_list.get(i).Nodes.get("roomID")),ResId, StringToDouble(room_list.get(i).Nodes.get("x-position")), StringToDouble(room_list.get(i).Nodes.get("y-position")),object_list,ctx);
+                    try {
+                        Room room_tmp = new Room(StringToInt(room_list.get(i).Nodes.get("roomID")), ResId, StringToDouble(room_list.get(i).Nodes.get("x-position")), StringToDouble(room_list.get(i).Nodes.get("y-position")), object_list, ctx);
+                        /*fuer Raumnavigation die jeweils benachbarten Raeume einstellen solange es nicht in der XML vorhanden ist*/
+                        /*Festlegung, als 2 Schläuche übereinander*/
+                        int left_room, right_room, up_room, down_room;
+                        //linken Raum setzen
+                        if ((i == 0) || (i == 3))
+                            left_room = -1;
+                        else
+                            left_room = StringToInt(room_list.get(i - 1).Nodes.get("roomID"));
+                        //rechten Raum setzen
+                        if ((i == (room_list.size() - 1)) || (i == 2))
+                            right_room = -1;
+                        else
+                            right_room = StringToInt(room_list.get(i + 1).Nodes.get("roomID"));
+                        //oberen/unteren Raum setzen
+                        if (i == 1)
+                            up_room = 4;
+                        else
+                            up_room = -1;
+                        if (i == 4)
+                            down_room = 1;
+                        else
+                            down_room = -1;
+                        //in Room übernehmen
+                        room_tmp.setAttachedRooms(left_room, right_room, up_room, down_room);
+                        /*Ende*/
+                        /*Hier muessen spaeter die Informationen aus der XML geholt werden*/
 
-                    /*fuer Raumnavigation die jeweils benachbarten Raeume einstellen*/
-                    /*Festlegung, alles erstmal nur nen Schlauch*/
-                    int left_room,right_room;
-                    if(i==0)
-                        left_room=-1;
-                    else
-                        left_room = StringToInt(room_list.get(i-1).Nodes.get("roomID"));
-                    if(i==(room_list.size()-1))
-                        right_room=-1;
-                    else
-                        right_room = StringToInt(room_list.get(i+1).Nodes.get("roomID"));
-                    room_tmp.setAttachedRooms(left_room,right_room,-1,-1);
-                    /*Ende*/
-                    /*Hier muessen spaeter die Informationen aus der XML geholt werden*/
-
-                    roomId_list.add(StringToInt(room_list.get(i).Nodes.get("roomID")));
-                    World.setRoom(StringToInt(room_list.get(i).Nodes.get("roomID")), room_tmp);
+                        roomId_list.add(StringToInt(room_list.get(i).Nodes.get("roomID")));
+                        World.setRoom(StringToInt(room_list.get(i).Nodes.get("roomID")), room_tmp);
+                    }
+                    catch(NullPointerException e){
+                        System.out.println("Fehler beim erzeugen von Room"+i);
+                        try{
+                            System.out.println("RaumID:"+room_list.get(i).Nodes.get("roomID"));
+                        }
+                        catch(NullPointerException f){
+                            System.out.println("RoomID kann nicht angezeigt werden!");
+                        }
+                        System.out.println("Parameter zum befüllen fehlt?");
+                    }
 
 				}
 				i++;

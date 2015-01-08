@@ -21,7 +21,7 @@
     </room>
     <room name="staircase_down" roomID = "4">
         <object name="phone" objectID = "12" need="talk" sound="1" popup="0" user="0" x-position="0.75" y-position="0.45"></object>
-        <object name="lightswitch" objectID = "13" need="light" sound="0" popup="0" user="1" x-position="0.31" y-position="0.49"></object>
+        <object name="light" objectID = "13" need="light" sound="0" popup="0" user="1" x-position="0.31" y-position="0.49"></object>
     </room>
     <room name = "bath" roomID = "5">
         <object name="shower" objectID = "14" need="hygiene" sound="1" popup="0" user="0" x-position="0.31" y-position="0.37"></object>
