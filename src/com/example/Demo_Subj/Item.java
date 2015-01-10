@@ -27,6 +27,8 @@ public class Item {
     private Integer sound;
     private Integer popup;
     private Integer user;
+    private Integer useTime = 200;
+    private Integer usedTime = 0;
     List<String> pics_for_animation;
     private Context context;
 
@@ -111,6 +113,9 @@ public class Item {
         return this.popup;
     }
 
+    public Integer isUsed(){
+        return actstate;
+    }
     //
     public Integer getUser(){
         return this.user;
@@ -126,14 +131,30 @@ public class Item {
     public void tick(){
         //sets the graphic-id for the renderer
         if (this.actstate == 2){
-            //TODO: animation caused by subjekt -->renderer
+           if(usedTime < useTime){
+               usedTime++;
+               //System.out.println("Waiting");
+           }
+           else
+           {
+               usedTime=0;
+               this.resetActstate();
+           }
         }
         else if (this.actstate == 1){
             //TODO: animation caused by user -->renderer
+            if(usedTime < useTime){
+                usedTime++;
+            }
+            else
+            {
+                usedTime=0;
+                this.resetActstate();
+            }
         }
         //if item is inactive
         else{
-            //this.akt_graphics_id = this.default_graphics_id;
+           //this.akt_graphics_id = this.default_graphics_id;
         }
     }
 

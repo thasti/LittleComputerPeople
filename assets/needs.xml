@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <allneeds>
-    <need name = "greenthumb" needID = "1" priority="5" daynight="1" toplevel="5" objectID="1"></need>
-    <need name="sleep" needID = "2" priority="6" daynight="0" toplevel="30" objectID="2"></need>
-    <need name = "information" needID = "3" priority="3" daynight="0" toplevel="80" objectID="3"></need>
-    <need name = "hear" needID ="4" priority="4" daynight="0" toplevel="80" objectID="4"></need>
-    <need name = "readcurrent" needID = "5" priority="3" daynight="0" toplevel="90" objectID="5"></need>
-    <need name = "watchtv" needID ="6" priority = "5" daynight="0" toplevel="70" objectID="6"></need>
-    <need name = "readtime" needID = "7" priority="2" daynight="1" toplevel="70" objectID="7"></need>
-    <need name = "freshair" needID = "8" priority="7" daynight="0" toplevel="90" objectID="8"></need>
-    <need name = "cook" needID = "9" priority="6" daynight="0" toplevel="30" objectID="9"></need>
-    <need name = "hunger" needID = "10" priority="8" daynight="0" toplevel="50" objectID="10"></need>
-    <need name = "drink" needID ="11" priority="2" daynight="0" toplevel="90" objectID="11"></need>
-    <need name = "talk" needID = "12" priority="7" daynight="0" toplevel="60" objectID="12"></need>
-    <need name = "light" needID = "13" priority="9" daynight="1" toplevel="10" objectID="13"></need>
-    <need name = "hygiene" needID = "14" priority="3" daynight="0" toplevel="50" objectID="14"></need>
-    <need name = "water" needID = "15" priority="4" daynight="0" toplevel="100" objectID="15"></need>
+    <need name = "greenthumb" 	needID = "1" 	priority="1" daynight="1" toplevel="50" objectID="1"></need>
+    <need name=  "sleep" 		needID = "2" 	priority="6" daynight="0" toplevel="30" objectID="2"></need>
+    <need name = "information" 	needID = "3" 	priority="3" daynight="1" toplevel="80" objectID="3"></need>
+    <need name = "hear" 		needID ="4" 	priority="4" daynight="1" toplevel="80" objectID="4"></need>
+    <need name = "readcurrent" 	needID = "5" 	priority="3" daynight="1" toplevel="90" objectID="5"></need>
+    <need name = "watchtv" 	    needID ="6" 	priority="5" daynight="0" toplevel="70" objectID="6"></need>
+    <need name = "readtime" 	needID = "7" 	priority="2" daynight="1" toplevel="70" objectID="7"></need>
+    <need name = "freshair" 	needID = "8" 	priority="7" daynight="1" toplevel="90" objectID="8"></need>
+    <need name = "cook" 		needID = "9" 	priority="6" daynight="1" toplevel="30" objectID="9"></need>
+    <need name = "hunger" 		needID = "10" 	priority="8" daynight="0" toplevel="50" objectID="10"></need>
+    <need name = "drink" 		needID ="11" 	priority="6" daynight="1" toplevel="90" objectID="11"></need>
+    <need name = "talk" 		needID = "12" 	priority="7" daynight="1" toplevel="60" objectID="12"></need>
+    <need name = "light" 		needID = "13" 	priority="1" daynight="0" toplevel="30" objectID="13"></need>
+    <need name = "hygiene" 	    needID = "14"	priority="3" daynight="1" toplevel="20" objectID="14"></need>
+    <need name = "water"		needID = "15"	priority="2" daynight="0" toplevel="100" objectID="15"></need>
 </allneeds>

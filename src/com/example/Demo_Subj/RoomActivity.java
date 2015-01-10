@@ -6,10 +6,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,12 +86,42 @@ public class RoomActivity extends Activity {
             public void run(){
                 if (paused == false) {
                     subject.tick();
+
+                    List<Integer> items = new ArrayList<>();
+                    int itemCount = 0;
+                    try{
+                        items = (World.getRoomById(GlobalInformation.getCurrentRoom())).getContainingitems();
+                        itemCount = items.size();
+                    }catch (NullPointerException e){
+                        e.printStackTrace();
+                    }
+
+                    for(int i = 0; i < itemCount; i++){
+                        Item item = World.getItemById(items.get(i));
+                        item.tick();
+                    }
+
                     grafik.postInvalidate();
+
                     InternalClock.computeTime();
+                }
+
+                if (GlobalInformation.getToastMessage() != "void"){
+                    final String message = GlobalInformation.getToastMessage();
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    GlobalInformation.setToastMessage("void");
                 }
             }
         }, 0, tick);
     }
+
+
 
     @Override
     public void onBackPressed() {
