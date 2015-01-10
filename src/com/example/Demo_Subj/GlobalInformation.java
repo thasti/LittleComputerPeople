@@ -12,9 +12,13 @@ public class GlobalInformation {
     private static int currentRoom = 0;
     private static List<Room> roomList;
     private static Subject subject;
-
+    private static String toastMessage = "null";
 
     private GlobalInformation(){};
+
+    public static String getToastMessage(){return toastMessage;}
+
+    public static void setToastMessage(String message){toastMessage = message;}
 
     public static int getScreenHeight() {
         return screenHeight;

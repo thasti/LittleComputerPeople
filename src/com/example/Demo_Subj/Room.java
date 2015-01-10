@@ -44,6 +44,7 @@ public class Room {
         attachedRooms = new ArrayList<Integer>();
         containingitems = new ArrayList<Integer>();
         containingitems = containingitemslist;
+
         //TODO populate this object list from XML information instead
 
         /*

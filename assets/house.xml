@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <house>
     <room name="bedroom" roomID ="0">
-        <object name="plant" objectID = "1" need="greenthumb" sound="0" popup="0" user="0" x-position="0.63" y-position="0.46"></object>
-        <object name="bed" objectID = "2" need="sleep" sound="1" popup="0" user="1" x-position="0.24" y-position="0.59"></object>
-        <object name="computer" objectID = "3" need="information" sound="1" popup="0" user="1" x-position="0.79" y-position="0.49"></object>
-        <object name="radio" objectID = "4" need="hear" sound="1" popup="0" user="1" x-position="0.27" y-position="0.41"></object>
+        <object name="plant" objectID = "1" need="greenthumb" sound="0" popup="0" user="0" x-position="0.45" y-position="0.18"></object>
+        <object name="bed" objectID = "2" need="sleep" sound="1" popup="0" user="1" x-position="0.08" y-position="0.39"></object>
+        <object name="computer" objectID = "3" need="information" sound="1" popup="0" user="1" x-position="0.59" y-position="0.25"></object>
+        <object name="radio" objectID = "4" need="hear" sound="1" popup="0" user="1" x-position="0.45" y-position="0.00"></object>
     </room>
     <room name="staircase_up" roomID = "1">
-        <object name="electricmeter" objectID = "5" need="readcurrent" sound="0" popup="0" user="1" x-position="0.56" y-position="0.44"></object>
+        <object name="electricmeter" objectID = "5" need="readcurrent" sound="0" popup="0" user="1" x-position="0.36" y-position="0.24"></object>
     </room>
     <room name="livingroom" roomID = "2">
         <object name="tv" objectID ="6" need="watchtv" sound="0" popup="0" user="1" x-position="0.38" y-position="0.4"></object>
         <object name="clock" objectID = "7" need="readtime" sound="1" popup="0" user="0" x-position="0.75" y-position="0.1"></object>
     </room>
     <room name="kitchen" roomID = "3">
-        <object name="window" objectID = "8" need="freshair" sound="1" popup="0" user="1" x-position="0.6" y-position="0.42"></object>
-        <object name="cooker" objectID= "9" need="cook" sound="0" popup="0" user="1" x-position="0.81" y-position="0.47"> </object>
-        <object name="table" objectID = "10" need="hunger" sound="0" popup="0" user="0" x-position="0.26" y-position="0.55"></object>
-        <object name="boddle" objectID = "11" need="drink" sound="0" popup="0" user="0" x-position="0.24" y-position="0.43"></object>
+        <object name="window" objectID = "8" need="freshair" sound="1" popup="0" user="1" x-position="0.4" y-position="0.10"></object>
+        <object name="cooker" objectID= "9" need="cook" sound="0" popup="0" user="1" x-position="0.55" y-position="0.20"> </object>
+        <object name="table" objectID = "10" need="hunger" sound="0" popup="0" user="0" x-position="0.12" y-position="0.35"></object>
+        <object name="boddle" objectID = "11" need="drink" sound="0" popup="0" user="0" x-position="0.12" y-position="0.30"></object>
     </room>
     <room name="staircase_down" roomID = "4">
-        <object name="phone" objectID = "12" need="talk" sound="1" popup="0" user="0" x-position="0.75" y-position="0.45"></object>
-        <object name="light" objectID = "13" need="light" sound="0" popup="0" user="1" x-position="0.31" y-position="0.49"></object>
+        <object name="phone" objectID = "12" need="talk" sound="1" popup="0" user="0" x-position="0.65" y-position="0.15"></object>
+        <object name="light" objectID = "13" need="light" sound="0" popup="0" user="1" x-position="0.07" y-position="0.00"></object>
     </room>
     <room name = "bath" roomID = "5">
-        <object name="shower" objectID = "14" need="hygiene" sound="1" popup="0" user="0" x-position="0.31" y-position="0.37"></object>
-        <object name="washbasin" objectID = "15" need="water" sound="1" popup="0" user="0" x-position="0.83" y-position="0.21"></object>
+        <object name="shower" objectID = "14" need="hygiene" sound="1" popup="0" user="0" x-position="0.21" y-position="0.10"></object>
+        <object name="washbasin" objectID = "15" need="water" sound="1" popup="0" user="0" x-position="0.53" y-position="0.31"></object>
     </room>
 </house>

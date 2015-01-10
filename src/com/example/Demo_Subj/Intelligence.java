@@ -88,10 +88,10 @@ public class Intelligence {
         switch (state) {
             case 0:
                 state = 1;
-                return new SubjectMoveAction(680, 1);
+                return new SubjectMoveAction(680, 0);
             case 1:
                 state = 0;
-                return new SubjectMoveAction(40, 0);
+                return new SubjectMoveAction(40, 5);
         }
         return new SubjectMoveAction(0, 1);
     }

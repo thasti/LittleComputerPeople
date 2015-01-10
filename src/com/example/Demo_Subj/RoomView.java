@@ -121,9 +121,14 @@ public class RoomView extends View {
                 e.printStackTrace();
             }
 
-            for(int i = 0; i < itemcount; i++){
-                itemId = drawRoom.getContainingitems().get(i);
-                decodedObjBitmap.add(BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresource()));
+            if (drawRoom.getContainingitems().isEmpty()){
+                itemcount = 0;
+            }
+            else{
+                for(int i = 0; i < itemcount; i++){
+                    itemId = drawRoom.getContainingitems().get(i);
+                    decodedObjBitmap.add(BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresource()));
+                }
             }
 
             sound.startSound(R.raw.sound_door);
@@ -146,16 +151,22 @@ public class RoomView extends View {
             e.printStackTrace();
         }
 
-        //zeichnet die Bitmaps
-        int itemId;
-        for(int i = 0; i < itemBmp; i++){
-            itemId = drawRoom.getContainingitems().get(i);
-            canvas.drawBitmap(
-                    decodedObjBitmap.get(i),
-                    World.getItemById(itemId).getXPos().floatValue(),
-                    World.getItemById(itemId).getYPos().floatValue(),
-                    p
-            );
+        if (drawRoom.getContainingitems().isEmpty()){
+            itemBmp = 0;
+        }
+
+        else{
+            //zeichnet die Bitmaps
+            int itemId;
+            for(int i = 0; i < itemBmp; i++){
+                itemId = drawRoom.getContainingitems().get(i);
+                canvas.drawBitmap(
+                        decodedObjBitmap.get(i),
+                        World.getItemById(itemId).getXPos().floatValue(),
+                        World.getItemById(itemId).getYPos().floatValue(),
+                        p
+                );
+            }
         }
 
         // draw all items (TODO: add layering)
