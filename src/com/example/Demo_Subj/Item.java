@@ -4,6 +4,7 @@ package com.example.Demo_Subj;
 
 import java.util.List;
 import android.content.Context;
+import android.content.res.Resources;
 
 /**
  * Created by johannes on 24.11.2014.
@@ -21,6 +22,9 @@ public class Item {
 
     private Integer id; //Item-ID
     private Integer picresource;
+    private Integer picresourceAnimUser;
+    private Integer picresourceAnimSubj;
+
     private Double xPos;
     private Double yPos;
     private String need;
@@ -31,6 +35,8 @@ public class Item {
     private Integer usedTime = 0;
     List<String> pics_for_animation;
     private Context context;
+
+    private String itemName = "void";
 
     private int default_graphics_id; //default
     private int akt_graphics_id; //name of resource to draw
@@ -43,7 +49,7 @@ public class Item {
 
 
     //constructor
-    public Item(Integer ID, Integer picresource, Double x, Double y, String need, Integer sound, Integer popup, Integer user, List<String> pics_for_animation, Context context){
+    public Item(Integer ID, Integer picresource, Double x, Double y, String need, Integer sound, Integer popup, Integer user, List<String> pics_for_animation, String itemName, Context context){
 
 
         this.id = ID;
@@ -56,7 +62,9 @@ public class Item {
         this.user = user;
         this.pics_for_animation = pics_for_animation;
         this.context = context;
+        this.itemName = itemName;
 
+        this.sound = context.getResources().getIdentifier("raw/"+itemName+"_s","raw", context.getPackageName());
 
     }
     //get resource-id from resource-name
@@ -66,6 +74,8 @@ public class Item {
         return GlobalInformation.context.getResources().getIdentifier(resourcename , "drawable", GlobalInformation.context.getPackageName());
     }
     */
+
+
 
     //the renderer sets the activity state to 0 (unused) if the animation finished?!
     public void resetActstate(){
@@ -176,5 +186,9 @@ public class Item {
         itemAnimbyUser.add(resNameToResID(graphicsname));
     }
     */
+
+    public int getSoundRes(){
+        return sound;
+    }
 
 }

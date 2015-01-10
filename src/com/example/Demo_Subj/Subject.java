@@ -1,14 +1,9 @@
 package com.example.Demo_Subj;
 
 import android.content.Context;
-import android.os.Handler;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
-import android.app.Activity;
 
-import javax.microedition.khronos.opengles.GL10;
 
 
 /**
@@ -31,6 +26,9 @@ public class Subject {
     private Item prevItem;
     private Integer wait = 0;
 
+    private int subjectSpeed = 1;
+    private Sound sound;
+
     private List<Room> route;
     private int routeRoomNum = 0;
 
@@ -41,6 +39,8 @@ public class Subject {
     public Subject(Context ctx) {
         context = ctx;
         intel = new Intelligence();
+
+        sound = new Sound(ctx);
 
         fillWalkingIntegerLists();
 
@@ -92,7 +92,7 @@ public class Subject {
         if (wait == 0){
             // TODO hier sollte das Animations-Zeugs eigentlich nicht gemacht werden, nur die Bewegung
             // die Animation sollte das GraphicalOutput dann aus dem Zustand und der Richtung erzeugen (oder?)
-            if (((xPos == xDest) | ((xPos <= xDest + 1) && (xPos >= xDest - 1))) && (GlobalInformation.getCurrentRoom() == destRoomID)) {
+            if (((xPos == xDest) | ((xPos <= xDest + subjectSpeed) && (xPos >= xDest - subjectSpeed))) && (GlobalInformation.getCurrentRoom() == destRoomID)) {
                 wait = 1;
 
                 try{
@@ -100,6 +100,17 @@ public class Subject {
                 }catch (NullPointerException e)
                 {
                     e.printStackTrace();
+                }
+
+                int soundID = 0;
+                try{
+                    soundID = destItem.getSoundRes();
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+
+                if(soundID != 0) {
+                    sound.startSound(soundID);
                 }
 
                 routeRoomNum = 0;
@@ -145,41 +156,41 @@ public class Subject {
             } else if (GlobalInformation.getCurrentRoom() == destRoomID) {
                 if (xPos > xDest) {
                     direction = -1;
-                    xPos--;
+                    xPos = xPos - subjectSpeed;
                 } else {
                     direction = 1;
-                    xPos++;
+                    xPos = xPos + subjectSpeed;
                 }
             } else if (GlobalInformation.getCurrentRoom() != destRoomID) {
-                if (xPos == 0) {
+                if (xPos <= 0) {
                     routeRoomNum++;
                     GlobalInformation.setCurrentRoom(route.get(routeRoomNum).getID());
                     xPos = GlobalInformation.getScreenWidth() - 1;//kann nicht GlobalInformation.getScreenWidth() sein sonst geht die Fkt unten wieder rein
-                } else if (xPos == (GlobalInformation.getScreenWidth())) {
+                } else if (xPos >= (GlobalInformation.getScreenWidth())) {
                     routeRoomNum++;
                     GlobalInformation.setCurrentRoom(route.get(routeRoomNum).getID());
                     xPos = 1;//kann nicht 0 sein sonst geht die Fkt oben wieder rein (xPos == 0)
-                } else if ((xPos == (GlobalInformation.getScreenWidth() / 2)) &&
+                } else if (((xPos >= ((GlobalInformation.getScreenWidth() / 2) - subjectSpeed)) &&(xPos <= ((GlobalInformation.getScreenWidth() / 2) + subjectSpeed))) &&
                         ((route.get(routeRoomNum + 1).getID() == lower) ||
-                                (route.get(routeRoomNum + 1).getID() == upper))) {
+                        (route.get(routeRoomNum + 1).getID() == upper))){
                     routeRoomNum++;
                     GlobalInformation.setCurrentRoom(route.get(routeRoomNum).getID());
                     xPos = GlobalInformation.getScreenWidth() / 2;//kann nicht 0 sein sonst geht die Fkt oben wieder rein (xPos == 0)
                 } else {
                     if (route.get(routeRoomNum + 1).getID() == right) {
                         direction = 1;
-                        xPos++;
+                        xPos += subjectSpeed;
                     } else if (route.get(routeRoomNum + 1).getID() == left) {
                         direction = -1;
-                        xPos--;
+                        xPos -= subjectSpeed;
                     } else if ((route.get(routeRoomNum + 1).getID() == lower) ||
                             (route.get(routeRoomNum + 1).getID() == upper)) {
                         if (xPos > (GlobalInformation.getScreenWidth() / 2)) {
                             direction = -1;
-                            xPos--;
+                            xPos -= subjectSpeed;
                         } else {
                             direction = 1;
-                            xPos++;
+                            xPos += subjectSpeed;
                         }
                     }
                 }

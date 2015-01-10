@@ -66,7 +66,7 @@ public class InformationPublisher extends ContextWrapper{
                     }
                     Integer ResId = ResourceNameToInt(object_list.get(i).Nodes.get("name"));
                     try {
-                        Item it_tmp = new Item(StringToInt(object_list.get(i).Nodes.get("objectID")), ResId, GlobalInformation.getScreenWidth() * StringToDouble(object_list.get(i).Nodes.get("x-position")), GlobalInformation.getScreenHeight() * StringToDouble(object_list.get(i).Nodes.get("y-position")), object_list.get(i).Nodes.get("need"), StringToInt(object_list.get(i).Nodes.get("sound")), StringToInt(object_list.get(i).Nodes.get("popup")), StringToInt(object_list.get(i).Nodes.get("user")), animationImages, ctx);
+                        Item it_tmp = new Item(StringToInt(object_list.get(i).Nodes.get("objectID")), ResId, GlobalInformation.getScreenWidth() * StringToDouble(object_list.get(i).Nodes.get("x-position")), GlobalInformation.getScreenHeight() * StringToDouble(object_list.get(i).Nodes.get("y-position")), object_list.get(i).Nodes.get("need"), StringToInt(object_list.get(i).Nodes.get("sound")), StringToInt(object_list.get(i).Nodes.get("popup")), StringToInt(object_list.get(i).Nodes.get("user")), animationImages, object_list.get(i).Nodes.get("name"), ctx);
                         World.setItem(StringToInt(object_list.get(i).Nodes.get("objectID")), it_tmp);
                     }
                     catch(NullPointerException e){

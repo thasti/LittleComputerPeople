@@ -149,32 +149,4 @@ public class RoomActivity extends Activity {
         super.onStop();
         paused = true;
     }
-
-
-    private void fillRoomList(){                    //Existiert temporär, bis der XML-Parser eingebunden wurde
-
-        List<Integer> itemListWohn;                 //Existiert temporär, bis der XML-Parser eingebunden wurde
-        List<Integer> itemListSchlaf;               //Existiert temporär, bis der XML-Parser eingebunden wurde//Existiert temporär, bis der XML-Parser eingebunden wurde
-
-
-        itemListWohn = new ArrayList<Integer>();
-        World.setItem(0, new Item(0, R.drawable.pflanze, GlobalInformation.getScreenWidth()*0.5, GlobalInformation.getScreenHeight()*0.5, null, null, null, null, null, this.getApplicationContext()));
-        itemListWohn.add(World.getItemById(0).getID());
-        World.setItem(1, new Item(1, R.drawable.boddle, GlobalInformation.getScreenWidth()*0.3, GlobalInformation.getScreenHeight()*0.5, null, null, null, null, null, this.getApplicationContext()));
-        itemListWohn.add(World.getItemById(1).getID());
-
-        itemListSchlaf = new ArrayList<Integer>();
-        World.setItem(2, new Item(2, R.drawable.boddle, GlobalInformation.getScreenWidth() * 0.3, GlobalInformation.getScreenHeight() * 0.5, null, null, null, null, null, this.getApplicationContext()));
-        itemListSchlaf.add(World.getItemById(2).getID());
-
-        World.setRoom(0, new Room(0, R.drawable.schlafzimmer, 0.0, 0.0, itemListSchlaf, this.getApplicationContext()));
-        World.getRoomById(0).setAttachedRooms(-1, 1, -1, -1);
-        World.setRoom(1, new Room(1, R.drawable.wohnzimmer, 0.0, 0.0, itemListWohn, this.getApplicationContext()));
-        World.getRoomById(1).setAttachedRooms(0, 2, -1, -1);
-        /*hab mal noch nen 3.raum eingefügt zum testen, um zu sehen ob er in mehr als 2 räume geht.*/
-        /*macht er  nicht weil er in einem raum nur bis zur mitte geht und im anderen offensichtlich nur eine Tür?*/
-        World.setRoom(2, new Room(2, R.drawable.bath, 0.0, 0.0, itemListWohn, this.getApplicationContext()));
-        World.getRoomById(2).setAttachedRooms(1, -1, -1, -1);
-
-    }
 }
