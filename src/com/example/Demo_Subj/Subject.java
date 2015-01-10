@@ -26,7 +26,7 @@ public class Subject {
     private Item prevItem;
     private Integer wait = 0;
 
-    private int subjectSpeed = 1;
+    private int subjectSpeed = 2;
     private Sound sound;
 
     private List<Room> route;
