@@ -142,13 +142,13 @@ public class InformationPublisher extends ContextWrapper{
                             right_room = StringToInt(room_list.get(i + 1).Nodes.get("roomID"));
                         //oberen/unteren Raum setzen
                         if (i == 1)
-                            up_room = 4;
-                        else
-                            up_room = -1;
-                        if (i == 4)
-                            down_room = 1;
+                            down_room = 4;
                         else
                             down_room = -1;
+                        if (i == 4)
+                            up_room = 1;
+                        else
+                            up_room = -1;
                         //in Room übernehmen
                         room_tmp.setAttachedRooms(left_room, right_room, up_room, down_room);
                         /*Ende*/

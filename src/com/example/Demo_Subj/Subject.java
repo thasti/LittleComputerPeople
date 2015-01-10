@@ -1,6 +1,9 @@
 package com.example.Demo_Subj;
 
 import android.content.Context;
+import android.os.Looper;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,13 +30,12 @@ public class Subject {
     private int routeRoomNum = 0;
 
     private Intelligence intel;
-
-    private Sound sound;
+    private Context context;
 
 
     public Subject(Context ctx){
+        context = ctx;
         intel = new Intelligence();
-        sound = new Sound(ctx);                     //Zum abspielen von Sound
 
         fillWalkingIntegerLists();
 
@@ -70,10 +72,12 @@ public class Subject {
 
         // TODO hier sollte das Animations-Zeugs eigentlich nicht gemacht werden, nur die Bewegung
         // die Animation sollte das GraphicalOutput dann aus dem Zustand und der Richtung erzeugen (oder?)
-        if((xPos == xDest) && (GlobalInformation.getCurrentRoom() == destRoomID)){
+        if(((xPos == xDest)|((xPos <= xDest + 1) && (xPos >= xDest -1))) && (GlobalInformation.getCurrentRoom() == destRoomID)){
             routeRoomNum = 0;
             // we finished the last action, so get the next from the KI
             //ToDO: Schnittstelle muss auf getNextItem() umgestellt werdne; ist aber noch nicht genau spezifiziert
+
+            System.out.println("Reached Destination");
 
             Item destItem = null;
 
@@ -90,7 +94,7 @@ public class Subject {
 
             else{
                 //Quasi ein getRoomByItem()- muss dann in World rein
-                for (int i = 0; i < GlobalInformation.getRoomList().size(); i++) { //geht jeden Raum durch
+                for (int i = 0; i < World.getAllRooms().size(); i++) { //geht jeden Raum durch
                     Room j = World.getRoomById(i);
                     for (int k = 0; k < j.getContainingitems().size(); k++) {        //geht jedes Objekt im aktuellen Raum durch
                         if (destItem.getID() == j.getContainingitems().get(k)) {    //wenn die ItemID im aktuellen Raum ist
@@ -102,6 +106,7 @@ public class Subject {
             }
 
             route = dijkstra.dijkstra(World.getRoomById(GlobalInformation.getCurrentRoom()), World.getRoomById(destRoomID));
+            System.out.println(destItem.getNeed());
             // move.getDestItem().use();
         }
         else if (GlobalInformation.getCurrentRoom() == destRoomID) {
@@ -113,35 +118,55 @@ public class Subject {
                 direction = 1;
                 xPos++;
             }
+            System.out.println("Reached destRoom");
         }
         else if (GlobalInformation.getCurrentRoom() != destRoomID){
             if (xPos == 0){
                 routeRoomNum++;
                 GlobalInformation.setCurrentRoom(route.get(routeRoomNum).getID());
                 xPos = GlobalInformation.getScreenWidth() - 1;//kann nicht GlobalInformation.getScreenWidth() sein sonst geht die Fkt unten wieder rein
+                System.out.println("Change Room left");
             }
             else if (xPos == (GlobalInformation.getScreenWidth())){
                 routeRoomNum++;
                 GlobalInformation.setCurrentRoom(route.get(routeRoomNum).getID());
                 xPos = 1;//kann nicht 0 sein sonst geht die Fkt oben wieder rein (xPos == 0)
+                System.out.println("Change Room right");
             }
-            else if ((xPos == (GlobalInformation.getScreenWidth())) &&
+            else if ((xPos == (GlobalInformation.getScreenWidth()/2)) &&
                     ((route.get(routeRoomNum + 1).getID() == lower) ||
                     (route.get(routeRoomNum + 1).getID() == upper))){
                 routeRoomNum++;
                 GlobalInformation.setCurrentRoom(route.get(routeRoomNum).getID());
-                xPos = 1;//kann nicht 0 sein sonst geht die Fkt oben wieder rein (xPos == 0)
+                xPos = GlobalInformation.getScreenWidth()/2;//kann nicht 0 sein sonst geht die Fkt oben wieder rein (xPos == 0)
+                System.out.println("Walk to upper/lower Room");
             }
             else{
                 if (route.get(routeRoomNum + 1).getID() == right){
                     direction = 1;
                     xPos++;
+                    System.out.println("Walk to rightRoom");
                 }
                 else if (route.get(routeRoomNum + 1).getID() == left){
                     direction = -1;
                     xPos--;
+                    System.out.println("Walk to leftRoom");
+                }
+                else if ((route.get(routeRoomNum + 1).getID() == lower) ||
+                   (route.get(routeRoomNum + 1).getID() == upper)){
+                    if(xPos > (GlobalInformation.getScreenWidth()/2)){
+                        direction = -1;
+                        xPos--;
+                        System.out.println("Walk to middle of the Room");
+                    }
+                    else{
+                        direction = 1;
+                        xPos++;
+                        System.out.println("Walk to middle of the Room");
+                    }
                 }
             }
+            System.out.println("Walk to destRoom");
         }
     }
 
