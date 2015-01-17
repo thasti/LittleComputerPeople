@@ -27,7 +27,6 @@ public class Subject {
     private Integer wait = 0;
 
     private int subjectSpeed = 3;
-    private Sound sound;
 
     private List<Room> route;
     private int routeRoomNum = 0;
@@ -41,8 +40,6 @@ public class Subject {
         intel = new Intelligence();
 
         World.setIntelligence(intel);
-
-        sound = new Sound(ctx);
 
         fillWalkingIntegerLists();
 
@@ -112,6 +109,7 @@ public class Subject {
                 }
 
                 if(soundID != 0) {
+                    Sound sound = new Sound(context);
                     sound.startSound(soundID);
                 }
 

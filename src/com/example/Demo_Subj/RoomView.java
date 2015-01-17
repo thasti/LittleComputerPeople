@@ -306,7 +306,7 @@ public class RoomView extends View {
                     if (boundingBoxItem.contains((int)event.getX(), (int)event.getY())) {
                         // TODO call the use() function of the item
                         World.getIntelligence().getTouchEvent(itemId);
-                        Toast.makeText(getContext(), "Click on " + World.getItemById(itemId).toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Click on " + World.getItemById(itemId).getNeed(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
