@@ -57,16 +57,30 @@ public class InformationPublisher extends ContextWrapper{
 			while(i<object_list.size()){
 				if(object_list.get(i).Nodes.containsKey("objectID")){
                     ObjectIds.add(StringToInt(object_list.get(i).Nodes.get("objectID")));
-                    List<String>animationImages = new ArrayList<>();
-                    List<TreeNode>animationImagesList = parser.getAllChildsFrom(parser.getChildFrom(object_list.get(i), "name", "Animation"));
+
+                    /*vom item Object alle Kinder abfragen welche zu Animationen gehören*/
+                    TreeMap<String,Integer>animationImages = new TreeMap<>();
+                    List<TreeNode>animationImagesList = parser.getAllChildsFrom(parser.getChildFrom(object_list.get(i), "typ", "Animation"));
+                    System.out.println("Anzahl gefundener Animationen: "+animationImagesList.size());
+                    /*alle Kinder durchgehen und die ResourceID speichern*/
                     int m = 0;
                     while(m<animationImagesList.size()) {
-                        animationImages.add(animationImagesList.get(m).Nodes.get("name"));
+                        animationImages.put(animationImagesList.get(m).Nodes.get("typ"), ResourceNameToInt(animationImagesList.get(m).Nodes.get("name")));
+                        System.out.println("animationsbild: "+animationImagesList.get(m).Nodes.get("name")+" ID: "+ResourceNameToInt(animationImagesList.get(m).Nodes.get("name")));
                         m++;
                     }
                     Integer ResId = ResourceNameToInt(object_list.get(i).Nodes.get("name"));
+
+                    /*solange nur 2 Zustände möglich sind wird keine Liste übergeben, sondern direkt 2 Integer*/
+                    Integer item_a=null,item_u=null;
+                    if(animationImages.containsKey("a")) {
+                        item_a = animationImages.get("a");
+                    }
+                    if(animationImages.containsKey("u")) {
+                        item_u = animationImages.get("u");
+                    }
                     try {
-                        Item it_tmp = new Item(StringToInt(object_list.get(i).Nodes.get("objectID")), ResId, GlobalInformation.getScreenWidth() * StringToDouble(object_list.get(i).Nodes.get("x-position")), GlobalInformation.getScreenHeight() * StringToDouble(object_list.get(i).Nodes.get("y-position")), object_list.get(i).Nodes.get("need"), StringToInt(object_list.get(i).Nodes.get("sound")), StringToInt(object_list.get(i).Nodes.get("popup")), StringToInt(object_list.get(i).Nodes.get("user")), animationImages, object_list.get(i).Nodes.get("name"), ctx);
+                        Item it_tmp = new Item(StringToInt(object_list.get(i).Nodes.get("objectID")), ResId, GlobalInformation.getScreenWidth() * StringToDouble(object_list.get(i).Nodes.get("x-position")), GlobalInformation.getScreenHeight() * StringToDouble(object_list.get(i).Nodes.get("y-position")), object_list.get(i).Nodes.get("need"), StringToInt(object_list.get(i).Nodes.get("sound")), StringToInt(object_list.get(i).Nodes.get("popup")), StringToInt(object_list.get(i).Nodes.get("user")),item_a,item_u, object_list.get(i).Nodes.get("name"), ctx);
                         World.setItem(StringToInt(object_list.get(i).Nodes.get("objectID")), it_tmp);
                     }
                     catch(NullPointerException e){
