@@ -33,7 +33,9 @@ public class Item {
     private Integer user;
     private Integer useTime = 200;
     private Integer usedTime = 0;
-    List<String> pics_for_animation;
+    private Integer a;//die IDs sind null wenn sie in der XML nicht existieren
+    private Integer u;//die IDs sind null wenn sie in der XML nicht existieren
+    //List<String> pics_for_animation;
     private Context context;
 
     private String itemName = "void";
@@ -49,7 +51,7 @@ public class Item {
 
 
     //constructor
-    public Item(Integer ID, Integer picresource, Double x, Double y, String need, Integer sound, Integer popup, Integer user, List<String> pics_for_animation, String itemName, Context context){
+    public Item(Integer ID, Integer picresource, Double x, Double y, String need, Integer sound, Integer popup, Integer user, Integer pic_a, Integer pic_u, String itemName, Context context){
 
 
         this.id = ID;
@@ -60,7 +62,8 @@ public class Item {
         this.sound = sound;
         this.popup = popup;
         this.user = user;
-        this.pics_for_animation = pics_for_animation;
+        this.a = pic_a;
+        this.u = pic_u;
         this.context = context;
         this.itemName = itemName;
 
@@ -170,9 +173,14 @@ public class Item {
 
 
     // returns a list with string-names of the drawable resources
-    public List<String> get_Pics_for_animation(){
+    //es wird erstmal ohne List gearbeitet
+    /*public List<String> get_Pics_for_animation(){
         return this.pics_for_animation;
-    }
+    }*/
+
+    /*die ResourceIDs für aktiv durch user(u), oder aktiv durch subject(a)*/
+    public Integer get_pic_a(){return this.a;}//die IDs sind null wenn sie in der XML nicht existieren
+    public Integer get_pic_u(){return this.u;}//die IDs sind null wenn sie in der XML nicht existieren
 
     //adds drawable picture-ids for subject caused animation  in a list
     /*
