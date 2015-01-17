@@ -41,7 +41,10 @@ public class HouseView extends View {
         // resize the View so it is as big as all rooms next to each other
         // could also be done as one view per room, flexibly loading the next one as one goes off screen,
         // effectively only having max. three rooms in memory.
-        int width = screenWidth * numRooms;
+
+        //measurement for old tube
+        //int width = screenWidth * numRooms;
+        int width = screenWidth;
         int height = GlobalInformation.getScreenHeight();
 
         setMeasuredDimension(width, height);
@@ -68,7 +71,7 @@ public class HouseView extends View {
 
         //Eingefügt von Jürgen als Anpassung an die überarbeiteten Klassen Room und Item
         Resources resources = getResources();
-        i = 0;
+/*      i = 0;
         for (Iterator<Room> iter = World.getAllRooms().iterator(); iter.hasNext(); ) {
             Room room = iter.next();
             canvas.drawBitmap(Bitmap.createScaledBitmap(
@@ -78,5 +81,12 @@ public class HouseView extends View {
                     false), screenWidth * i, 0, p);
             i++;
         }
+*/
+        canvas.drawBitmap(Bitmap.createScaledBitmap(
+                BitmapFactory.decodeResource(resources, R.drawable.house),
+                GlobalInformation.getScreenWidth(),
+                GlobalInformation.getScreenHeight(),
+                false), 0, 0, p);
+
     }
 }

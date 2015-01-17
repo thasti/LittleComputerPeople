@@ -62,6 +62,7 @@ public class Sound {
                 }
                 mediaplayer.start();
                 mediaplayer.setVolume(1,1);
+
             }
         });
         sound.start();
