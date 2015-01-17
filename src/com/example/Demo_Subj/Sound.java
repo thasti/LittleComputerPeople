@@ -61,8 +61,6 @@ public class Sound {
                 while (mediaplayer.getCurrentPosition() != mediaplayer.getDuration()) {
 
                 }
-                mediaplayer.start();
-                mediaplayer.setVolume(1,1);
                 mediaplayer.reset();
                 mediaplayer.release();
             }

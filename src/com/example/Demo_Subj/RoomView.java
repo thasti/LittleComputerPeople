@@ -277,6 +277,13 @@ public class RoomView extends View {
             case MotionEvent.ACTION_DOWN:
                 // Traverse all Objects in the current room
 
+                Rect changeViewBox = new Rect(0,0, 50, 50);
+                if (changeViewBox.contains((int)event.getX(), (int)event.getY())) {
+                    Intent i = new Intent(ctx, HouseActivity.class);
+                    ctx.startActivity(i);
+                    return true;
+                }
+
                 Rect boundingBoxSubject = new Rect((int)subject.getXPos(),
                         (int)subject.getYPos(),
                         (int)subject.getXPos() + subjStand.getWidth(),
@@ -286,6 +293,7 @@ public class RoomView extends View {
                     // TODO call the use() function of the item
                     Intent i = new Intent(ctx, ChatActivity.class);
                     ctx.startActivity(i);
+                    return true;
                 }
 
                 int itemId;
@@ -307,13 +315,8 @@ public class RoomView extends View {
                         // TODO call the use() function of the item
                         World.getIntelligence().getTouchEvent(itemId);
                         Toast.makeText(getContext(), "Click on " + World.getItemById(itemId).getNeed(), Toast.LENGTH_SHORT).show();
+                        return true;
                     }
-                }
-
-                Rect changeViewBox = new Rect(0,0, 50, 50);
-                if (changeViewBox.contains((int)event.getX(), (int)event.getY())) {
-                    Intent i = new Intent(ctx, HouseActivity.class);
-                    ctx.startActivity(i);
                 }
                 break;
         }
