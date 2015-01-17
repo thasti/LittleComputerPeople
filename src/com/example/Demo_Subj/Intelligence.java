@@ -175,16 +175,21 @@ public class Intelligence {
 
     //KI übernimmt Touchevents
     public void getTouchEvent(int ItemID){
-        int rnd = (randomStart+10) + (int) Math.round( Math.random() * ((randomEnd+20) - (randomStart) ));  //Zufallszahl Erzuegen, sie größer ist, als alle, die sonst als Inkrement dienen (siehe Methode getIntRandom())
+        int rnd;
 
         for(int i=0; i < needs_list.size();i++){
             if(needs_list.get(i).getObjectID() == ItemID) {
+
+                rnd = needs_list.get(i).getCurrentValue() + (int) Math.round( Math.random() * ((randomEnd+100) - (randomStart) ));  //Zufallszahl Erzuegen; sie größer ist, als alle, die sonst als Inkrement dienen (siehe Methode getIntRandom())
+
                 try {
                     //aktueller_Wert = aktueller_Wert + (neue, größere) Zufallszahl
                     needs_list.get(i).setCurrentValue(needs_list.get(i).getCurrentValue() + rnd);
 
                     //Motivation neu berechnen; Motivation = Priorität * (aktueller Wert - Schwellwert)
                     needs_list.get(i).setMotivation(needs_list.get(i).getPriority() * (needs_list.get(i).getCurrentValue() - needs_list.get(i).getTopLevel()));
+
+                    Log.d("LCP_Intelligence", "ObjectID " + ItemID + ". Neuer aktueller Wert: " + needs_list.get(i).getCurrentValue() + ". Inkrementiert durch: " + rnd + ". Ergibt neue Motivation: " + needs_list.get(i).getMotivation());
                 } catch (ArrayIndexOutOfBoundsException e) { //Wird von get(index) geworfen, wenn dieser Index nicht im Vektor existiert.
                     //Exception wird geloggt
                     Log.e("LCP_Intelligence", "Index " + i + " does not exist in needs_list.", e);
@@ -196,7 +201,6 @@ public class Intelligence {
                 } catch (Error e) {     //irgendwo ist ein (gravierender) Fehler aufgetreten
                     //Error wird geloggt
                     Log.e("LCP_Intelligence", "Error while TouchEvent in Intelligence.", e);
-
                 }
             }
         }
