@@ -175,7 +175,35 @@ public class Intelligence {
 
     //KI übernimmt Touchevents
     public void getTouchEvent(int ItemID){
-        //Die Implementierung erfolg am 17.1.. Konzept muss noch erarbeitet werden. 
+        int rnd = (randomStart+10) + (int) Math.round( Math.random() * ((randomEnd+20) - (randomStart) ));  //Zufallszahl Erzuegen, sie größer ist, als alle, die sonst als Inkrement dienen (siehe Methode getIntRandom())
+
+        for(int i=0; i < needs_list.size();i++){
+            if(needs_list.get(i).getObjectID() == ItemID) {
+                try {
+                    //aktueller_Wert = aktueller_Wert + (neue, größere) Zufallszahl
+                    needs_list.get(i).setCurrentValue(needs_list.get(i).getCurrentValue() + rnd);
+
+                    //Motivation neu berechnen; Motivation = Priorität * (aktueller Wert - Schwellwert)
+                    needs_list.get(i).setMotivation(needs_list.get(i).getPriority() * (needs_list.get(i).getCurrentValue() - needs_list.get(i).getTopLevel()));
+                } catch (ArrayIndexOutOfBoundsException e) { //Wird von get(index) geworfen, wenn dieser Index nicht im Vektor existiert.
+                    //Exception wird geloggt
+                    Log.e("LCP_Intelligence", "Index " + i + " does not exist in needs_list.", e);
+
+                } catch (Exception e) { // Andere Exceptions können auf Grund anderer Sicherheitsvorkehrungen nicht auftreten. Werden hier für den unvorhergesehenen Fall dennoch abgefangen.
+                    //Exception wird geloggt
+                    Log.e("LCP_Intelligence", "Exception while TouchEvents in Intelligence.", e);
+
+                } catch (Error e) {     //irgendwo ist ein (gravierender) Fehler aufgetreten
+                    //Error wird geloggt
+                    Log.e("LCP_Intelligence", "Error while TouchEvent in Intelligence.", e);
+
+                }
+            }
+        }
+
+        //Note: TopLevel, Priority oder Motivation eines Bedürfnisses können/ dürfen nicht verändert werden, da diese Änderungen nicht rückgängig gemacht werden können.
+        //      Bei den TouchEvents handelt es sich aber nur im temporäre Ereignisse. Daher wird nur der aktuelle Wert und dem entsprechewnd die Motivation deutlich mehr als sonst hochgesetzt.
     }
+
 
 }
