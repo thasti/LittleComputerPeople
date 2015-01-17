@@ -39,6 +39,7 @@ public class RoomView extends View {
     private float subjXPos;
     private float subjYPos;
     private Sound sound;
+    private int subjectVisible = 1;
 
     private int holdAnimCycles = 15;
     private int animCycle = 0;
@@ -160,48 +161,95 @@ public class RoomView extends View {
             int itemId;
             for(int i = 0; i < itemBmp; i++){
                 itemId = drawRoom.getContainingitems().get(i);
-                canvas.drawBitmap(
-                        decodedObjBitmap.get(i),
-                        World.getItemById(itemId).getXPos().floatValue(),
-                        World.getItemById(itemId).getYPos().floatValue(),
-                        p
-                );
+                if (World.getItemById(itemId).isUsed() == 0) {
+                    subjectVisible = 1;
+                    canvas.drawBitmap(
+                            decodedObjBitmap.get(i),
+                            World.getItemById(itemId).getXPos().floatValue(),
+                            World.getItemById(itemId).getYPos().floatValue(),
+                            p
+                    );
+                }
+                //UsedByUser
+                else if (World.getItemById(itemId).isUsed() == 1){
+                    if(World.getItemById(itemId).getPicresourceAnimUser() != null) {
+                        subjectVisible = 0;
+                        canvas.drawBitmap(
+                                BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresourceAnimUser()),
+                                World.getItemById(itemId).getXPos().floatValue(),
+                                World.getItemById(itemId).getYPos().floatValue(),
+                                p
+                        );
+                    }
+                    else{
+                        subjectVisible = 1;
+                        canvas.drawBitmap(
+                                decodedObjBitmap.get(i),
+                                World.getItemById(itemId).getXPos().floatValue(),
+                                World.getItemById(itemId).getYPos().floatValue(),
+                                p
+                        );
+                    }
+                }
+                //UsedBySubject
+                else if (World.getItemById(itemId).isUsed() == 2){
+                    if(World.getItemById(itemId).getPicresourceAnimSubj() != null) {
+                        subjectVisible = 0;
+                        canvas.drawBitmap(
+                                BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresourceAnimSubj()),
+                                World.getItemById(itemId).getXPos().floatValue(),
+                                World.getItemById(itemId).getYPos().floatValue(),
+                                p
+                        );
+                    }
+                    else{
+                        subjectVisible = 1;
+                        canvas.drawBitmap(
+                                decodedObjBitmap.get(i),
+                                World.getItemById(itemId).getXPos().floatValue(),
+                                World.getItemById(itemId).getYPos().floatValue(),
+                                p
+                        );
+                    }
+                }
+
             }
         }
 
         // draw all items (TODO: add layering)
         //Layer als zusätzliche Eigenschaft von Item benötigt, wird ein Offset zur Y-Koordinate von Objekten hinzufügen
 
-        getSubjectMovement();
+        if(subjectVisible == 1) {
+            getSubjectMovement();
+            switch (direction) {
+                case 0:
+                    drawIndex = 0;
+                    animCycle = 0;
+                    canvas.drawBitmap(this.subjStand,
+                            this.subjXPos,
+                            this.subjYPos, this.p
+                    );
+                    break;
 
-        switch(direction){
-            case 0:
-                drawIndex = 0;
-                animCycle = 0;
-                canvas.drawBitmap(this.subjStand,
-                        this.subjXPos,
-                        this.subjYPos, this.p
-                );
-                break;
+                case 1:
+                    animation();
+                    canvas.drawBitmap(this.subjWalkForward.get(drawIndex),
+                            this.subjXPos,
+                            this.subjYPos, this.p
+                    );
+                    break;
 
-            case 1:
-                animation();
-                canvas.drawBitmap(this.subjWalkForward.get(drawIndex),
-                        this.subjXPos,
-                        this.subjYPos, this.p
-                );
-                break;
+                case -1:
+                    animation();
+                    canvas.drawBitmap(this.subjWalkBackward.get(drawIndex),
+                            this.subjXPos,
+                            this.subjYPos, this.p
+                    );
+                    break;
 
-            case -1:
-                animation();
-                canvas.drawBitmap(this.subjWalkBackward.get(drawIndex),
-                        this.subjXPos,
-                        this.subjYPos, this.p
-                );
-                break;
-
-            default:
-                break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -257,6 +305,7 @@ public class RoomView extends View {
                             World.getItemById(itemId).getYPos().floatValue() + BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresource()).getHeight());
                     if (boundingBoxItem.contains((int)event.getX(), (int)event.getY())) {
                         // TODO call the use() function of the item
+                        World.getIntelligence().getTouchEvent(itemId);
                         Toast.makeText(getContext(), "Click on " + World.getItemById(itemId).toString(), Toast.LENGTH_SHORT).show();
                     }
                 }

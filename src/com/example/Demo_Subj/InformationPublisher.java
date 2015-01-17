@@ -113,7 +113,7 @@ public class InformationPublisher extends ContextWrapper{
         List<Integer> roomId_list = new ArrayList<>();
 		if(ret){	
 			if(houseid==null){
-				//es gibt zur zeit nicht mehrere H�user
+				//es gibt zur zeit nicht mehrere H?user
 				TreeNode superparent = parser.getSuperParent();
 				room_list = parser.getAllChildsFrom(superparent);
 				while(room_list.get(0).Nodes.get("typ").compareTo("room")!=0){
@@ -213,7 +213,7 @@ public class InformationPublisher extends ContextWrapper{
                 }
             }
             //in house_list sollten jetzt alle haeuser gelistet sein
-            //jetzt wird jedes haus mit den ben�tigten Werten in die Liste von Welt einsortiert
+            //jetzt wird jedes haus mit den ben?tigten Werten in die Liste von Welt einsortiert
             int i = 0;
             while (i < house_list.size()) {
                 List<Integer> roomIdList = setRoomlist(StringToInt(house_list.get(i).Nodes.get("houseID")));

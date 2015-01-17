@@ -14,6 +14,7 @@ public class World {
     private static TreeMap<Integer, Item> itemTreeMap = new TreeMap<Integer, Item>();
     private static List<Room> Rooms = new ArrayList<Room>();
     private static List<Item> Items = new ArrayList<Item>();
+    private static Intelligence intel;
 
     /*******************************************************************************************
         Puts a room with the given ID in a TreeMap and fills the List Rooms
@@ -22,6 +23,14 @@ public class World {
         System.out.println("add to List Room:"+room.getID()+" leftRoom:"+room.getLeftRoomID()+" rightRoom:"+room.getRightRoomID()+" upperRoom:"+room.getUpperRoomID()+" lowerRoom:"+room.getLowerRoomID());
         roomTreeMap.put(key, room);
         Rooms.add(room);
+    }
+
+    public static Intelligence getIntelligence(){
+        return intel;
+    }
+
+    public static void setIntelligence(Intelligence intelligence){
+        intel = intelligence;
     }
 
     public static int getRoomlistSize(){

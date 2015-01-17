@@ -22,8 +22,8 @@ public class Item {
 
     private Integer id; //Item-ID
     private Integer picresource;
-    private Integer picresourceAnimUser;
-    private Integer picresourceAnimSubj;
+    private Integer picresourceAnimUser;//die IDs sind null wenn sie in der XML nicht existieren
+    private Integer picresourceAnimSubj;//die IDs sind null wenn sie in der XML nicht existieren
 
     private Double xPos;
     private Double yPos;
@@ -33,8 +33,6 @@ public class Item {
     private Integer user;
     private Integer useTime = 200;
     private Integer usedTime = 0;
-    private Integer a;//die IDs sind null wenn sie in der XML nicht existieren
-    private Integer u;//die IDs sind null wenn sie in der XML nicht existieren
     //List<String> pics_for_animation;
     private Context context;
 
@@ -62,8 +60,8 @@ public class Item {
         this.sound = sound;
         this.popup = popup;
         this.user = user;
-        this.a = pic_a;
-        this.u = pic_u;
+        this.picresourceAnimSubj = pic_a;
+        this.picresourceAnimUser = pic_u;
         this.context = context;
         this.itemName = itemName;
 
@@ -179,8 +177,8 @@ public class Item {
     }*/
 
     /*die ResourceIDs für aktiv durch user(u), oder aktiv durch subject(a)*/
-    public Integer get_pic_a(){return this.a;}//die IDs sind null wenn sie in der XML nicht existieren
-    public Integer get_pic_u(){return this.u;}//die IDs sind null wenn sie in der XML nicht existieren
+    public Integer getPicresourceAnimSubj(){return this.picresourceAnimSubj;}//die IDs sind null wenn sie in der XML nicht existieren
+    public Integer getPicresourceAnimUser(){return this.picresourceAnimUser;}//die IDs sind null wenn sie in der XML nicht existieren
 
     //adds drawable picture-ids for subject caused animation  in a list
     /*

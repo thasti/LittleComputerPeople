@@ -40,6 +40,8 @@ public class Subject {
         context = ctx;
         intel = new Intelligence();
 
+        World.setIntelligence(intel);
+
         sound = new Sound(ctx);
 
         fillWalkingIntegerLists();
