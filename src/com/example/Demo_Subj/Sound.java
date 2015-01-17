@@ -27,7 +27,6 @@ public class Sound {
         Uri path = Uri.parse("android.resource://com.example.Demo_Subj/" + soundRes);
         mediaplayer = new MediaPlayer();
         mediaplayer.reset();
-
         try{
             mediaplayer.setDataSource(ctx, path);
         }catch (IOException e){
@@ -61,8 +60,9 @@ public class Sound {
                 while (mediaplayer.getCurrentPosition() != mediaplayer.getDuration()) {
 
                 }
-                mediaplayer.reset();
-                mediaplayer.release();
+                mediaplayer.start();
+                mediaplayer.setVolume(1,1);
+
             }
         });
         sound.start();

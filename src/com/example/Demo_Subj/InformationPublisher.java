@@ -73,11 +73,11 @@ public class InformationPublisher extends ContextWrapper{
 
                     /*solange nur 2 Zustände möglich sind wird keine Liste übergeben, sondern direkt 2 Integer*/
                     Integer item_a=null,item_u=null;
-                    if(animationImages.containsKey("a")) {
-                        item_a = animationImages.get("a");
+                    if(animationImages.containsKey("A")) {
+                        item_a = animationImages.get("A");
                     }
-                    if(animationImages.containsKey("u")) {
-                        item_u = animationImages.get("u");
+                    if(animationImages.containsKey("U")) {
+                        item_u = animationImages.get("U");
                     }
                     try {
                         Item it_tmp = new Item(StringToInt(object_list.get(i).Nodes.get("objectID")), ResId, GlobalInformation.getScreenWidth() * StringToDouble(object_list.get(i).Nodes.get("x-position")), GlobalInformation.getScreenHeight() * StringToDouble(object_list.get(i).Nodes.get("y-position")), object_list.get(i).Nodes.get("need"), StringToInt(object_list.get(i).Nodes.get("sound")), StringToInt(object_list.get(i).Nodes.get("popup")), StringToInt(object_list.get(i).Nodes.get("user")),item_a,item_u, object_list.get(i).Nodes.get("name"), ctx);

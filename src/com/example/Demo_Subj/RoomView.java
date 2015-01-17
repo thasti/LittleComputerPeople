@@ -39,7 +39,6 @@ public class RoomView extends View {
     private float subjXPos;
     private float subjYPos;
     private Sound sound;
-    private int subjectVisible = 1;
 
     private int holdAnimCycles = 15;
     private int animCycle = 0;
@@ -162,7 +161,6 @@ public class RoomView extends View {
             for(int i = 0; i < itemBmp; i++){
                 itemId = drawRoom.getContainingitems().get(i);
                 if (World.getItemById(itemId).isUsed() == 0) {
-                    subjectVisible = 1;
                     canvas.drawBitmap(
                             decodedObjBitmap.get(i),
                             World.getItemById(itemId).getXPos().floatValue(),
@@ -173,7 +171,6 @@ public class RoomView extends View {
                 //UsedByUser
                 else if (World.getItemById(itemId).isUsed() == 1){
                     if(World.getItemById(itemId).getPicresourceAnimUser() != null) {
-                        subjectVisible = 0;
                         canvas.drawBitmap(
                                 BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresourceAnimUser()),
                                 World.getItemById(itemId).getXPos().floatValue(),
@@ -182,7 +179,6 @@ public class RoomView extends View {
                         );
                     }
                     else{
-                        subjectVisible = 1;
                         canvas.drawBitmap(
                                 decodedObjBitmap.get(i),
                                 World.getItemById(itemId).getXPos().floatValue(),
@@ -194,7 +190,6 @@ public class RoomView extends View {
                 //UsedBySubject
                 else if (World.getItemById(itemId).isUsed() == 2){
                     if(World.getItemById(itemId).getPicresourceAnimSubj() != null) {
-                        subjectVisible = 0;
                         canvas.drawBitmap(
                                 BitmapFactory.decodeResource(resources, World.getItemById(itemId).getPicresourceAnimSubj()),
                                 World.getItemById(itemId).getXPos().floatValue(),
@@ -203,7 +198,6 @@ public class RoomView extends View {
                         );
                     }
                     else{
-                        subjectVisible = 1;
                         canvas.drawBitmap(
                                 decodedObjBitmap.get(i),
                                 World.getItemById(itemId).getXPos().floatValue(),
@@ -212,14 +206,13 @@ public class RoomView extends View {
                         );
                     }
                 }
-
             }
         }
 
         // draw all items (TODO: add layering)
         //Layer als zusätzliche Eigenschaft von Item benötigt, wird ein Offset zur Y-Koordinate von Objekten hinzufügen
 
-        if(subjectVisible == 1) {
+        if(GlobalInformation.getSubjectVisibility() == true) {
             getSubjectMovement();
             switch (direction) {
                 case 0:
@@ -314,6 +307,7 @@ public class RoomView extends View {
                     if (boundingBoxItem.contains((int)event.getX(), (int)event.getY())) {
                         // TODO call the use() function of the item
                         World.getIntelligence().getTouchEvent(itemId);
+                        World.getItemById(itemId).useByUser();
                         Toast.makeText(getContext(), "Click on " + World.getItemById(itemId).getNeed(), Toast.LENGTH_SHORT).show();
                         return true;
                     }

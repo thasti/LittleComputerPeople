@@ -26,7 +26,7 @@ public class Subject {
     private Item prevItem;
     private Integer wait = 0;
 
-    private int subjectSpeed = 3;
+    private int subjectSpeed = 2;
 
     private List<Room> route;
     private int routeRoomNum = 0;
@@ -76,6 +76,7 @@ public class Subject {
 
         //Warten bis die Animation vom vorherigen Objekt zuende ist
         if (wait == 1){
+            GlobalInformation.setSubjectVisibility(false);
             direction = 0;
             int used = 0;
             try{
@@ -85,6 +86,7 @@ public class Subject {
             }
             if (used == 0){
                 wait = 0;
+                GlobalInformation.setSubjectVisibility(true);
             }
         }
 

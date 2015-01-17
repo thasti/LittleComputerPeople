@@ -13,8 +13,13 @@ public class GlobalInformation {
     private static List<Room> roomList;
     private static Subject subject;
     private static String toastMessage = "null";
+    private static boolean subjectVisible = true;
 
     private GlobalInformation(){};
+
+    public static boolean getSubjectVisibility (){return subjectVisible;}
+
+    public static void setSubjectVisibility (boolean subjectVisibility){subjectVisible = subjectVisibility;}
 
     public static String getToastMessage(){return toastMessage;}
 
