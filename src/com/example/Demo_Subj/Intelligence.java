@@ -173,4 +173,9 @@ public class Intelligence {
         return motivation_highest;
     }
 
+    //KI übernimmt Touchevents
+    public void getTouchEvent(int ItemID){
+        //Die Implementierung erfolg am 17.1.. Konzept muss noch erarbeitet werden. 
+    }
+
 }
